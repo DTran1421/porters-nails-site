@@ -1046,7 +1046,7 @@
   function renderCategory(b){
     b.innerHTML = '<div class="wiz-title">What kind of service?</div><div class="wiz-sub">Pick a category to get started</div>'+
       '<div class="choice-grid">'+CATALOG.map(function(c){
-        return '<div class="choice '+(wiz.cat===c.id?'sel':'')+'" data-cat="'+c.id+'"><div style="display:flex;align-items:center;gap:12px"><span class="cat-ico"><i class="ti '+c.icon+'"></i></span><div class="c-name">'+c.cat+'</div></div><i class="ti ti-chevron-right" style="color:var(--rose-mid)"></i></div>';
+        return '<div class="choice '+(wiz.cat===c.id?'sel':'')+'" data-cat="'+c.id+'"><div style="display:flex;align-items:center;gap:12px"><span class="cat-ico"><i class="ti '+(c.icon||CAT_ICONS[c.id]||'ti-sparkles')+'"></i></span><div class="c-name">'+c.cat+'</div></div><i class="ti ti-chevron-right" style="color:var(--rose-mid)"></i></div>';
       }).join('')+'</div>';
     Array.prototype.forEach.call(b.querySelectorAll('[data-cat]'),function(el){ el.onclick=function(){ wiz.cat=el.dataset.cat; wiz.service=null; wiz.techId=null; wiz.date=null; wiz.time=null; wiz.step=2; render(); }; });
   }
