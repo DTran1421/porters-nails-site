@@ -1198,61 +1198,6 @@
     .catch(function(){tb.innerHTML='<div class="dash-empty"><i class="ti ti-alert-circle"></i><p>Could not load. Check connection.</p></div>';});
   }
 
-  function renderApptsTab(){
-    var tb=document.getElementById('tabBody');
-    tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading appointments...</p></div>';
-    fetch(BOOKING_API+'/api/appointments',{
-      headers:{}
-    })
-    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
-    .then(function(rows){
-      var pending=rows.filter(function(a){return a.status==='pending';}).length;
-      var confirmed=rows.filter(function(a){return a.status==='confirmed';}).length;
-      var html='<div class="dash-stats"><div class="stat"><div class="s-label">Total</div><div class="s-val">'+rows.length+'</div></div><div class="stat"><div class="s-label">Pending</div><div class="s-val">'+pending+'</div></div><div class="stat"><div class="s-label">Confirmed</div><div class="s-val">'+confirmed+'</div></div></div>';
-      if(!rows.length){ html+='<div class="dash-empty"><i class="ti ti-calendar-off"></i><p>No appointments yet. Once customers book, they\'ll show up here.</p></div>'; tb.innerHTML=html; return; }
-      html+=rows.map(function(a){
-        var p=(a.date||'').split('-'); var dt=p.length===3?new Date(p[0],p[1]-1,p[2]):new Date();
-        var actions=a.status==='pending'?
-          '<div class="mini-btns"><button class="mini ok" data-ok="'+a.id+'"><i class="ti ti-check"></i> Approve</button><button class="mini no" data-no="'+a.id+'">Decline</button></div>':
-          '<span class="badge '+a.status+'">'+a.status+'</span>';
-        return '<div class="appt"><div class="a-date"><div class="ad-day">'+dt.getDate()+'</div><div class="ad-mon">'+dt.toLocaleDateString('en-US',{month:'short'})+'</div></div>'+
-          '<div><div class="a-name">'+escHtml(a.name||'')+'</div>'+
-          '<div class="a-meta"><i class="ti ti-phone" style="font-size:11px"></i> <a href="tel:'+escHtml(a.phone||'')+'">'+escHtml(a.phone||'')+'</a>'+(a.email?' &middot; '+escHtml(a.email):'')+'</div>'+
-          '<div class="a-svc">'+escHtml(a.service||'')+(a.tech_name?' &middot; with '+escHtml(a.tech_name):'')+(a.time?' &middot; '+fmtTime(a.time):'')+(a.price?' &middot; '+escHtml(a.price):'')+(a.notes?' &middot; <em>'+escHtml(a.notes)+'</em>':'')+'</div></div>'+
-          '<div class="a-right">'+actions+'</div></div>';
-      }).join('');
-      tb.innerHTML=html;
-      Array.prototype.forEach.call(tb.querySelectorAll('[data-ok]'),function(el){
-        el.onclick=function(){
-          var row=rows.filter(function(r){return r.id===el.dataset.ok;})[0];
-          el.disabled=true; el.textContent='Updating...';
-          updateApptStatus(row.id,'confirmed',row.name,row.email,row.service,row.date,row.time);
-        };
-      });
-      Array.prototype.forEach.call(tb.querySelectorAll('[data-no]'),function(el){
-        el.onclick=function(){
-          var row=rows.filter(function(r){return r.id===el.dataset.no;})[0];
-          el.disabled=true; el.textContent='Updating...';
-          updateApptStatus(row.id,'declined',row.name,row.email,row.service,row.date,row.time);
-        };
-      });
-    })
-    .catch(function(e){ console.error(e); tb.innerHTML='<div class="dash-empty"><i class="ti ti-alert-circle"></i><p>Could not load appointments. Check your connection.</p></div>'; });
-  }
-
-  function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  function updateApptStatus(id,status,name,email,service,date,time){
-    if(typeof BOOKING_API==='undefined'||!BOOKING_API){ showToast('Booking API not configured'); return; }
-    fetch(BOOKING_API+'/api/update-status',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({id:id,status:status,name:name||'',email:email||'',service:service||'',date:date||'',time:time||''})
-    })
-    .then(function(r){return r.json();})
-    .then(function(d){ if(d.success){ showToast('Appointment '+status+'!'); renderDash(); } else showToast('Could not update. Try again.'); })
-    .catch(function(){ showToast('Connection error.'); });
-  }
-
 
   function renderTechsTab(){
     var tb=document.getElementById('tabBody');

@@ -14,6 +14,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:image" content="https://portersnailsandspa.com/porters-logo.png" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="preload" as="image" href="porters-logo-icon.png" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Porter's Nails & Spa | Nail Salon in Porter, TX" />
@@ -134,6 +135,7 @@
 }
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
@@ -503,7 +505,7 @@
 <div class="promo-bar" id="promoBar" style="display:none;"><span id="promoText"></span></div>
 <nav>
   <div class="nav-inner">
-    <a href="#home" class="logo"><img src="porters-logo-icon.png" alt="Porter's Nails & Spa" /></a>
+    <a href="#home" class="logo"><img src="porters-logo-icon.png" alt="Porter's Nails & Spa" loading="eager" /></a>
     <div class="nav-right">
       <button class="lang-btn" id="langBtn"><i class="ti ti-language"></i> <span id="langLabel">Español</span></button>
       <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
