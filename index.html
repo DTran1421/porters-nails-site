@@ -927,6 +927,14 @@
     bar.style.display='block';
   }
 
+  var CAT_ICONS = {
+    pedicure: 'ti-sparkles',
+    manicure: 'ti-hand-stop',
+    enhance:  'ti-wand',
+    addons:   'ti-plus',
+    kids:     'ti-star',
+    waxing:   'ti-droplet'
+  };
   function renderPublicServices(){
     var g=document.getElementById('servicesGrid');
     if(!g) return;
@@ -989,7 +997,7 @@
           +'</div>';
       }
 
-      return '<div class="menu-cat"><div class="menu-cat-head"><span class="mc-ico"><i class="ti '+c.icon+'"></i></span><h3>'+c.cat+'</h3></div>'+rows+addonsFooter+'</div>';
+      return '<div class="menu-cat"><div class="menu-cat-head"><span class="mc-ico"><i class="ti '+(c.icon||CAT_ICONS[c.id]||'ti-sparkles')+'"></i></span><h3>'+c.cat+'</h3></div>'+rows+addonsFooter+'</div>';
     }).join('');
   }
 
