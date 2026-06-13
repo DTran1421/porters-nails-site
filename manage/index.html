@@ -409,6 +409,7 @@
   .manage-body.sidebar-collapsed .manage-sidebar{ width:0; overflow:hidden; padding:0; border:none; }
   .manage-body.sidebar-collapsed .manage-content{ padding:2rem; }
   .mobile-nav{ display:none; }
+  #loginScreen ~ .mobile-nav{ display:none !important; }
   @media(max-width:768px){
     .manage-sidebar{ display:none; }
     .manage-content{ padding:1rem; padding-bottom:80px; }
@@ -515,7 +516,7 @@
 <body class="manage-page">
 
   <!-- Login screen -->
-  <div class="login-screen" id="loginScreen">
+  <div class="login-screen" id="loginScreen" style="display:flex">
     <div class="login-card">
       <img src="../porters-logo-icon.png" class="login-logo" alt="Porter's Nails & Spa" />
       <div class="login-title">Owner Dashboard</div>
@@ -563,7 +564,7 @@
       <div id="dashView"></div>
     </main>
   </div>
-  <nav class="mobile-nav" id="mobileNav">
+  <nav class="mobile-nav" id="mobileNav" style="display:none">
     <button onclick="showTab('appts')" id="mnAppts"><i class="ti ti-calendar"></i>Bookings</button>
     <button onclick="showTab('techs')" id="mnTechs"><i class="ti ti-users"></i>Techs</button>
     <button onclick="showTab('services')" id="mnSvc"><i class="ti ti-list"></i>Services</button>
@@ -1990,6 +1991,7 @@ async function showDashboard(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('managebody').style.display='flex';
   document.getElementById('dashView').style.display='block';
+  var mn=document.getElementById('mobileNav'); if(mn) mn.style.display='';
   ownerTab='appts';
   try{
     var token=getSession();
