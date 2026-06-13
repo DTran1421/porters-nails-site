@@ -3,7 +3,7 @@ name: Deploy to Hostinger
 on:
   push:
     branches:
-      - production  # Only triggers when pushing to production, never main
+      - production
 
 jobs:
   deploy:
@@ -12,17 +12,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Deploy to Hostinger via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: public_html/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/README.md
-            **/.github/**
-          dangerous-clean-slate: false  # NEVER delete files not in repo (protects images/assets)
+          port: 22
+          local_path: './*'
+          remote_path: '/public_html'
+          sftp_only: true
+          delete_remote_files: false
