@@ -2008,28 +2008,27 @@ function _wireApptEvents(tb){
   document.getElementById('dashView').style.display='block';
   ownerTab='appts';
 
-// ===== AUTH =====
+</script>
+
+<script>
 var SESSION_KEY = 'porters_session';
+var BOOKING_API_AUTH = 'https://porters-nails-api.vercel.app';
 function getSession(){ return sessionStorage.getItem(SESSION_KEY); }
 function setSession(t){ sessionStorage.setItem(SESSION_KEY, t); }
 function clearSession(){ sessionStorage.removeItem(SESSION_KEY); }
 
-function showLoginError(msg){
-  var el=document.getElementById('loginError');
-  el.textContent=msg; el.style.display='block';
-}
-
 function showDashboard(){
   document.getElementById('loginScreen').style.display='none';
-  renderDash();
+  if(typeof renderDash === 'function') renderDash();
 }
 
 function showRegister(e){
-  e.preventDefault();
+  if(e) e.preventDefault();
   document.getElementById('loginForm').style.display='none';
   document.getElementById('registerForm').style.display='block';
   document.getElementById('loginSub').textContent='Create your owner account';
   document.getElementById('loginError').style.display='none';
+  return false;
 }
 
 function showLogin(e){
@@ -2038,13 +2037,14 @@ function showLogin(e){
   document.getElementById('loginForm').style.display='block';
   document.getElementById('loginSub').textContent='Sign in to manage your salon';
   document.getElementById('loginError').style.display='none';
+  return false;
 }
 
 async function initAuth(){
   try {
     var token = getSession();
     if(token){
-      var r = await fetch(BOOKING_API+'/api/auth', { headers:{'x-session-token':token} });
+      var r = await fetch(BOOKING_API_AUTH+'/api/auth', { headers:{'x-session-token':token} });
       var d = await r.json();
       if(d.valid){ showDashboard(); return; }
       clearSession();
@@ -2061,7 +2061,7 @@ async function doLogin(){
   if(!username){ errEl.textContent='Please enter your username.'; errEl.style.display='block'; return; }
   if(!pwd){ errEl.textContent='Please enter your password.'; errEl.style.display='block'; return; }
   try {
-    var r = await fetch(BOOKING_API+'/api/auth', {
+    var r = await fetch(BOOKING_API_AUTH+'/api/auth', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({action:'login', username:username, password:pwd})
     });
@@ -2081,16 +2081,15 @@ async function doRegister(){
   if(!pwd || pwd.length < 6){ errEl.textContent='Password must be at least 6 characters.'; errEl.style.display='block'; return; }
   if(pwd !== confirm){ errEl.textContent='Passwords do not match.'; errEl.style.display='block'; return; }
   try {
-    var r = await fetch(BOOKING_API+'/api/auth', {
+    var r = await fetch(BOOKING_API_AUTH+'/api/auth', {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({action:'setup', username:username, password:pwd})
     });
     var d = await r.json();
     if(d.success){
-      // Auto login
       document.getElementById('loginUsername').value = username;
       document.getElementById('loginPwd').value = pwd;
-      showLogin({preventDefault:function(){}});
+      showLogin(null);
       await doLogin();
     } else {
       errEl.textContent = d.error || 'Could not create account.';
@@ -2102,7 +2101,7 @@ async function doRegister(){
 async function doLogout(){
   var token = getSession();
   clearSession();
-  if(token) fetch(BOOKING_API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'logout'})}).catch(function(){});
+  if(token) fetch(BOOKING_API_AUTH+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'logout'})}).catch(function(){});
   location.reload();
 }
 
@@ -2133,19 +2132,16 @@ async function doChangePw(){
   if(nw!==cf){err.textContent='Passwords do not match.';err.style.display='block';return;}
   var token=getSession();
   try{
-    var r=await fetch(BOOKING_API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'change',password:cur,newPassword:nw})});
+    var r=await fetch(BOOKING_API_AUTH+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'change',password:cur,newPassword:nw})});
     var d=await r.json();
     if(d.success){showToast('Password updated! Please sign in again.');document.getElementById('chpwWrap').remove();setTimeout(doLogout,1500);}
     else{err.textContent=d.error||'Could not update password.';err.style.display='block';}
   }catch(e){err.textContent='Connection error.';err.style.display='block';}
 }
 
-// Enter key support
-document.addEventListener('DOMContentLoaded',function(){
-  document.getElementById('loginPwd').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-  document.getElementById('regConfirm').addEventListener('keydown',function(e){if(e.key==='Enter')doRegister();});
-  initAuth();
-});
+document.getElementById('loginPwd').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('regConfirm').addEventListener('keydown',function(e){if(e.key==='Enter')doRegister();});
+initAuth();
 </script>
 </body>
 </html>
