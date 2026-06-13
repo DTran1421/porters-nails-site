@@ -27,4 +27,6 @@ jobs:
             **/.git*/**
             **/README.md
             **/.github/**
+            **/node_modules/**
           dangerous-clean-slate: false
+          log-level: verbose
