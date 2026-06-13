@@ -386,12 +386,25 @@
   }
 </style>
 <style>
-  body.manage-page{ background:var(--cream); min-height:100vh; }
-  .manage-wrap{ max-width:860px; margin:0 auto; padding:22px 18px 70px; }
-  .manage-top{ display:flex; align-items:center; gap:12px; justify-content:center; padding:6px 0 14px; border-bottom:1px solid var(--rose-mid); margin-bottom:18px; }
-  .manage-logo{ height:50px; width:auto; }
-  .manage-title{ font-family:'Playfair Display',serif; font-size:21px; color:var(--rose-text); font-weight:600; }
-  .manage-page #dashView{ background:#fff; border:1px solid var(--rose-mid); border-radius:18px; padding:18px 18px 24px; }
+  body.manage-page{ background:#f7f0f3; min-height:100vh; display:flex; flex-direction:column; }
+  .manage-header{ background:#fff; border-bottom:1px solid var(--rose-mid); padding:0 2rem; display:flex; align-items:center; justify-content:space-between; height:64px; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(184,74,110,0.06); }
+  .manage-header-left{ display:flex; align-items:center; gap:12px; }
+  .manage-logo{ height:40px; width:auto; }
+  .manage-title{ font-family:'Playfair Display',serif; font-size:20px; color:var(--rose-text); font-weight:600; }
+  .manage-header-right{ display:flex; align-items:center; gap:1rem; }
+  .manage-back{ font-size:13px; color:var(--text-soft); text-decoration:none; display:flex; align-items:center; gap:5px; font-weight:600; transition:color .2s; }
+  .manage-back:hover{ color:var(--rose-dark); }
+  .manage-body{ display:flex; flex:1; min-height:calc(100vh - 64px); }
+  .manage-sidebar{ width:220px; background:#fff; border-right:1px solid var(--rose-mid); padding:1.5rem 0; flex-shrink:0; position:sticky; top:64px; height:calc(100vh - 64px); overflow-y:auto; }
+  .sidebar-label{ font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-muted); padding:0 1rem; margin-bottom:.5rem; display:block; margin-top:1rem; }
+  .sidebar-item{ display:flex; align-items:center; gap:10px; padding:.6rem 1rem; cursor:pointer; font-size:14px; font-weight:600; color:var(--text-soft); transition:background .15s, color .15s; margin:1px .5rem; border-radius:10px; border:none; background:none; width:calc(100% - 1rem); text-align:left; font-family:'Nunito',sans-serif; }
+  .sidebar-item i{ font-size:18px; }
+  .sidebar-item:hover{ background:var(--rose); color:var(--rose-text); }
+  .sidebar-item.active{ background:var(--rose); color:var(--rose-dark); }
+  .manage-content{ flex:1; padding:2rem; overflow-y:auto; }
+  .manage-page #dashView{ background:transparent; }
+  .manage-wrap{ display:none; }
+  @media(max-width:768px){ .manage-sidebar{ display:none; } .manage-content{ padding:1rem; } }
   .sch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
   .sch-stat{background:var(--cream);border-radius:14px;padding:.7rem 1rem;border:1px solid var(--rose-mid)}
   .ss-l{font-size:12px;color:var(--text-soft);margin-bottom:4px}
@@ -460,12 +473,32 @@
 </style>
 </head>
 <body class="manage-page">
-  <div class="manage-wrap">
-    <div class="manage-top">
+  <header class="manage-header">
+    <div class="manage-header-left">
       <img src="../porters-logo-icon.png" alt="Porter's Nails &amp; Spa" class="manage-logo" />
       <span class="manage-title">Owner Dashboard</span>
     </div>
-    <div id="dashView"></div>
+    <div class="manage-header-right">
+      <a href="https://portersnailsandspa.com" class="manage-back" target="_blank"><i class="ti ti-external-link"></i> View site</a>
+    </div>
+  </header>
+  <div class="manage-body">
+    <aside class="manage-sidebar">
+      <span class="sidebar-label">Bookings</span>
+      <button class="sidebar-item active" onclick="showTab('appts')"><i class="ti ti-calendar"></i> Appointments</button>
+      <button class="sidebar-item" onclick="showTab('blocks')"><i class="ti ti-clock-off"></i> Block time</button>
+      <span class="sidebar-label">Content</span>
+      <button class="sidebar-item" onclick="showTab('promo')"><i class="ti ti-speakerphone"></i> Promotion</button>
+      <button class="sidebar-item" onclick="showTab('photos')"><i class="ti ti-photo"></i> Photos</button>
+      <button class="sidebar-item" onclick="showTab('techs')"><i class="ti ti-users"></i> Nail techs</button>
+      <button class="sidebar-item" onclick="showTab('services')"><i class="ti ti-list"></i> Services & prices</button>
+      <span class="sidebar-label">Settings</span>
+      <button class="sidebar-item" onclick="showTab('hours')"><i class="ti ti-clock"></i> Hours & info</button>
+      <button class="sidebar-item" onclick="showTab('msglog')"><i class="ti ti-message"></i> Message log</button>
+    </aside>
+    <main class="manage-content">
+      <div id="dashView"></div>
+    </main>
   </div>
   <div class="toast" id="toast"></div>
 <script>  var SUPABASE_URL='https://cguokuwxonsletmtqfwr.supabase.co';
@@ -1013,6 +1046,17 @@
   function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2600); }
 
   var ownerTab='appts';
+  function showTab(tab){
+    ownerTab=tab;
+    // Update sidebar active state
+    var items=document.querySelectorAll('.sidebar-item');
+    var tabMap={'appts':'appointments','blocks':'block','promo':'promotion','photos':'photos','techs':'techs','services':'services','hours':'hours','msglog':'messages'};
+    items.forEach(function(el){
+      var fn=el.getAttribute('onclick')||'';
+      el.classList.toggle('active', fn.indexOf("'"+tab+"'")>-1);
+    });
+    renderDash();
+  }
   function renderDash(){
     var d=document.getElementById('dashView');
     d.innerHTML = '<div class="tabs">'+
