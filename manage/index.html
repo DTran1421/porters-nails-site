@@ -474,9 +474,39 @@
 
 
 
+
+  /* Login screen */
+  .login-screen{ position:fixed; inset:0; background:var(--cream); z-index:9999; display:flex; align-items:center; justify-content:center; padding:1rem; }
+  .login-card{ background:#fff; border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; max-width:380px; width:100%; box-shadow:0 20px 60px rgba(184,74,110,0.12); text-align:center; }
+  .login-logo{ height:64px; width:auto; margin-bottom:1.25rem; }
+  .login-title{ font-family:'Playfair Display',serif; font-size:22px; color:var(--rose-text); margin-bottom:.25rem; }
+  .login-sub{ font-size:14px; color:var(--text-soft); margin-bottom:1.75rem; }
+  .login-field{ width:100%; padding:.75rem 1rem; border:1.5px solid var(--rose-mid); border-radius:12px; font-family:'Nunito',sans-serif; font-size:15px; color:var(--text); background:var(--cream); margin-bottom:1rem; box-sizing:border-box; outline:none; transition:border-color .2s; }
+  .login-field:focus{ border-color:var(--rose-dark); }
+  .login-btn{ width:100%; padding:.8rem; background:var(--rose-dark); color:#fff; border:none; border-radius:12px; font-family:'Nunito',sans-serif; font-size:15px; font-weight:700; cursor:pointer; transition:opacity .2s; }
+  .login-btn:hover{ opacity:.88; }
+  .login-btn:disabled{ opacity:.5; cursor:not-allowed; }
+  .login-error{ color:#B84A6E; font-size:13px; margin-bottom:.75rem; display:none; }
+
+  /* Change password modal */
+  .chpw-wrap{ position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1001; display:flex; align-items:center; justify-content:center; padding:1rem; }
+  .chpw-card{ background:#fff; border-radius:20px; padding:2rem; max-width:360px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.2); }
+  .chpw-card h3{ font-family:'Playfair Display',serif; font-size:18px; color:var(--rose-text); margin-bottom:1.25rem; }
 </style>
 </head>
 <body class="manage-page">
+
+  <!-- Login screen -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <img src="../porters-logo-icon.png" class="login-logo" alt="Porter's Nails & Spa" />
+      <div class="login-title">Owner Dashboard</div>
+      <div class="login-sub" id="loginSub">Sign in to manage your salon</div>
+      <div class="login-error" id="loginError"></div>
+      <input class="login-field" type="password" id="loginPwd" placeholder="Password" autocomplete="current-password" />
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign in</button>
+    </div>
+  </div>
   <header class="manage-header">
     <div class="manage-header-left">
       <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar"><i class="ti ti-layout-sidebar"></i></button>
@@ -485,6 +515,7 @@
     </div>
     <div class="manage-header-right">
       <a href="https://portersnailsandspa.com" class="manage-back" target="_blank"><i class="ti ti-external-link"></i> View site</a>
+      <button class="manage-back" onclick="doLogout()" style="background:none;border:none;cursor:pointer;color:var(--text-soft);font-size:13px;font-weight:600;display:flex;align-items:center;gap:5px;"><i class="ti ti-logout"></i> Sign out</button>
     </div>
   </header>
   <div class="manage-body">
@@ -499,6 +530,7 @@
       <button class="sidebar-item" onclick="showTab('services')"><i class="ti ti-list"></i> Services & prices</button>
       <span class="sidebar-label">Settings</span>
       <button class="sidebar-item" onclick="showTab('hours')"><i class="ti ti-clock"></i> Hours & info</button>
+      <button class="sidebar-item" onclick="showChangePw()"><i class="ti ti-lock"></i> Change password</button>
       <button class="sidebar-item" onclick="showTab('msglog')"><i class="ti ti-message"></i> Message log</button>
     </aside>
     <main class="manage-content">
@@ -1415,9 +1447,6 @@
         });
         var clearBtn=tb.querySelector('#clearLogBtn');
         if(clearBtn){ clearBtn.onclick=function(){
-          var pwd=prompt('Enter password to clear message log:');
-          if(pwd===null) return;
-          if(pwd!=='895623'){ showToast('Incorrect password.'); return; }
           showConfirm({title:'Clear message log?', message:'This will permanently delete all '+rows.length+' log entries. This cannot be undone.', confirmLabel:'Clear all', onConfirm:function(){
             fetch(BOOKING_API+'/api/messages',{
               method:'DELETE',
