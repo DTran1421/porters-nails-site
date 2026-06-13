@@ -506,9 +506,7 @@
     </main>
   </div>
   <div class="toast" id="toast"></div>
-<script>  var SUPABASE_URL='https://cguokuwxonsletmtqfwr.supabase.co';
-  var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNndW9rdXd4b25zbGV0bXRxZndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3OTQzMDQsImV4cCI6MjA5NjM3MDMwNH0.28_zw70vbccQCQSTCZ44K3JwGXb2pOm_e4oNEvxqq_E';
-  var BOOKING_API='https://porters-nails-api.vercel.app';
+<script>  var BOOKING_API='https://porters-nails-api.vercel.app';
 
   // --- mobile nav toggle ---
   (function(){
@@ -536,10 +534,9 @@
   function load(k,d){ var v=DB.get(k); return v?JSON.parse(v):d; }
   function save(k,v){ DB.set(k,JSON.stringify(v)); }
   function syncSetting(key,value){
-    if(typeof SUPABASE_URL==='undefined'||!SUPABASE_URL) return;
-    fetch(SUPABASE_URL+'/rest/v1/site_settings',{
+    fetch(BOOKING_API+'/api/settings',{
       method:'POST',
-      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({key:key,value:typeof value==='string'?value:JSON.stringify(value),updated_at:new Date().toISOString()})
     }).catch(function(){});
   }
@@ -1135,9 +1132,8 @@
   function renderApptsTab(){
     var tb=document.getElementById('tabBody');
     tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading appointments...</p></div>';
-    if(typeof SUPABASE_URL==='undefined'||!SUPABASE_URL){ tb.innerHTML='<div class="dash-empty"><p>Supabase not configured.</p></div>'; return; }
-    fetch(SUPABASE_URL+'/rest/v1/appointments?order=created_at.desc',{
-      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+    fetch(BOOKING_API+'/api/appointments',{
+      headers:{}
     })
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
     .then(function(rows){
@@ -1347,12 +1343,11 @@
       btn.disabled=true; prog.style.display='block';
       var ext=selectedFile.name.split('.').pop().toLowerCase();
       var fname='gallery/'+Date.now()+'.'+ext;
-      var uploadUrl=SUPABASE_URL+'/storage/v1/object/'+fname;
+      var uploadUrl=BOOKING_API+'/api/upload';
       fetch(uploadUrl,{
         method:'POST',
         headers:{
-          'Authorization':'Bearer '+SUPABASE_ANON_KEY,
-          'apikey':SUPABASE_ANON_KEY,
+          'x-file-name':fname,
           'Content-Type':selectedFile.type,
           'x-upsert':'true'
         },
@@ -1360,7 +1355,7 @@
       })
       .then(function(r){ if(!r.ok) throw new Error('Upload failed '+r.status); return r.json(); })
       .then(function(){
-        var publicUrl=SUPABASE_URL+'/storage/v1/object/public/'+fname;
+        var publicUrl='https://cguokuwxonsletmtqfwr.supabase.co/storage/v1/object/public/'+fname;
         gallery.push({ id:'g'+Date.now(), url:publicUrl, caption:tb.querySelector('#newPhotoCap').value.trim() });
         save('porters_gallery',gallery); syncSetting('gallery',gallery); renderGalleryPublic(); showToast('Photo uploaded!'); renderDash();
       })
@@ -1379,8 +1374,8 @@
     var filter='all';
 
     function load(){
-      fetch(SUPABASE_URL+'/rest/v1/message_log?order=created_at.desc&limit=100',{
-        headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+      fetch(BOOKING_API+'/api/messages',{
+        headers:{}
       })
       .then(function(r){return r.json();})
       .then(function(rows){
@@ -1424,9 +1419,9 @@
           if(pwd===null) return;
           if(pwd!=='895623'){ showToast('Incorrect password.'); return; }
           showConfirm({title:'Clear message log?', message:'This will permanently delete all '+rows.length+' log entries. This cannot be undone.', confirmLabel:'Clear all', onConfirm:function(){
-            fetch(SUPABASE_URL+'/rest/v1/message_log?id=gt.0',{
+            fetch(BOOKING_API+'/api/messages',{
               method:'DELETE',
-              headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+              headers:{}
             }).then(function(r){
               if(r.ok){ showToast('Message log cleared.'); load(); }
               else showToast('Error clearing log.');
@@ -1490,7 +1485,7 @@
     if(removeBtn) removeBtn.onclick=function(){
       info.heroPhoto=''; save('porters_info',info); applyInfo();
       // Sync removal to Supabase
-      fetch(SUPABASE_URL+'/rest/v1/site_settings',{method:'POST',headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({key:'hero_photo',value:''})}).catch(function(){});
+      fetch(BOOKING_API+'/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:'hero_photo',value:''})}).catch(function(){});
       renderDash();
     };
     // Hero photo upload
@@ -1502,17 +1497,17 @@
       status.style.display='block';
       var ext=file.name.split('.').pop().toLowerCase();
       var fname='gallery/hero_'+Date.now()+'.'+ext;
-      fetch(SUPABASE_URL+'/storage/v1/object/'+fname,{
+      fetch(BOOKING_API+'/api/upload',{
         method:'POST',
-        headers:{'Authorization':'Bearer '+SUPABASE_ANON_KEY,'apikey':SUPABASE_ANON_KEY,'Content-Type':file.type,'x-upsert':'true'},
+        headers:{'x-file-name':fname,'x-file-type':file.type},
         body:file
       })
       .then(function(r){ if(!r.ok) throw new Error('Upload failed '+r.status); return r.json(); })
       .then(function(){
-        info.heroPhoto=SUPABASE_URL+'/storage/v1/object/public/'+fname;
+        info.heroPhoto='https://cguokuwxonsletmtqfwr.supabase.co/storage/v1/object/public/'+fname;
         save('porters_info',info); applyInfo();
         // Sync to Supabase so all devices see the new hero photo
-        fetch(SUPABASE_URL+'/rest/v1/site_settings',{method:'POST',headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({key:'hero_photo',value:info.heroPhoto})}).catch(function(){});
+        fetch(BOOKING_API+'/api/settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:'hero_photo',value:info.heroPhoto})}).catch(function(){});
         showToast('Hero photo updated!'); renderDash();
       })
       .catch(function(e){ status.style.display='none'; showToast('Upload failed: '+e.message); });
