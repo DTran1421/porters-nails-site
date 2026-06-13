@@ -1192,8 +1192,10 @@
         {original_token:wiz.rescheduleToken,name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||''}:
         {name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||''};
       fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
-      .then(function(r){return r.json();})
-      .then(function(d){
+      .then(function(r){return r.json().then(function(d){return {status:r.status,data:d};});})
+      .then(function(res){
+        var d=res.data;
+        if(res.status===409||d.error==='slot_taken'){ btn.disabled=false; btn.innerHTML='<i class="ti ti-calendar-check"></i> Request appointment'; showToast(d.message||'That time was just booked. Please pick another time.'); wiz.step=5; render(); return; }
         if(d.success){ wiz.step=7; render(); }
         else{ btn.disabled=false; btn.innerHTML='<i class="ti ti-calendar-check"></i> Request appointment'; showToast('Something went wrong. Please call (281) 747-7421.'); }
       })
