@@ -1093,7 +1093,7 @@
     ownerTab=tab;
     // Update sidebar active state
     var items=document.querySelectorAll('.sidebar-item');
-    var tabMap={'appts':'appointments','blocks':'block','promo':'promotion','photos':'photos','techs':'techs','services':'services','hours':'hours','msglog':'messages'};
+    var tabMap={'appts':'appointments','blocks':'block','promo':'promotion','photos':'photos','techs':'techs','services':'services','hours':'hours','msglog':'messages','accounts':'accounts'};
     items.forEach(function(el){
       var fn=el.getAttribute('onclick')||'';
       el.classList.toggle('active', fn.indexOf("'"+tab+"'")>-1);
@@ -1120,6 +1120,7 @@
     else if(ownerTab==='techs') renderTechsTab();
     else if(ownerTab==='services') renderServicesTab();
     else if(ownerTab==='msglog') renderMsgLogTab();
+    else if(ownerTab==='accounts') renderAccountsTab();
     else renderHoursTab();
   }
 
@@ -2009,11 +2010,23 @@ function getSession(){ return sessionStorage.getItem(SESSION_KEY); }
 function setSession(t){ sessionStorage.setItem(SESSION_KEY, t); }
 function clearSession(){ sessionStorage.removeItem(SESSION_KEY); }
 
-function showDashboard(){
+async function showDashboard(){
   document.getElementById('loginScreen').style.display='none';
   document.getElementById('managebody').style.display='flex';
   document.getElementById('dashView').style.display='block';
   ownerTab='appts';
+  // Check role and show admin items
+  try{
+    var token=getSession();
+    var r=await fetch(BOOKING_API_AUTH+'/api/auth',{headers:{'x-session-token':token}});
+    var d=await r.json();
+    if(d.valid && d.role==='admin'){
+      var al=document.getElementById('adminLabel');
+      var ab=document.getElementById('accountsBtn');
+      if(al) al.style.display='block';
+      if(ab) ab.style.display='flex';
+    }
+  }catch(e){}
   if(typeof renderDash === 'function') renderDash();
 }
 
@@ -2033,6 +2046,82 @@ function showLogin(e){
   document.getElementById('loginSub').textContent='Sign in to manage your salon';
   document.getElementById('loginError').style.display='none';
   return false;
+}
+
+function renderAccountsTab(){
+  var tb=document.getElementById('tabBody');
+  if(!tb) return;
+  tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading accounts...</p></div>';
+  var token=getSession();
+  fetch(BOOKING_API_AUTH+'/api/auth',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-session-token':token},
+    body:JSON.stringify({action:'list_accounts'})
+  }).then(function(r){return r.json();}).then(function(accounts){
+    var h='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">';
+    h+='<h2 style="font-family:Playfair Display,serif;font-size:22px;color:var(--rose-text)">Owner Accounts</h2>';
+    h+='<button class="btn btn-primary" style="font-size:13px;padding:.5rem 1.2rem" onclick="showAddAccount()"><i class="ti ti-plus"></i> Add account</button></div>';
+    h+='<div id="addAccountWrap"></div>';
+    h+='<div style="display:flex;flex-direction:column;gap:.75rem">';
+    accounts.forEach(function(a){
+      h+='<div style="background:#fff;border:1px solid var(--rose-mid);border-radius:14px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between">';
+      h+='<div><div style="font-weight:700;color:var(--rose-text);font-size:15px">'+a.username+'</div>';
+      h+='<div style="font-size:12px;color:var(--text-muted);margin-top:2px">'+a.role+(a.last_login?' &middot; Last login: '+new Date(a.last_login).toLocaleDateString():'')+'</div></div>';
+      if(a.role!=='admin'){
+        h+='<button class="mini no" onclick="deleteAccount(''+a.username+'')"><i class="ti ti-trash"></i> Remove</button>';
+      } else {
+        h+='<span style="font-size:12px;color:var(--text-muted)">Admin</span>';
+      }
+      h+='</div>';
+    });
+    h+='</div>';
+    tb.innerHTML=h;
+  }).catch(function(){ tb.innerHTML='<div class="dash-empty"><p>Could not load accounts.</p></div>'; });
+}
+
+function showAddAccount(){
+  var wrap=document.getElementById('addAccountWrap');
+  if(!wrap) return;
+  wrap.innerHTML='<div style="background:var(--cream);border:1px solid var(--rose-mid);border-radius:14px;padding:1.25rem;margin-bottom:1rem">'+
+    '<h4 style="margin-bottom:1rem;color:var(--rose-text)">New Account</h4>'+
+    '<input class="login-field" type="text" id="newUser" placeholder="Username" style="margin-bottom:.5rem" />'+
+    '<input class="login-field" type="password" id="newPwd" placeholder="Password (min 6 characters)" style="margin-bottom:.5rem" />'+
+    '<div style="display:flex;gap:.5rem">'+
+    '<button class="btn btn-ghost" style="flex:1;padding:.6rem;font-size:13px" onclick="document.getElementById('addAccountWrap').innerHTML=''">Cancel</button>'+
+    '<button class="btn btn-primary" style="flex:1;padding:.6rem;font-size:13px" onclick="createAccount()">Create</button>'+
+    '</div></div>';
+}
+
+async function createAccount(){
+  var username=(document.getElementById('newUser').value||'').trim();
+  var password=document.getElementById('newPwd').value;
+  if(!username||username.length<3){showToast('Username must be at least 3 characters.');return;}
+  if(!password||password.length<6){showToast('Password must be at least 6 characters.');return;}
+  var token=getSession();
+  try{
+    var r=await fetch(BOOKING_API_AUTH+'/api/auth',{
+      method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},
+      body:JSON.stringify({action:'create_account',targetUsername:username,targetPassword:password,targetRole:'owner'})
+    });
+    var d=await r.json();
+    if(d.success){showToast('Account created!');renderAccountsTab();}
+    else{showToast(d.error||'Could not create account.');}
+  }catch(e){showToast('Connection error.');}
+}
+
+async function deleteAccount(username){
+  showConfirm({title:'Remove account?',message:'Remove access for "'+username+'"? They will no longer be able to log in.',confirmLabel:'Remove',danger:true,onConfirm:async function(){
+    var token=getSession();
+    try{
+      var r=await fetch(BOOKING_API_AUTH+'/api/auth',{
+        method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},
+        body:JSON.stringify({action:'delete_account',targetUsername:username})
+      });
+      var d=await r.json();
+      if(d.success){showToast('Account removed.');renderAccountsTab();}
+      else{showToast(d.error||'Could not remove.');}
+    }catch(e){showToast('Connection error.');}
+  }});
 }
 
 async function initAuth(){
