@@ -506,6 +506,7 @@
 
       <!-- Login form -->
       <div id="loginForm">
+        <input class="login-field" type="text" id="loginUsername" placeholder="Username" autocomplete="username" />
         <input class="login-field" type="password" id="loginPwd" placeholder="Password" autocomplete="current-password" />
         <button class="login-btn" onclick="doLogin()">Sign in</button>
         <p style="margin-top:1rem;font-size:13px;color:var(--text-muted)">First time? <a href="#" onclick="showRegister(event)" style="color:var(--rose-dark);font-weight:700;text-decoration:none">Create account</a></p>
@@ -513,8 +514,9 @@
 
       <!-- Register form -->
       <div id="registerForm" style="display:none">
-        <input class="login-field" type="password" id="regPwd" placeholder="Choose a password (min 6 characters)" />
-        <input class="login-field" type="password" id="regConfirm" placeholder="Confirm password" />
+        <input class="login-field" type="text" id="regUsername" placeholder="Username (e.g. owner)" autocomplete="username" />
+        <input class="login-field" type="password" id="regPwd" placeholder="Password (min 6 characters)" autocomplete="new-password" />
+        <input class="login-field" type="password" id="regConfirm" placeholder="Confirm password" autocomplete="new-password" />
         <button class="login-btn" onclick="doRegister()">Create account</button>
         <p style="margin-top:1rem;font-size:13px;color:var(--text-muted)">Already have an account? <a href="#" onclick="showLogin(event)" style="color:var(--rose-dark);font-weight:700;text-decoration:none">Sign in</a></p>
       </div>
@@ -2005,7 +2007,145 @@ function _wireApptEvents(tb){
 
   document.getElementById('dashView').style.display='block';
   ownerTab='appts';
+
+// ===== AUTH =====
+var SESSION_KEY = 'porters_session';
+function getSession(){ return sessionStorage.getItem(SESSION_KEY); }
+function setSession(t){ sessionStorage.setItem(SESSION_KEY, t); }
+function clearSession(){ sessionStorage.removeItem(SESSION_KEY); }
+
+function showLoginError(msg){
+  var el=document.getElementById('loginError');
+  el.textContent=msg; el.style.display='block';
+}
+
+function showDashboard(){
+  document.getElementById('loginScreen').style.display='none';
   renderDash();
+}
+
+function showRegister(e){
+  e.preventDefault();
+  document.getElementById('loginForm').style.display='none';
+  document.getElementById('registerForm').style.display='block';
+  document.getElementById('loginSub').textContent='Create your owner account';
+  document.getElementById('loginError').style.display='none';
+}
+
+function showLogin(e){
+  if(e && e.preventDefault) e.preventDefault();
+  document.getElementById('registerForm').style.display='none';
+  document.getElementById('loginForm').style.display='block';
+  document.getElementById('loginSub').textContent='Sign in to manage your salon';
+  document.getElementById('loginError').style.display='none';
+}
+
+async function initAuth(){
+  try {
+    var token = getSession();
+    if(token){
+      var r = await fetch(BOOKING_API+'/api/auth', { headers:{'x-session-token':token} });
+      var d = await r.json();
+      if(d.valid){ showDashboard(); return; }
+      clearSession();
+    }
+  } catch(e){}
+  document.getElementById('loginScreen').style.display='flex';
+}
+
+async function doLogin(){
+  var username = (document.getElementById('loginUsername').value||'').trim();
+  var pwd = document.getElementById('loginPwd').value;
+  var errEl = document.getElementById('loginError');
+  errEl.style.display='none';
+  if(!username){ errEl.textContent='Please enter your username.'; errEl.style.display='block'; return; }
+  if(!pwd){ errEl.textContent='Please enter your password.'; errEl.style.display='block'; return; }
+  try {
+    var r = await fetch(BOOKING_API+'/api/auth', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'login', username:username, password:pwd})
+    });
+    var d = await r.json();
+    if(d.success){ setSession(d.token); showDashboard(); }
+    else { errEl.textContent = d.error || 'Incorrect username or password.'; errEl.style.display='block'; }
+  } catch(e){ errEl.textContent='Connection error. Try again.'; errEl.style.display='block'; }
+}
+
+async function doRegister(){
+  var username = (document.getElementById('regUsername').value||'').trim();
+  var pwd = document.getElementById('regPwd').value;
+  var confirm = document.getElementById('regConfirm').value;
+  var errEl = document.getElementById('loginError');
+  errEl.style.display='none';
+  if(!username || username.length < 3){ errEl.textContent='Username must be at least 3 characters.'; errEl.style.display='block'; return; }
+  if(!pwd || pwd.length < 6){ errEl.textContent='Password must be at least 6 characters.'; errEl.style.display='block'; return; }
+  if(pwd !== confirm){ errEl.textContent='Passwords do not match.'; errEl.style.display='block'; return; }
+  try {
+    var r = await fetch(BOOKING_API+'/api/auth', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'setup', username:username, password:pwd})
+    });
+    var d = await r.json();
+    if(d.success){
+      // Auto login
+      document.getElementById('loginUsername').value = username;
+      document.getElementById('loginPwd').value = pwd;
+      showLogin({preventDefault:function(){}});
+      await doLogin();
+    } else {
+      errEl.textContent = d.error || 'Could not create account.';
+      errEl.style.display='block';
+    }
+  } catch(e){ errEl.textContent='Connection error. Try again.'; errEl.style.display='block'; }
+}
+
+async function doLogout(){
+  var token = getSession();
+  clearSession();
+  if(token) fetch(BOOKING_API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'logout'})}).catch(function(){});
+  location.reload();
+}
+
+function showChangePw(){
+  var wrap=document.createElement('div');
+  wrap.className='chpw-wrap'; wrap.id='chpwWrap';
+  wrap.innerHTML='<div class="chpw-card">'+
+    '<h3>Change Password</h3>'+
+    '<input class="login-field" type="password" id="chpwCurrent" placeholder="Current password" />'+
+    '<input class="login-field" type="password" id="chpwNew" placeholder="New password (min 6 characters)" />'+
+    '<input class="login-field" type="password" id="chpwConfirm" placeholder="Confirm new password" />'+
+    '<div class="login-error" id="chpwError"></div>'+
+    '<div style="display:flex;gap:.5rem;margin-top:.5rem">'+
+    '<button class="btn btn-ghost" style="flex:1;padding:.65rem" onclick="document.getElementById('chpwWrap').remove()">Cancel</button>'+
+    '<button class="btn btn-primary" style="flex:1;padding:.65rem;font-size:14px" onclick="doChangePw()">Update</button>'+
+    '</div></div>';
+  document.body.appendChild(wrap);
+}
+
+async function doChangePw(){
+  var cur=document.getElementById('chpwCurrent').value;
+  var nw=document.getElementById('chpwNew').value;
+  var cf=document.getElementById('chpwConfirm').value;
+  var err=document.getElementById('chpwError');
+  err.style.display='none';
+  if(!cur){err.textContent='Enter current password.';err.style.display='block';return;}
+  if(nw.length<6){err.textContent='New password must be at least 6 characters.';err.style.display='block';return;}
+  if(nw!==cf){err.textContent='Passwords do not match.';err.style.display='block';return;}
+  var token=getSession();
+  try{
+    var r=await fetch(BOOKING_API+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'change',password:cur,newPassword:nw})});
+    var d=await r.json();
+    if(d.success){showToast('Password updated! Please sign in again.');document.getElementById('chpwWrap').remove();setTimeout(doLogout,1500);}
+    else{err.textContent=d.error||'Could not update password.';err.style.display='block';}
+  }catch(e){err.textContent='Connection error.';err.style.display='block';}
+}
+
+// Enter key support
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('loginPwd').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  document.getElementById('regConfirm').addEventListener('keydown',function(e){if(e.key==='Enter')doRegister();});
+  initAuth();
+});
 </script>
 </body>
 </html>
