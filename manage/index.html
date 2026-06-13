@@ -408,7 +408,25 @@
   .sidebar-toggle:hover{ background:var(--rose); }
   .manage-body.sidebar-collapsed .manage-sidebar{ width:0; overflow:hidden; padding:0; border:none; }
   .manage-body.sidebar-collapsed .manage-content{ padding:2rem; }
-  @media(max-width:768px){ .manage-sidebar{ display:none; } .manage-content{ padding:1rem; } }
+  .mobile-nav{ display:none; }
+  @media(max-width:768px){
+    .manage-sidebar{ display:none; }
+    .manage-content{ padding:1rem; padding-bottom:80px; }
+    .manage-header{ padding:0 1rem; }
+    .manage-title{ font-size:16px; }
+    .mobile-nav{
+      display:flex; position:fixed; bottom:0; left:0; right:0;
+      background:#fff; border-top:1px solid var(--rose-mid);
+      z-index:100; padding:.5rem 0;
+    }
+    .mobile-nav button{
+      flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+      background:none; border:none; cursor:pointer; font-size:10px; font-weight:600;
+      color:var(--text-muted); font-family:'Nunito',sans-serif; padding:.25rem 0;
+    }
+    .mobile-nav button i{ font-size:20px; }
+    .mobile-nav button.active{ color:var(--rose-dark); }
+  }
   .sch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
   .sch-stat{background:var(--cream);border-radius:14px;padding:.7rem 1rem;border:1px solid var(--rose-mid)}
   .ss-l{font-size:12px;color:var(--text-soft);margin-bottom:4px}
@@ -545,6 +563,13 @@
       <div id="dashView"></div>
     </main>
   </div>
+  <nav class="mobile-nav" id="mobileNav">
+    <button onclick="showTab('appts')" id="mnAppts"><i class="ti ti-calendar"></i>Bookings</button>
+    <button onclick="showTab('techs')" id="mnTechs"><i class="ti ti-users"></i>Techs</button>
+    <button onclick="showTab('services')" id="mnSvc"><i class="ti ti-list"></i>Services</button>
+    <button onclick="showTab('hours')" id="mnHours"><i class="ti ti-clock"></i>Hours</button>
+    <button onclick="showTab('photos')" id="mnPhotos"><i class="ti ti-photo"></i>Photos</button>
+  </nav>
   <div class="toast" id="toast"></div>
 <script>  var BOOKING_API='https://porters-nails-api.vercel.app';
 
@@ -1095,11 +1120,14 @@
     ownerTab=tab;
     // Update sidebar active state
     var items=document.querySelectorAll('.sidebar-item');
-    var tabMap={'appts':'appointments','blocks':'block','promo':'promotion','photos':'photos','techs':'techs','services':'services','hours':'hours','msglog':'messages','accounts':'accounts'};
     items.forEach(function(el){
       var fn=el.getAttribute('onclick')||'';
       el.classList.toggle('active', fn.indexOf("'"+tab+"'")>-1);
     });
+    // Update mobile nav active state
+    var mobileMap={'appts':'mnAppts','techs':'mnTechs','services':'mnSvc','hours':'mnHours','photos':'mnPhotos'};
+    document.querySelectorAll('.mobile-nav button').forEach(function(b){ b.classList.remove('active'); });
+    if(mobileMap[tab]){ var mb=document.getElementById(mobileMap[tab]); if(mb) mb.classList.add('active'); }
     renderDash();
   }
   function renderDash(){
