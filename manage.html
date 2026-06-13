@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Porter's Nails & Spa — Porter, TX</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --rose:#FBEAF0; --rose-mid:#F4C0D1; --rose-deep:#ED93B1; --rose-dark:#B84A6E; --rose-text:#72243E;
+    --lavender:#EEEDFE; --lavender-mid:#CECBF6; --lavender-dark:#534AB7; --lavender-text:#3C3489;
+    --cream:#FDF8F5; --peach:#FAECE7; --peach-mid:#F5C4B3; --peach-text:#712B13;
+    --text:#3a2a2a; --text-soft:#6b4f4f; --text-muted:#9c8585; --white:#fff;
+    --shadow:0 10px 40px rgba(184,74,110,0.08); --shadow-sm:0 4px 16px rgba(184,74,110,0.06);
+    --good:#2e7d52; --good-bg:#E1F5EE;
+  }
+  html { scroll-behavior:smooth; }
+  body { font-family:'Nunito',sans-serif; background:var(--cream); color:var(--text); line-height:1.75; overflow-x:hidden; font-size:16px; }
+  .wrap { max-width:1180px; margin:0 auto; padding:0 2rem; }
+
+  nav { position:sticky; top:0; z-index:100; background:rgba(253,248,245,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--rose-mid); }
+  .nav-inner { display:flex; justify-content:space-between; align-items:center; padding:1.1rem 2rem; max-width:1180px; margin:0 auto; }
+  .logo { display:flex; align-items:center; text-decoration:none; }
+  .logo img { height:52px; width:auto; display:block; }
+  .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
+  .nav-links a { text-decoration:none; color:var(--text-soft); font-size:15px; font-weight:600; transition:color .2s; }
+  .nav-links a:hover { color:var(--rose-text); }
+  .nav-cta { background:var(--rose-dark); color:var(--white)!important; padding:.6rem 1.4rem; border-radius:25px; white-space:nowrap; transition:transform .2s,box-shadow .2s; }
+  .nav-cta:hover { transform:translateY(-2px); box-shadow:0 6px 18px rgba(184,74,110,.3); }
+  .nav-owner { display:inline-flex; align-items:center; gap:6px; color:var(--lavender-dark)!important; font-size:13px; white-space:nowrap; }
+  .nav-toggle { display:none; background:none; border:none; cursor:pointer; padding:8px; color:var(--rose-text); }
+  .nav-toggle svg { display:block; }
+
+  .hero { position:relative; padding:5.5rem 0 5rem; overflow:hidden; }
+  /* Confirmation modal */
+  .confirm-wrap{ position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem; }
+  .confirm-box{ background:#fff;border-radius:20px;padding:1.75rem 1.5rem;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.2);text-align:center; }
+  .confirm-box h3{ font-family:'Playfair Display',serif;font-size:18px;color:var(--rose-text);margin:0 0 .5rem; }
+  .confirm-box p{ font-size:14px;color:var(--text-soft);margin:0 0 1.25rem;line-height:1.5; }
+  .confirm-btns{ display:flex;gap:.5rem;justify-content:center; }
+  .confirm-btns .btn-ghost{ flex:1;padding:.65rem;border:1.5px solid var(--rose-mid);border-radius:12px;background:none;font-size:14px;cursor:pointer;color:var(--text-soft); }
+  .confirm-btns .btn-danger{ flex:1;padding:.65rem;border:none;border-radius:12px;background:#B84A6E;color:#fff;font-size:14px;font-weight:700;cursor:pointer; }
+  .bv-wrap{ position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900;display:flex;align-items:center;justify-content:center;padding:1rem; }
+  .bv-card{ background:var(--white);border-radius:24px;padding:2rem;max-width:420px;width:100%;box-shadow:var(--shadow-lg,0 20px 60px rgba(0,0,0,.18)); }
+  .bv-head{ display:flex;align-items:center;gap:12px;margin-bottom:1rem; }
+  .bv-head h2{ font-family:'Playfair Display',serif;font-size:20px;color:var(--rose-text);margin:0; }
+  .bv-status{ display:inline-block;padding:4px 14px;border-radius:20px;font-size:13px;font-weight:700;margin-bottom:1rem;background:var(--rose);color:var(--rose-dark); }
+  .bv-details{ background:var(--cream);border-radius:14px;padding:1rem;margin-bottom:1rem; }
+  .bv-details div{ display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--rose-mid);font-size:14px; }
+  .bv-details div:last-child{ border-bottom:none; }
+  .bv-details span{ color:var(--text-soft); }
+  .bv-actions{ display:flex;flex-direction:column;gap:.5rem; }
+  .hero::before { content:''; position:absolute; top:-120px; right:-120px; width:480px; height:480px; background:var(--rose); border-radius:50%; }
+  .hero::after { content:''; position:absolute; bottom:-160px; left:-100px; width:380px; height:380px; background:var(--lavender); border-radius:50%; }
+  .hero-grid { position:relative; z-index:1; display:grid; grid-template-columns:1.1fr .9fr; gap:3.5rem; align-items:center; }
+  .hero-badge { display:inline-flex; align-items:center; gap:7px; background:var(--lavender); color:var(--lavender-text); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:6px 16px; border-radius:25px; margin-bottom:1.5rem; }
+  .hero h1 { font-family:'Playfair Display',serif; font-size:56px; font-weight:600; line-height:1.08; color:var(--rose-text); margin-bottom:1.25rem; }
+  .hero h1 em { font-style:italic; color:var(--rose-dark); }
+  .hero p { font-size:18px; color:var(--text-soft); max-width:440px; margin-bottom:2rem; }
+  .hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
+  .btn { font-family:'Nunito',sans-serif; font-size:16px; font-weight:700; padding:.95rem 2rem; border-radius:30px; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:8px; border:none; transition:transform .2s,box-shadow .2s,background .2s; }
+  .btn-primary { background:var(--rose-dark); color:var(--white); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(184,74,110,.3); }
+  .btn-ghost { background:var(--white); color:var(--rose-text); border:2px solid var(--rose-mid); }
+  .btn-ghost:hover { background:var(--rose); border-color:var(--rose-deep); }
+  .hero-visual { position:relative; aspect-ratio:4/5; background:linear-gradient(160deg,var(--rose),var(--peach)); border-radius:28px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; }
+  .hero-visual .ph { text-align:center; color:var(--rose-dark); }
+  .hero-visual .ph i { font-size:56px; opacity:.5; }
+  .hero-visual .ph p { font-size:13px; font-weight:600; margin-top:8px; letter-spacing:.05em; }
+
+  section { padding:4.5rem 0; }
+  .sec-head { text-align:center; margin-bottom:3rem; }
+  .sec-eyebrow { font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--rose-dark); margin-bottom:.5rem; }
+  .sec-head h2 { font-family:'Playfair Display',serif; font-size:40px; font-weight:500; color:var(--rose-text); }
+  .sec-head p { color:var(--text-soft); margin-top:.5rem; font-size:17px; }
+
+  .services { background:var(--white); }
+  .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
+  .svc-card { background:var(--cream); border:1px solid var(--rose-mid); border-radius:20px; padding:1.75rem; transition:transform .25s,box-shadow .25s,border-color .25s; }
+  .svc-card:hover { transform:translateY(-6px); box-shadow:var(--shadow); border-color:var(--rose-deep); }
+  .svc-icon { width:52px; height:52px; border-radius:14px; background:var(--rose); display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
+  .svc-icon i { font-size:26px; color:var(--rose-dark); }
+  .svc-card:nth-child(3n+2) .svc-icon { background:var(--lavender); } .svc-card:nth-child(3n+2) .svc-icon i { color:var(--lavender-dark); }
+  .svc-card:nth-child(3n) .svc-icon { background:var(--peach); } .svc-card:nth-child(3n) .svc-icon i { color:var(--peach-text); }
+  .svc-card h3 { font-size:19px; font-weight:700; color:var(--rose-text); margin-bottom:.4rem; }
+  .svc-card p { font-size:14px; color:var(--text-soft); margin-bottom:1rem; min-height:42px; }
+  .svc-price { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--rose-dark); }
+  .svc-price small { font-size:13px; font-weight:400; color:var(--text-muted); font-family:'Nunito'; }
+  .svc-empty { grid-column:1/-1; text-align:center; color:var(--text-muted); padding:2rem; }
+
+  .gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:200px; gap:1rem; }
+  .gal { background:linear-gradient(150deg,var(--lavender),var(--rose)); border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--lavender-dark); gap:6px; }
+  .gal i { font-size:30px; opacity:.55; } .gal span { font-size:12px; font-weight:600; }
+  .gal.big { grid-column:span 2; grid-row:span 2; }
+  .gal:nth-child(even) { background:linear-gradient(150deg,var(--peach),var(--rose)); color:var(--peach-text); }
+
+  .about { background:var(--white); }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:3.5rem; align-items:center; }
+  .about-text h2 { font-family:'Playfair Display',serif; font-size:38px; font-weight:500; color:var(--rose-text); line-height:1.15; margin-bottom:1.25rem; }
+  .about-text p { color:var(--text-soft); margin-bottom:1rem; font-size:16px; }
+  .info-stack { display:flex; flex-direction:column; gap:1rem; }
+  .info-card { display:flex; align-items:center; gap:1rem; background:var(--cream); border:1px solid var(--rose-mid); border-radius:16px; padding:1.1rem 1.4rem; }
+  .info-card .ic-ico { width:46px; height:46px; flex-shrink:0; border-radius:12px; background:var(--lavender); display:flex; align-items:center; justify-content:center; }
+  .info-card .ic-ico i { font-size:22px; color:var(--lavender-dark); }
+  .info-card:nth-child(2) .ic-ico { background:var(--rose); } .info-card:nth-child(2) .ic-ico i { color:var(--rose-dark); }
+  .info-card:nth-child(3) .ic-ico { background:var(--peach); } .info-card:nth-child(3) .ic-ico i { color:var(--peach-text); }
+  .info-card strong { display:block; font-size:15px; color:var(--rose-text); font-weight:700; }
+  .info-card span { font-size:13px; color:var(--text-soft); }
+
+  .booking { background:linear-gradient(170deg,var(--rose) 0%,var(--cream) 100%); }
+  .wiz { max-width:760px; margin:0 auto; background:var(--white); border-radius:24px; box-shadow:var(--shadow); padding:2.25rem 2.5rem 2.5rem; }
+  .wiz-steps { display:flex; align-items:center; justify-content:center; gap:0; margin-bottom:2rem; flex-wrap:wrap; }
+  .wiz-step { display:flex; align-items:center; gap:8px; color:var(--text-muted); font-size:12px; font-weight:700; }
+  .wiz-step .num { width:26px; height:26px; border-radius:50%; background:var(--rose); color:var(--rose-text); display:flex; align-items:center; justify-content:center; font-size:12px; }
+  .wiz-step.active .num { background:var(--rose-dark); color:var(--white); }
+  .wiz-step.active { color:var(--rose-text); }
+  .wiz-step.done .num { background:var(--good-bg); color:var(--good); }
+  .wiz-line { width:28px; height:2px; background:var(--rose-mid); margin:0 8px; }
+  .wiz-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:600; color:var(--rose-text); text-align:center; margin-bottom:.25rem; }
+  .wiz-sub { text-align:center; color:var(--text-soft); font-size:14px; margin-bottom:1.75rem; }
+  .choice-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.85rem; }
+  .choice { border:1.5px solid var(--rose-mid); border-radius:14px; padding:1.1rem 1.25rem; cursor:pointer; background:var(--cream); transition:border-color .2s,background .2s; display:flex; justify-content:space-between; align-items:center; }
+  .choice:hover { border-color:var(--rose-dark); background:var(--rose); }
+  .choice.sel { border-color:var(--rose-dark); background:var(--rose); box-shadow:0 0 0 2px var(--rose-deep); }
+  .choice .c-name { font-weight:700; color:var(--rose-text); font-size:15px; }
+  .choice .c-meta { font-size:12px; color:var(--text-soft); margin-top:2px; }
+  .choice .c-price { font-size:13px; font-weight:700; color:var(--rose-dark); }
+  .tech-ava { font-size:11px; color:var(--lavender-dark); background:var(--lavender); padding:3px 9px; border-radius:12px; font-weight:700; }
+
+  .cal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+  .cal-head .cal-mon { font-family:'Playfair Display',serif; font-size:20px; font-weight:600; color:var(--rose-text); }
+  .cal-nav { background:var(--cream); border:1px solid var(--rose-mid); width:36px; height:36px; border-radius:50%; cursor:pointer; color:var(--rose-text); font-size:16px; display:flex; align-items:center; justify-content:center; }
+  .cal-nav:hover { background:var(--rose); }
+  .cal-nav:disabled { opacity:.35; cursor:not-allowed; }
+  .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
+  .cal-dow { text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; padding:4px 0; }
+  .cal-day { aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:10px; font-size:14px; font-weight:600; }
+  .cal-day.open { background:var(--cream); border:1.5px solid var(--rose-mid); color:var(--rose-text); cursor:pointer; }
+  .cal-day.open:hover { background:var(--rose); border-color:var(--rose-dark); }
+  .cal-day.sel { background:var(--rose-dark); color:var(--white); border-color:var(--rose-dark); }
+  .cal-day.blocked { color:var(--text-muted); text-decoration:line-through; background:transparent; opacity:.5; }
+  .cal-day.empty { background:transparent; }
+  .cal-legend { display:flex; gap:1.25rem; justify-content:center; margin-top:1rem; font-size:12px; color:var(--text-soft); }
+  .cal-legend span { display:inline-flex; align-items:center; gap:6px; }
+  .lg-dot { width:12px; height:12px; border-radius:4px; }
+
+  .slot-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.6rem; }
+  .slot { padding:.65rem; text-align:center; border:1.5px solid var(--rose-mid); border-radius:10px; background:var(--cream); cursor:pointer; font-weight:700; color:var(--rose-text); font-size:14px; }
+  .slot:hover { background:var(--rose); border-color:var(--rose-dark); }
+  .slot.sel { background:var(--rose-dark); color:var(--white); border-color:var(--rose-dark); }
+  .slot.taken { opacity:.4; text-decoration:line-through; cursor:not-allowed; background:transparent; }
+
+  .field { display:flex; flex-direction:column; gap:6px; margin-bottom:1rem; }
+  .field label { font-size:13px; font-weight:700; color:var(--rose-text); }
+  .field input, .field textarea, .field select { font-family:'Nunito'; font-size:15px; padding:.75rem 1rem; border:1.5px solid var(--rose-mid); border-radius:12px; background:var(--cream); color:var(--text); outline:none; }
+  .field input:focus, .field textarea:focus, .field select:focus { border-color:var(--rose-dark); }
+  .field textarea { resize:none; height:70px; }
+  .field-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .summary { background:var(--lavender); border-radius:14px; padding:1.1rem 1.4rem; margin-bottom:1.25rem; }
+  .summary div { display:flex; justify-content:space-between; font-size:14px; padding:3px 0; color:var(--lavender-text); }
+  .summary strong { font-weight:700; }
+  .wiz-actions { display:flex; justify-content:space-between; margin-top:1.5rem; }
+  .wiz-back { background:transparent; border:none; color:var(--text-soft); font-weight:700; cursor:pointer; font-family:'Nunito'; font-size:14px; display:inline-flex; align-items:center; gap:6px; }
+  .wiz-back:hover { color:var(--rose-text); }
+  .wiz-checking { text-align:center; font-size:13px; color:var(--text-soft); padding:.5rem 0; }
+  .wiz-done { text-align:center; padding:1rem 0; }
+  .wiz-done .check { width:72px; height:72px; border-radius:50%; background:var(--good-bg); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; }
+  .wiz-done .check i { font-size:38px; color:var(--good); }
+  .wiz-done h3 { font-family:'Playfair Display'; font-size:26px; color:var(--rose-text); margin-bottom:.5rem; }
+  .wiz-done p { color:var(--text-soft); font-size:15px; max-width:440px; margin:0 auto 1rem; }
+  .pending-note { background:var(--peach); color:var(--peach-text); border-radius:12px; padding:.85rem 1.1rem; font-size:13px; font-weight:600; max-width:460px; margin:0 auto; }
+  .empty-techs { text-align:center; padding:2rem 1rem; color:var(--text-muted); }
+  .empty-techs i { font-size:40px; opacity:.4; }
+
+  footer { background:var(--rose-text); color:#f4d0df; padding:3rem 0 2rem; }
+  .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:2rem; margin-bottom:2rem; }
+  .footer-logo { font-family:'Playfair Display',serif; font-size:24px; color:var(--white); margin-bottom:.75rem; }
+  footer p, footer a { font-size:14px; color:#f0c8d8; line-height:1.9; text-decoration:none; }
+  footer a:hover { color:var(--white); }
+  .footer-col h4 { color:var(--white); font-size:15px; margin-bottom:.75rem; font-weight:700; }
+  .footer-col a { display:block; }
+  .map-link { margin-bottom:.5rem; }
+  .map-link i { font-size:13px; }
+  .map-link:hover { text-decoration:underline; }
+
+  .promo-bar { background:var(--rose-dark); color:#fff; text-align:center; padding:.6rem 1rem; font-size:14px; font-weight:700; letter-spacing:.01em; }
+  .promo-bar i { margin-right:6px; }
+  .open-badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; letter-spacing:.04em; padding:6px 14px; border-radius:25px; margin-bottom:1.5rem; margin-left:8px; }
+  .open-badge.open { background:var(--good-bg); color:var(--good); }
+  .open-badge.closed { background:#f0e0e0; color:#9a5a5a; }
+  .open-badge .dot { width:8px; height:8px; border-radius:50%; background:currentColor; }
+  .gal-photo { background-size:cover; background-position:center; position:relative; }
+  .gal-cap { position:absolute; left:0; right:0; bottom:0; background:linear-gradient(transparent,rgba(58,23,38,.65)); color:#fff; font-size:12px; font-weight:600; padding:1.2rem .8rem .6rem; }
+  /* owner-facing helpers */
+  .help { background:var(--lavender); color:var(--lavender-text); border-radius:12px; padding:.85rem 1.1rem; font-size:14px; margin-bottom:1.25rem; line-height:1.5; }
+  .help b { font-weight:800; }
+  .big-input { width:100%; font-family:'Nunito'; font-size:16px; padding:.85rem 1rem; border:1.5px solid var(--rose-mid); border-radius:12px; background:var(--cream); color:var(--text); outline:none; margin-bottom:.9rem; }
+  .big-input:focus { border-color:var(--rose-dark); }
+  .big-label { font-size:15px; font-weight:800; color:var(--rose-text); display:block; margin:0 0 .4rem; }
+  .btn-big { width:100%; justify-content:center; font-size:16px; padding:1rem; }
+  .gphoto-row { display:flex; gap:1rem; align-items:center; background:var(--cream); border:1px solid var(--rose-mid); border-radius:14px; padding:.75rem; margin-bottom:.75rem; }
+  .gphoto-row img { width:64px; height:64px; object-fit:cover; border-radius:10px; flex-shrink:0; background:var(--rose); }
+  .gphoto-row .gp-cap { flex:1; font-size:14px; color:var(--rose-text); font-weight:600; }
+  .upload-zone { position:relative; border:2px dashed var(--rose-mid); border-radius:14px; padding:1.5rem 1rem; text-align:center; cursor:pointer; background:var(--rose); transition:border-color .2s; }
+  .upload-zone:hover { border-color:var(--rose-dark); }
+  .toggle-row { display:flex; align-items:center; justify-content:space-between; background:var(--cream); border:1px solid var(--rose-mid); border-radius:14px; padding:1rem 1.25rem; margin-bottom:1rem; }
+  .toggle-row .tr-label { font-size:15px; font-weight:800; color:var(--rose-text); }
+  .switch { position:relative; width:56px; height:30px; flex-shrink:0; }
+  .switch input { opacity:0; width:0; height:0; }
+  .slider-sw { position:absolute; inset:0; background:var(--rose-mid); border-radius:30px; transition:.2s; cursor:pointer; }
+  .slider-sw::before { content:''; position:absolute; height:24px; width:24px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
+  .switch input:checked + .slider-sw { background:var(--good); }
+  .switch input:checked + .slider-sw::before { transform:translateX(26px); }
+  .hours-edit-row { display:grid; grid-template-columns:90px auto 1fr; gap:.6rem; align-items:center; margin-bottom:.6rem; }
+  .hours-edit-row .hd-day { font-weight:800; color:var(--rose-text); font-size:14px; }
+  .hours-edit-row select { font-family:'Nunito'; font-size:14px; padding:.5rem; border:1.5px solid var(--rose-mid); border-radius:10px; background:var(--white); }
+  .hours-edit-row .hd-times { display:flex; gap:.4rem; align-items:center; }
+
+  .faq { background:var(--white); }
+  .faq-list { max-width:780px; margin:0 auto; }
+  .faq-item { background:var(--cream); border:1px solid var(--rose-mid); border-radius:16px; padding:1.4rem 1.6rem; margin-bottom:1rem; }
+  .faq-item h3 { font-size:18px; font-weight:800; color:var(--rose-text); margin-bottom:.4rem; display:flex; gap:.6rem; align-items:flex-start; }
+  .faq-item h3 i { color:var(--rose-dark); font-size:20px; flex-shrink:0; margin-top:1px; }
+  .faq-item p { font-size:16px; color:var(--text-soft); margin:0; }
+  .lang-btn { background:var(--lavender); color:var(--lavender-text); border:1px solid var(--lavender-mid); border-radius:20px; padding:.45rem .9rem; font-family:'Nunito'; font-size:14px; font-weight:800; cursor:pointer; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+  .lang-btn:hover { background:var(--lavender-mid); }
+  .nav-right { display:flex; align-items:center; gap:.75rem; }
+  .nav-links { margin-left:auto; order:2; }
+  .nav-right { order:3; margin-left:1.5rem; }
+
+  .menu-logo { display:block; max-width:180px; height:auto; margin:0 auto 1rem; }
+  .menu-cats { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem 2.5rem; }
+  .menu-cat { background:var(--cream); border:1px solid var(--rose-mid); border-radius:18px; padding:1.5rem 1.6rem; }
+  .menu-cat-head { display:flex; align-items:center; gap:.7rem; margin-bottom:1rem; }
+  .menu-cat-head h3 { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--rose-text); }
+  .mc-ico { width:42px; height:42px; border-radius:11px; background:var(--rose); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .mc-ico i { font-size:22px; color:var(--rose-dark); }
+  .menu-row { display:flex; align-items:baseline; gap:.5rem; padding:.4rem 0; }
+  .mr-name { font-size:15.5px; color:var(--text); font-weight:600; }
+  .mr-dots { flex:1; border-bottom:1.5px dotted var(--rose-mid); transform:translateY(-3px); }
+  .mr-price { font-size:15.5px; font-weight:800; color:var(--rose-dark); white-space:nowrap; }
+  .cat-ico { width:40px; height:40px; border-radius:11px; background:var(--rose); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .cat-ico i { font-size:21px; color:var(--rose-dark); }
+  .add-inline { display:flex; gap:.5rem; margin-top:.6rem; align-items:center; flex-wrap:wrap; }
+  .add-inline .ai-name { flex:2; min-width:140px; font-family:'Nunito'; font-size:14px; padding:.55rem .8rem; border:1.5px solid var(--rose-mid); border-radius:10px; background:var(--white); }
+  .add-inline .ai-price { width:80px; font-family:'Nunito'; font-size:14px; padding:.55rem .8rem; border:1.5px solid var(--rose-mid); border-radius:10px; background:var(--white); }
+  .footer-bottom { border-top:1px solid rgba(255,255,255,.15); padding-top:1.5rem; text-align:center; font-size:13px; color:#e8b8c8; }
+  .social-links { display:flex; gap:12px; margin-top:1rem; }
+  .social-links a { display:flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; border:1px solid rgba(255,255,255,.25); color:#f0c8d8; font-size:18px; transition:background .2s,border-color .2s; }
+  .social-links a:hover { background:rgba(255,255,255,.15); border-color:rgba(255,255,255,.5); color:var(--white); }
+
+  .overlay { display:none; position:fixed; inset:0; background:rgba(58,23,38,.62); z-index:1000; align-items:flex-start; justify-content:center; padding:2.5rem 1.5rem; overflow-y:auto; }
+  .overlay.show { display:flex; }
+  .modal { background:var(--white); border-radius:24px; width:100%; max-width:920px; box-shadow:0 24px 70px rgba(58,23,38,.4); }
+  .modal-head { display:flex; justify-content:space-between; align-items:center; padding:1.5rem 2rem; border-bottom:1px solid var(--rose-mid); }
+  .modal-head h3 { font-family:'Playfair Display',serif; font-size:24px; color:var(--rose-text); font-weight:600; }
+  .modal-close { background:var(--cream); border:none; width:38px; height:38px; border-radius:50%; cursor:pointer; color:var(--rose-text); font-size:18px; display:flex; align-items:center; justify-content:center; }
+  .modal-close:hover { background:var(--rose); }
+  .modal-body { padding:2rem; }
+  .login-box { max-width:360px; margin:1rem auto; text-align:center; }
+  .login-box .lock-ico { width:64px; height:64px; border-radius:50%; background:var(--lavender); display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; }
+  .login-box .lock-ico i { font-size:30px; color:var(--lavender-dark); }
+  .login-box p { color:var(--text-soft); font-size:14px; margin-bottom:1.5rem; }
+  .login-box input { width:100%; font-family:'Nunito'; font-size:15px; padding:.8rem 1rem; border:1.5px solid var(--rose-mid); border-radius:12px; margin-bottom:1rem; outline:none; }
+  .login-box input:focus { border-color:var(--rose-dark); }
+  .login-err { color:var(--rose-dark); font-size:13px; font-weight:600; margin-bottom:1rem; display:none; }
+  .login-err.show { display:block; }
+  .login-hint { font-size:12px; color:var(--text-muted); margin-top:1.25rem; }
+
+  .tabs { display:flex; gap:.25rem; margin-bottom:1.5rem; border-bottom:1px solid var(--rose-mid); flex-wrap:wrap; }
+  .tab { background:none; border:none; padding:.75rem 1.1rem; font-family:'Nunito'; font-size:15px; font-weight:700; color:var(--text-soft); cursor:pointer; border-bottom:3px solid transparent; }
+  .tab.active { color:var(--rose-dark); border-bottom-color:var(--rose-dark); }
+  .dash-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+  .stat { background:var(--cream); border:1px solid var(--rose-mid); border-radius:16px; padding:1.1rem 1.25rem; }
+  .stat .s-label { font-size:12px; color:var(--text-muted); font-weight:700; text-transform:uppercase; }
+  .stat .s-val { font-family:'Playfair Display'; font-size:32px; font-weight:600; color:var(--rose-dark); }
+  .appt { display:grid; grid-template-columns:auto 1fr auto; gap:1rem; align-items:center; background:var(--white); border:1px solid var(--rose-mid); border-radius:14px; padding:1rem 1.25rem; margin-bottom:.75rem; }
+  .appt .a-date { text-align:center; background:var(--rose); border-radius:10px; padding:.5rem .75rem; min-width:60px; }
+  .appt .a-date .ad-day { font-family:'Playfair Display'; font-size:20px; font-weight:600; color:var(--rose-dark); line-height:1; }
+  .appt .a-date .ad-mon { font-size:11px; font-weight:700; color:var(--rose-text); text-transform:uppercase; }
+  .appt .a-name { font-size:16px; font-weight:700; color:var(--rose-text); }
+  .appt .a-meta { font-size:13px; color:var(--text-soft); }
+  .appt .a-right { text-align:right; display:flex; flex-direction:column; gap:6px; align-items:flex-end; }
+  .badge { font-size:11px; font-weight:700; padding:4px 11px; border-radius:20px; text-transform:uppercase; letter-spacing:.04em; }
+  .badge.pending { background:var(--peach); color:var(--peach-text); }
+  .badge.confirmed { background:var(--good-bg); color:var(--good); }
+  .badge.declined { background:#f0e0e0; color:#9a5a5a; }
+  .a-svc { font-size:12px; color:var(--lavender-dark); font-weight:700; }
+  .mini-btns { display:flex; gap:6px; }
+  .mini { font-size:12px; font-weight:700; padding:5px 12px; border-radius:18px; border:none; cursor:pointer; font-family:'Nunito'; }
+  .mini.ok { background:var(--good-bg); color:var(--good); }
+  .mini.no { background:#f0e0e0; color:#9a5a5a; }
+  .mini:hover { filter:brightness(.95); }
+  .dash-empty { text-align:center; padding:3rem 1rem; color:var(--text-muted); }
+  .dash-empty i { font-size:44px; opacity:.4; }
+  .demo-banner { background:var(--lavender); color:var(--lavender-text); border-radius:12px; padding:.8rem 1.1rem; font-size:13px; margin-bottom:1.5rem; display:flex; gap:8px; align-items:flex-start; }
+  .demo-banner i { font-size:18px; margin-top:1px; flex-shrink:0; }
+
+  .tech-row { display:flex; justify-content:space-between; align-items:center; background:var(--cream); border:1px solid var(--rose-mid); border-radius:14px; padding:1rem 1.25rem; margin-bottom:.75rem; }
+  .tech-row .t-name { font-weight:700; color:var(--rose-text); font-size:16px; }
+  .tech-row .t-meta { font-size:12px; color:var(--text-soft); margin-top:2px; }
+  .add-form { background:var(--cream); border:1px solid var(--rose-mid); border-radius:16px; padding:1.5rem; margin-top:1rem; }
+  .add-form h4 { font-size:16px; color:var(--rose-text); margin-bottom:1rem; }
+  .chk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.5rem; margin-bottom:1rem; }
+  .chk { display:flex; align-items:center; gap:7px; font-size:13px; color:var(--text-soft); cursor:pointer; background:var(--white); border:1px solid var(--rose-mid); border-radius:10px; padding:.5rem .7rem; }
+  .chk input { accent-color:var(--rose-dark); }
+  .chk.on { background:var(--rose); border-color:var(--rose-dark); color:var(--rose-text); font-weight:700; }
+  .lbl { font-size:13px; font-weight:700; color:var(--rose-text); margin-bottom:.5rem; display:block; }
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:var(--rose-text); color:#fff; padding:.9rem 1.5rem; border-radius:30px; font-size:14px; font-weight:600; z-index:2000; box-shadow:0 8px 30px rgba(0,0,0,.25); display:none; }
+  .toast.show { display:block; }
+
+  .menu-edit-cat { background:var(--white); border:1px solid var(--rose-mid); border-radius:18px; margin-bottom:1.25rem; overflow:hidden; }
+  .menu-edit-cat .menu-cat-head { margin:0 !important; padding:1rem 1.25rem; background:var(--rose); border-bottom:1px solid var(--rose-mid); }
+  .menu-edit-cat .menu-cat-head h3 { font-size:17px; }
+  .se-table { width:100%; border-collapse:collapse; }
+  .se-table tr.se-item { border-bottom:1px solid var(--rose-mid); }
+  .se-table tr.se-item:last-child { border-bottom:none; }
+  .se-table td { padding:.7rem 1.1rem; font-size:14px; vertical-align:middle; }
+  .se-item-name { color:var(--text); font-weight:600; flex:1; }
+  .se-item-price { color:var(--rose-dark); font-weight:800; font-size:15px; white-space:nowrap; width:80px; text-align:right; }
+  .se-item-actions { width:60px; text-align:right; }
+  .se-edit-btn { background:none; border:none; cursor:pointer; color:var(--text-muted); font-size:16px; padding:4px 6px; border-radius:8px; transition:background .15s,color .15s; }
+  .se-edit-btn:hover { background:var(--rose); color:var(--rose-dark); }
+  .se-edit-row { display:none; background:var(--cream); }
+  .se-edit-row.open { display:table-row; }
+  .se-edit-inner { padding:.85rem 1.1rem; display:flex; flex-direction:column; gap:.6rem; }
+  .se-edit-fields { display:grid; grid-template-columns:2fr 100px; gap:.6rem; }
+  .se-edit-fields input { font-family:'Nunito'; font-size:14px; padding:.5rem .75rem; border:1.5px solid var(--rose-mid); border-radius:10px; background:var(--white); color:var(--text); outline:none; width:100%; }
+  .se-edit-fields input:focus { border-color:var(--rose-dark); }
+  .se-desc { width:100%; font-family:'Nunito'; font-size:13px; padding:.5rem .75rem; border:1.5px solid var(--rose-mid); border-radius:10px; background:var(--white); color:var(--text); outline:none; resize:none; height:52px; margin-top:.4rem; }
+  .se-desc:focus { border-color:var(--rose-dark); }
+  .se-desc-label { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:2px; }
+  .se-edit-btns { display:flex; justify-content:space-between; align-items:center; }
+  .se-edit-btns label { font-size:12.5px; color:var(--text-soft); display:flex; align-items:center; gap:6px; cursor:pointer; }
+  .se-edit-btns .btn-grp { display:flex; gap:6px; }
+  .se-add-row { padding:.75rem 1.1rem; border-top:1.5px dashed var(--rose-mid); display:flex; gap:.6rem; align-items:center; }
+  .se-add-row input { font-family:'Nunito'; font-size:13.5px; padding:.45rem .75rem; border:1.5px solid var(--rose-mid); border-radius:10px; background:var(--white); color:var(--text); outline:none; }
+  .se-add-row input:focus { border-color:var(--rose-dark); }
+  .se-add-row .ai-name { flex:1; }
+  .se-add-row .ai-price { width:70px; }
+  .msglog-table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  .msglog-table th { text-align:left; padding:.6rem .9rem; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); border-bottom:2px solid var(--rose-mid); }
+  .msglog-table td { padding:.65rem .9rem; border-bottom:1px solid var(--rose-mid); color:var(--text); vertical-align:top; }
+  .msglog-table tr:last-child td { border-bottom:none; }
+  .msglog-table tr:hover td { background:var(--rose); }
+  .msg-type-sms { display:inline-flex; align-items:center; gap:4px; background:#E8F4FD; color:#1565C0; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
+  .msg-type-email { display:inline-flex; align-items:center; gap:4px; background:#F3E8FD; color:#6A1B9A; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
+  .msg-trigger { font-size:11px; color:var(--text-muted); background:var(--cream); padding:2px 7px; border-radius:10px; }
+  .msg-preview { color:var(--text-soft); font-size:12.5px; max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .msglog-empty { text-align:center; padding:3rem; color:var(--text-muted); font-size:14px; }
+  .msglog-filters { display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .msglog-filter-btn { background:var(--white); border:1.5px solid var(--rose-mid); border-radius:20px; padding:.35rem .9rem; font-size:13px; font-family:'Nunito'; cursor:pointer; color:var(--text-soft); transition:all .15s; }
+  .msglog-filter-btn.active { background:var(--rose-dark); color:#fff; border-color:var(--rose-dark); }
+
+  @media (max-width:900px) {
+    .hero-grid, .about-grid { grid-template-columns:1fr; }
+    .hero-visual { max-width:340px; margin:0 auto; }
+    .services-grid, .choice-grid { grid-template-columns:1fr; }
+    .menu-cats { grid-template-columns:1fr; gap:1rem; }
+    .gallery-grid { grid-template-columns:repeat(2,1fr); }
+    .hero h1 { font-size:42px; } .wrap { padding:0 1.25rem; }
+    .footer-grid, .dash-stats, .field-row, .chk-grid { grid-template-columns:1fr; }
+    .slot-grid { grid-template-columns:repeat(3,1fr); }
+    .wiz { padding:1.5rem; } .modal-body { padding:1.25rem; }
+    .wiz-step span.txt { display:none; } .wiz-line { width:16px; }
+    .logo img { height:42px; }
+    .nav-inner { padding:0.9rem 1.25rem; position:relative; }
+    .nav-toggle { display:flex; }
+    .nav-links {
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:0;
+      background:var(--cream); border-bottom:1px solid var(--rose-mid);
+      box-shadow:0 12px 24px rgba(184,74,110,.10);
+      padding:0.5rem 1.25rem 1rem; display:none;
+    }
+    nav.open .nav-links { display:flex; }
+    .nav-links li { width:100%; }
+    .nav-links a { display:block; padding:0.9rem 0.25rem; font-size:16px; border-bottom:1px solid var(--rose-mid); }
+    .nav-links li:last-child a { border-bottom:none; }
+    .nav-cta { text-align:center; margin-top:0.75rem; padding:0.85rem; }
+    .nav-owner { justify-content:center; padding:0.9rem; }
+  }
+</style>
+<style>
+  body.manage-page{ background:var(--cream); min-height:100vh; }
+  .manage-wrap{ max-width:860px; margin:0 auto; padding:22px 18px 70px; }
+  .manage-top{ display:flex; align-items:center; gap:12px; justify-content:center; padding:6px 0 14px; border-bottom:1px solid var(--rose-mid); margin-bottom:18px; }
+  .manage-logo{ height:50px; width:auto; }
+  .manage-title{ font-family:'Playfair Display',serif; font-size:21px; color:var(--rose-text); font-weight:600; }
+  .manage-page #dashView{ background:#fff; border:1px solid var(--rose-mid); border-radius:18px; padding:18px 18px 24px; }
+  .sch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
+  .sch-stat{background:var(--cream);border-radius:14px;padding:.7rem 1rem;border:1px solid var(--rose-mid)}
+  .ss-l{font-size:12px;color:var(--text-soft);margin-bottom:4px}
+  .ss-v{font-size:22px;font-weight:700;color:var(--rose-text)}
+  .sch-bar{display:flex;align-items:center;gap:12px;margin-bottom:1rem;flex-wrap:wrap}
+  .sch-views{display:flex;gap:4px}
+  .svb{padding:5px 14px;font-size:12px;font-weight:700;border:1px solid var(--rose-mid);border-radius:18px;background:var(--white);cursor:pointer;color:var(--text-soft);font-family:'Nunito'}
+  .svb.svo{background:var(--rose);border-color:var(--rose-dark);color:var(--rose-text)}
+  .sch-wnav{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .wnl{font-size:13px;font-weight:700;min-width:150px;text-align:center;color:var(--rose-text)}
+  .wnb{border:1px solid var(--rose-mid);background:var(--white);border-radius:10px;padding:4px 10px;cursor:pointer;font-size:12px;color:var(--text-soft);font-family:'Nunito'}
+  .wnb:hover{background:var(--rose)}
+  .sch-grid{border:1px solid var(--rose-mid);border-radius:14px;overflow:hidden}
+  .sch-hrow{display:grid;grid-template-columns:68px repeat(6,1fr);background:var(--rose);border-bottom:1px solid var(--rose-mid)}
+  .sch-tc{padding:8px 6px;display:flex;align-items:center;gap:6px;border-right:1px solid var(--rose-mid);min-height:44px}
+  .sch-tc span{font-size:11px;font-weight:700;color:var(--rose-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sch-dh{padding:7px 4px;text-align:center;border-right:1px solid var(--rose-mid);font-size:12px}
+  .sch-dh:last-child{border-right:none}
+  .shdow{font-size:10px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:.05em}
+  .shdate{font-size:15px;font-weight:700;color:var(--rose-text)}
+  .schtoday .shdow,.schtoday .shdate{color:#B84A6E}
+  .tav{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+  .sch-trow{border-top:1px solid var(--rose-mid)}
+  .sch-thead{display:grid;grid-template-columns:68px repeat(6,1fr);cursor:pointer;background:var(--white)}
+  .sch-thead:hover{background:var(--cream)}
+  .sch-dc{padding:3px;border-right:1px solid var(--rose-mid);min-height:44px}
+  .sch-dc:last-child{border-right:none}
+  .sch-em{display:flex;align-items:center;justify-content:center;height:100%;min-height:36px;color:var(--rose-mid);font-size:14px}
+  .sch-chip{background:#fdf0f4;border:1px solid #E7B9C8;border-radius:5px;padding:3px 4px;margin-bottom:2px;cursor:pointer;font-size:10px;overflow:hidden}
+  .sch-chip:hover{background:#fce6ed}
+  .sch-chip.schp{background:#fdefd5;border-color:#f5c87a}
+  .chtime{font-weight:700;color:#B84A6E;font-size:11px;display:block}
+  .sch-chip.schp .chtime{color:#8a5a00}
+  .chsvc{color:#9a6070;font-size:10px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sch-td{display:none;border-top:1px solid var(--rose-mid);background:var(--cream);padding:8px 10px}
+  .sch-dr{display:grid;grid-template-columns:32px 68px 1fr 100px auto;gap:8px;align-items:start;background:var(--white);border:1px solid var(--rose-mid);border-radius:12px;padding:8px 10px;margin-bottom:6px;font-size:13px}
+  .sdr-d{font-size:11px;font-weight:700;color:var(--text-soft);padding-top:2px}
+  .sdr-t{color:#B84A6E;font-weight:700;font-size:12px}
+  .sdr-svc{font-weight:700;color:var(--rose-text)}
+  .sdr-pr{font-size:12px;color:var(--text-soft);margin-left:4px}
+  .sdr-n{font-size:12px;color:var(--text-soft)}
+  .sdr-ax{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+  .sdr-nt{grid-column:1/-1;font-size:12px;color:var(--text-soft);border-top:1px solid var(--rose-mid);padding-top:5px;margin-top:2px}
+  .sch-lv{display:flex;flex-direction:column;gap:6px}
+  .sch-lr{display:grid;grid-template-columns:52px 64px 1fr 100px auto;gap:8px;align-items:center;background:var(--white);border:1px solid var(--rose-mid);border-radius:12px;padding:10px 12px}
+  .slrd{text-align:center}
+  .slrdn{font-size:10px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:.04em}
+  .slrmd{font-size:13px;font-weight:700;color:var(--rose-text)}
+  .slrt{color:#B84A6E;font-weight:700;font-size:13px}
+  .slrsvc{font-size:13px;font-weight:700;color:var(--rose-text)}
+  .slrtech{font-size:12px;color:var(--text-soft)}
+  .slrax{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+  .badge.cancelled{background:#f0e8e8;color:#9a5a5a}
+  .any-alert{background:#fdefd5;border:1px solid #f5c87a;border-radius:12px;padding:.7rem 1rem;font-size:13px;color:#8a5a00;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+  @media(max-width:600px){.sch-hrow,.sch-thead{grid-template-columns:48px repeat(6,1fr)}.sch-tc{padding:4px 3px}.sch-dr{grid-template-columns:28px 60px 1fr 80px auto}.sch-lr{grid-template-columns:40px 56px 1fr 80px auto}.wnl{min-width:120px;font-size:12px}}
+
+
+
+
+
+
+
+
+
+
+</style>
+</head>
+<body class="manage-page">
+  <div class="manage-wrap">
+    <div class="manage-top">
+      <img src="porters-logo.png" alt="Porter's Nails &amp; Spa" class="manage-logo" />
+      <span class="manage-title">Owner Dashboard</span>
+    </div>
+    <div id="dashView"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+<script>  var SUPABASE_URL='https://cguokuwxonsletmtqfwr.supabase.co';
+  var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNndW9rdXd4b25zbGV0bXRxZndyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3OTQzMDQsImV4cCI6MjA5NjM3MDMwNH0.28_zw70vbccQCQSTCZ44K3JwGXb2pOm_e4oNEvxqq_E';
+  var BOOKING_API='https://porters-nails-api.vercel.app';
+
+  // --- mobile nav toggle ---
+  (function(){
+    var nav=document.querySelector('nav'); var tog=document.getElementById('navToggle');
+    if(tog){
+      tog.addEventListener('click', function(){
+        var open=nav.classList.toggle('open');
+        tog.setAttribute('aria-expanded', open?'true':'false');
+      });
+      // close menu when any link is tapped
+      nav.querySelectorAll('.nav-links a').forEach(function(a){
+        a.addEventListener('click', function(){ nav.classList.remove('open'); tog.setAttribute('aria-expanded','false'); });
+      });
+    }
+  })();
+
+  // --- maps link href is set in applyInfo() below (Apple Maps on iOS, Google elsewhere) ---
+
+  // --- storage layer (defined first so everything below can use it) ---
+  var mem = {};
+  var DB = {
+    get: function(k){ try { return localStorage.getItem(k); } catch(e){ return (k in mem)?mem[k]:null; } },
+    set: function(k,v){ try { localStorage.setItem(k,v); } catch(e){ mem[k]=v; } }
+  };
+  function load(k,d){ var v=DB.get(k); return v?JSON.parse(v):d; }
+  function save(k,v){ DB.set(k,JSON.stringify(v)); }
+  function syncSetting(key,value){
+    if(typeof SUPABASE_URL==='undefined'||!SUPABASE_URL) return;
+    fetch(SUPABASE_URL+'/rest/v1/site_settings',{
+      method:'POST',
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
+      body:JSON.stringify({key:key,value:typeof value==='string'?value:JSON.stringify(value),updated_at:new Date().toISOString()})
+    }).catch(function(){});
+  }
+  function showConfirm(opts){
+    // opts: { title, message, confirmLabel, danger, onConfirm }
+    var wrap=document.createElement('div');
+    wrap.className='confirm-wrap';
+    wrap.innerHTML='<div class="confirm-box">'+
+      '<h3>'+opts.title+'</h3>'+
+      '<p>'+opts.message+'</p>'+
+      '<div class="confirm-btns">'+
+        '<button class="btn-ghost" id="cfCancel">Cancel</button>'+
+        '<button class="'+(opts.danger!==false?'btn-danger':'btn-primary')+'" id="cfOk">'+(opts.confirmLabel||'Confirm')+'</button>'+
+      '</div>'+
+    '</div>';
+    document.body.appendChild(wrap);
+    wrap.querySelector('#cfCancel').onclick=function(){ document.body.removeChild(wrap); };
+    wrap.querySelector('#cfOk').onclick=function(){ document.body.removeChild(wrap); opts.onConfirm(); };
+    wrap.onclick=function(e){ if(e.target===wrap){ document.body.removeChild(wrap); } };
+  }
+
+  // --- language toggle (English / Spanish). Spanish is a first draft — have a native speaker review. ---
+  var I18N = {
+    es: {
+      'nav.services':'Servicios','nav.gallery':'Galería','nav.about':'Nosotros','nav.faq':'Preguntas','nav.book':'Reservar','nav.owner':'Acceso dueños',
+      'hero.badge':'Bajo nueva administración &middot; Porter, TX',
+      'hero.h1':'Uñas que te hacen sentir <em>hermosa.</em>',
+      'hero.sub':'Cuidado profesional de uñas y tratamientos de spa en un espacio cálido y acogedor. Reserva en línea en segundos.',
+      'hero.book':'Reservar una cita',
+      'svc.eyebrow':'Lo que ofrecemos','svc.h2':'Nuestros servicios','svc.sub':'Consiéntete con nuestros tratamientos favoritos',
+      'gal.eyebrow':'Nuestro trabajo','gal.h2':'Galería','gal.sub':'Un vistazo a los estilos que aman nuestras clientas',
+      'about.h2':'Un nuevo comienzo, pensando en ti.',
+      'about.p1':'Porter\u2019s Nails and Spa está bajo nueva administración, con un compromiso renovado con la calidad, la limpieza y el cuidado genuino de cada clienta.',
+      'about.p2':'Hemos creado un espacio tranquilo y acogedor donde puedes relajarte y salir sintiéndote de maravilla. Ven a consentirte: te lo mereces.',
+      'about.visit':'Visítanos','about.hours':'Horario','about.pay':'Pago','about.payval':'Efectivo y todas las tarjetas principales',
+      'book.eyebrow':'Aparta tu lugar','book.h2':'Reservar una cita','book.sub':'Elige tu servicio, tu manicurista y tu horario',
+      'faq.eyebrow':'Bueno saber','faq.h2':'Preguntas frecuentes','faq.sub':'Algunas cosas que nos preguntan a menudo',
+      'faq.q1':'¿Necesito cita o puedo llegar sin reservar?','faq.a1':'¡Ambas opciones son bienvenidas! Aceptamos clientas sin cita cuando hay espacio, pero reservar asegura tu lugar y tu manicurista favorita.',
+      'faq.q2':'¿Qué formas de pago aceptan?','faq.a2':'Aceptamos efectivo y todas las tarjetas de crédito principales.',
+      'faq.q3':'¿Dónde me estaciono?','faq.a3':'Hay estacionamiento gratuito justo enfrente del salón, junto a O\u2019Reilly Auto Parts en FM1314.',
+      'faq.q4':'¿Con cuánta anticipación debo llegar?','faq.a4':'Llegar unos 5 minutos antes nos ayuda a comenzar a tiempo. Si vas con retraso, llámanos.',
+      'faq.q5':'¿Cómo puedo contactarlos?','faq.a5':'Lo más fácil es llamarnos al (281) 747-7421. Con gusto respondemos tus preguntas o te ayudamos a reservar.',
+      'footer.tag':'Tu salón de uñas de confianza en Porter, Texas. Cuidado de calidad, una cálida bienvenida y un toque de lujo en cada visita.',
+      'footer.visit':'Visítanos','footer.hours':'Horario',
+      'open.now':'Abierto ahora','open.closed':'Cerrado ahora'
+    }
+  };
+  var curLang = load('porters_lang','en');
+  function applyLang(lang){
+    curLang=lang; save('porters_lang',lang);
+    document.documentElement.lang = lang;
+    var dict = I18N[lang];
+    Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function(el){
+      var key=el.getAttribute('data-i18n');
+      if(lang==='en'){ if(el.getAttribute('data-en')!=null) el.innerHTML=el.getAttribute('data-en'); }
+      else if(dict && dict[key]!=null){
+        if(el.getAttribute('data-en')==null) el.setAttribute('data-en', el.innerHTML); // stash original
+        el.innerHTML = dict[key];
+      }
+    });
+    var lbl=document.getElementById('langLabel'); if(lbl) lbl.textContent = (lang==='en'?'Español':'English');
+    if(typeof renderOpenBadge==='function') renderOpenBadge();
+  }
+  // stash English originals on first run so we can switch back
+  Array.prototype.forEach.call(document.querySelectorAll('[data-i18n]'), function(el){ el.setAttribute('data-en', el.innerHTML); });
+  (function(){
+    var b=document.getElementById('langBtn'); if(!b) return;
+    b.addEventListener('click', function(){ applyLang(curLang==='en'?'es':'en'); });
+  })();
+
+  var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+  var CATALOG = load('porters_catalog', null);
+  if(!CATALOG){
+    CATALOG = [
+      { id:'manicure', cat:'Manicure', icon:'ti-hand-finger', items:[
+        { id:'m1', name:'Classic Manicure', price:20 },
+        { id:'m2', name:'Shellac Manicure', price:32 },
+        { id:'m3', name:'French Shellac Manicure', price:38 }
+      ]},
+      { id:'pedicure', cat:'Pedicure', icon:'ti-flower', items:[
+        { id:'p1', name:'Regular Spa Pedicure', price:25 },
+        { id:'p2', name:'Classic Spa Pedicure', price:30 },
+        { id:'p3', name:'Deluxe Spa Pedicure', price:45 },
+        { id:'p4', name:'Golden Spa Pedicure', price:45 },
+        { id:'p5', name:'Pearl Spa Pedicure', price:55 }
+      ]},
+      { id:'enhance', cat:'Nail Enhancement', icon:'ti-diamond', items:[
+        { id:'e1', name:'Solar Full Set', price:45 },
+        { id:'e2', name:'Solar Fill-ins', price:45 },
+        { id:'e3', name:'Powder Color Full Set', price:50 },
+        { id:'e4', name:'Powder Color Fill-ins', price:45 },
+        { id:'e5', name:'Powder w/ White & Pearl Tips', price:40 },
+        { id:'e6', name:'Powder w/ Shellac', price:50 },
+        { id:'e7', name:'Refill w/ Shellac', price:45 },
+        { id:'e8', name:'Dipping Powder Full Set', price:45 },
+        { id:'e9', name:'Pink & White Full Set', price:50 },
+        { id:'e10', name:'Pink & White Fill-ins', price:45 },
+        { id:'e11', name:'Pink Fill', price:40 }
+      ]},
+      { id:'addons', cat:'Add-ons & Polish', icon:'ti-droplet', items:[
+        { id:'a1', name:'Polish Change \u2014 Hands', price:10 },
+        { id:'a2', name:'Polish Change \u2014 Hands (French)', price:12 },
+        { id:'a3', name:'Polish Change \u2014 Toes', price:10 },
+        { id:'a4', name:'Polish Change \u2014 Toes (French)', price:15 },
+        { id:'a5', name:'Soak Off', price:10 },
+        { id:'a6', name:'Cut Down', price:5 },
+        { id:'a7', name:'Cut Down & File', price:10 },
+        { id:'a8', name:'French', price:6 },
+        { id:'a9', name:'Paraffin Wax', price:6 },
+        { id:'a10', name:'Nail Design', price:5, plus:true },
+        { id:'a11', name:'Nail Repair', price:5 },
+        { id:'a12', name:'Shellac Polish Change \u2014 Feet', price:25 },
+        { id:'a13', name:'Shellac Polish Change \u2014 Hands', price:25 }
+      ]},
+      { id:'kids', cat:'Kids (11 & under)', icon:'ti-mood-kid', items:[
+        { id:'k1', name:'Spa Pedicure & Manicure', price:30 },
+        { id:'k2', name:'Pedicure', price:20 },
+        { id:'k3', name:'Manicure', price:12 },
+        { id:'k4', name:'Polish Change \u2014 Feet', price:7 },
+        { id:'k5', name:'Polish Change \u2014 Hands', price:6 }
+      ]},
+      { id:'waxing', cat:'Waxing', icon:'ti-wand', items:[
+        { id:'w1', name:'Full Face', price:30 },
+        { id:'w2', name:'Eyebrows', price:10 },
+        { id:'w3', name:'Lips & Chin', price:20 },
+        { id:'w4', name:'Chin', price:15 },
+        { id:'w5', name:'Full Arms', price:30, plus:true },
+        { id:'w6', name:'Underarms', price:20 },
+        { id:'w7', name:'Bikini', price:30, plus:true },
+        { id:'w8', name:'Full Legs', price:60 },
+        { id:'w9', name:'Half Legs', price:30 },
+        { id:'w10', name:'Full Back', price:50 }
+      ]}
+    ];
+    save('porters_catalog', CATALOG);
+  }
+  var techs = load('porters_techs2', null);
+  if(!techs){
+    techs = [
+      { id:'t1', name:'Lisa', cats:['manicure','pedicure','addons','kids','waxing'], days:{1:1,2:1,3:1,4:1,5:1,6:1}, start:9, end:18 },
+      { id:'t2', name:'Maria', cats:['enhance','manicure','pedicure','addons','waxing'], days:{2:1,3:1,4:1,5:1,6:1}, start:10, end:19 }
+    ];
+    save('porters_techs2', techs);
+  }
+  // Always refresh techs from Supabase via Vercel so booking wizard stays in sync
+  if(typeof BOOKING_API!=='undefined'&&BOOKING_API){
+    fetch(BOOKING_API+'/api/book?techs=1')
+    .then(function(r){return r.json();})
+    .then(function(rows){
+      if(!rows||!rows.length) return;
+      // Convert Supabase format back to app format
+      var synced=rows.map(function(r){return{id:r.id,name:r.name,phone:r.phone||'',cats:r.cats||[],days:r.days||{},start:r.start_hour||9,end:r.end_hour||18};});
+      techs=synced; save('porters_techs2',techs);
+    })
+    .catch(function(){}); // silently fall back to localStorage if fetch fails
+    // Fetch ALL site settings so every device stays in sync
+    fetch(BOOKING_API+'/api/book?settings=1')
+    .then(function(r){return r.json();})
+    .then(function(s){
+      if(!s) return;
+      var infoChanged=false;
+      if(s.hero_photo){ info.heroPhoto=s.hero_photo; infoChanged=true; }
+      if(s.info){ try{ var si=JSON.parse(s.info); info.phone=si.phone||info.phone; info.address=si.address||info.address; info.hours=si.hours||info.hours; infoChanged=true; }catch(e){} }
+      if(infoChanged){ save('porters_info',info); applyInfo(); renderHoursPublic(); renderOpenBadge(); }
+      if(s.promo){ try{ promo=JSON.parse(s.promo); save('porters_promo',promo); renderPromo(); }catch(e){} }
+      if(s.gallery){ try{ gallery=JSON.parse(s.gallery); save('porters_gallery',gallery); renderGalleryPublic(); }catch(e){} }
+      if(s.catalog){ try{ CATALOG=JSON.parse(s.catalog); save('porters_catalog',CATALOG); renderPublicServices(); }catch(e){} }
+      if(s.menu_pdf_url !== undefined){ info.menuPdfUrl=s.menu_pdf_url||''; save('porters_info',info); }
+    })
+    .catch(function(){});
+  }
+  var appts = load('porters_appts', []);
+  var promo = load('porters_promo', { text:'', active:false });
+  var gallery = load('porters_gallery', []);
+  var info = load('porters_info', {
+    phone:'(281) 747-7421',
+    address:'23830 FM1314 Suite C, Porter, TX 77365',
+    heroPhoto: '',
+    hours:[
+      { closed:false, open:'10:00', close:'17:00' },
+      { closed:false, open:'09:00', close:'19:00' },
+      { closed:false, open:'09:00', close:'19:00' },
+      { closed:false, open:'09:00', close:'19:00' },
+      { closed:false, open:'09:00', close:'19:00' },
+      { closed:false, open:'09:00', close:'19:00' },
+      { closed:false, open:'09:00', close:'18:00' }
+    ]
+  });
+
+  function catById(id){ return CATALOG.filter(function(c){return c.id===id;})[0]; }
+  function allItems(){ var o=[]; CATALOG.forEach(function(c){ c.items.forEach(function(it){ o.push(it); }); }); return o; }
+  function priceOf(name){ var it=allItems().filter(function(x){return x.name===name;})[0]; return it?it.price:null; }
+  function priceLabel(it){ return '$'+it.price+(it.plus?'+':''); }
+  function catName(id){ var c=catById(id); return c?c.cat:''; }
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function ymd(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  var todayStr = ymd(new Date());
+  function fmtTime(t){ var p=t.split(':').map(Number); var h=p[0],m=p[1]; var ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+pad(m)+' '+ap; }
+  function fmtDateLong(s){ var p=s.split('-'); var dt=new Date(p[0],p[1]-1,p[2]); return dt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}); }
+  function hourLabel(h){ var ap=h>=12?'pm':'am'; var hh=h>12?h-12:h; return hh+ap; }
+
+  function hm(s){ var p=s.split(':'); return (+p[0])*60+(+p[1]); }
+  function fmtHM(s){ return fmtTime(s); }
+
+  function applyInfo(){
+    var ph=info.phone, addr=info.address;
+    var fa=document.getElementById('footAddr'); if(fa) fa.textContent=addr;
+    var aa=document.getElementById('aboutAddr'); if(aa) aa.textContent=addr;
+    var fp=document.getElementById('footPhone'); if(fp){ fp.textContent=ph; fp.href='tel:'+ph.replace(/[^0-9]/g,''); }
+    var link=document.getElementById('mapLink');
+    if(link){
+      var isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+      var googlePin='https://maps.app.goo.gl/8AW8RNzP2fiX5LpN8';
+      var applePin='https://maps.apple.com/?q='+encodeURIComponent("Porter's Nails and Spa, 23830 FM1314 suite c, Porter, TX 77365");
+      link.href = isIOS ? applePin : googlePin;
+    }
+    // Apply hero photo
+    var hv=document.getElementById('heroVisual');
+    if(hv){
+      if(info.heroPhoto){
+        hv.style.backgroundImage='url('+info.heroPhoto+')';
+        hv.style.backgroundSize='cover';
+        hv.style.backgroundPosition='center';
+        var ph2=hv.querySelector('.ph'); if(ph2) ph2.style.display='none';
+      } else {
+        hv.style.backgroundImage=''; var ph2=hv.querySelector('.ph'); if(ph2) ph2.style.display='';
+      }
+    }
+  }
+
+  function renderHoursPublic(){
+    var fh=document.getElementById('footHours');
+    if(fh){
+      fh.innerHTML = info.hours.map(function(d,i){
+        return DOW[i]+': '+(d.closed?'Closed':fmtHM(d.open)+' – '+fmtHM(d.close));
+      }).join('<br>');
+    }
+    var ah=document.getElementById('aboutHours');
+    if(ah){
+      var today=info.hours[new Date().getDay()];
+      ah.textContent = today.closed ? 'Closed today' : 'Today: '+fmtHM(today.open)+' – '+fmtHM(today.close);
+    }
+  }
+
+  function renderOpenBadge(){
+    var el=document.getElementById('openBadge'); if(!el) return;
+    var now=new Date(); var d=info.hours[now.getDay()];
+    var mins=now.getHours()*60+now.getMinutes();
+    var open = !d.closed && mins>=hm(d.open) && mins<hm(d.close);
+    el.className='open-badge '+(open?'open':'closed');
+    var lab = (typeof curLang!=='undefined' && curLang==='es')
+      ? (open?'Abierto ahora':'Cerrado ahora')
+      : (open?'Open now':'Closed now');
+    el.innerHTML='<span class="dot"></span> '+lab;
+  }
+
+  function renderPromo(){
+    var bar=document.getElementById('promoBar'); var t=document.getElementById('promoText');
+    if(!bar) return;
+    if(promo.active && promo.text){ t.innerHTML='<i class="ti ti-confetti"></i>'+promo.text; bar.style.display='block'; }
+    else { bar.style.display='none'; }
+  }
+
+  function renderGalleryPublic(){
+    var g=document.getElementById('galleryGrid'); if(!g) return;
+    if(!gallery.length){
+      g.innerHTML = '<div class="gal big"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
+        '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
+        '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
+        '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
+        '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>';
+      return;
+    }
+    g.innerHTML = gallery.map(function(p,i){
+      var big = i===0 ? ' big' : '';
+      var cap = p.caption ? '<div class="gal-cap">'+p.caption+'</div>' : '';
+      return '<div class="gal gal-photo'+big+'" style="background-image:url(\''+p.url.replace(/'/g,"%27")+'\')">'+cap+'</div>';
+    }).join('');
+  }
+
+  function renderPublicServices(){
+    var g=document.getElementById('servicesGrid');
+    if(!g) return;
+    g.className='menu-cats';
+    g.innerHTML = CATALOG.map(function(c){
+      var rows = c.items.map(function(it){
+        return '<div class="menu-row"><span class="mr-name">'+it.name+'</span><span class="mr-dots"></span><span class="mr-price">'+priceLabel(it)+'</span></div>';
+      }).join('');
+      return '<div class="menu-cat"><div class="menu-cat-head"><span class="mc-ico"><i class="ti '+c.icon+'"></i></span><h3>'+c.cat+'</h3></div>'+rows+'</div>';
+    }).join('');
+  }
+
+  function techSlots(tech, dateStr){
+    var p=dateStr.split('-'); var dow=new Date(p[0],p[1]-1,p[2]).getDay();
+    if(!tech.days[dow]) return [];
+    var out=[]; for(var h=tech.start; h<tech.end; h++) out.push(pad(h)+':00'); return out;
+  }
+  function bookedTimes(techId, dateStr){
+    return appts.filter(function(a){ return a.techId===techId && a.date===dateStr && a.status!=='declined'; }).map(function(a){ return a.time; });
+  }
+  function dayState(tech, dateStr){
+    if(dateStr < todayStr) return 'past';
+    var slots = techSlots(tech, dateStr);
+    if(slots.length===0) return 'off';
+    var booked = bookedTimes(tech.id, dateStr);
+    return slots.every(function(s){ return booked.indexOf(s)>-1; }) ? 'full' : 'open';
+  }
+
+  var wiz = { step:1, cat:null, service:null, priceLabel:null, techId:null, date:null, time:null };
+  var calRef = new Date(); calRef.setDate(1);
+  var STEP_LABELS = ["Type","Service","Tech","Date","Time","Details"];
+
+  function renderSteps(){
+    var el = document.getElementById('wizSteps');
+    if(wiz.step>6){ el.innerHTML=''; return; }
+    el.innerHTML = STEP_LABELS.map(function(lbl,i){
+      var n=i+1; var cls = n<wiz.step?'done':(n===wiz.step?'active':'');
+      var inner = '<div class="wiz-step '+cls+'"><div class="num">'+(n<wiz.step?'<i class="ti ti-check"></i>':n)+'</div><span class="txt">'+lbl+'</span></div>';
+      return inner + (n<6?'<div class="wiz-line"></div>':'');
+    }).join('');
+  }
+
+  function render(){
+    renderSteps();
+    var b = document.getElementById('wizBody');
+    if(wiz.step===1) return renderCategory(b);
+    if(wiz.step===2) return renderService(b);
+    if(wiz.step===3) return renderTech(b);
+    if(wiz.step===4) return renderDate(b);
+    if(wiz.step===5) return renderTimeStep(b);
+    if(wiz.step===6) return renderDetails(b);
+    if(wiz.step===7) return renderConfirmed(b);
+  }
+
+  function renderCategory(b){
+    b.innerHTML = '<div class="wiz-title">What kind of service?</div><div class="wiz-sub">Pick a category to get started</div>'+
+      '<div class="choice-grid">'+CATALOG.map(function(c){
+        return '<div class="choice '+(wiz.cat===c.id?'sel':'')+'" data-cat="'+c.id+'"><div style="display:flex;align-items:center;gap:12px"><span class="cat-ico"><i class="ti '+c.icon+'"></i></span><div class="c-name">'+c.cat+'</div></div><i class="ti ti-chevron-right" style="color:var(--rose-mid)"></i></div>';
+      }).join('')+'</div>';
+    Array.prototype.forEach.call(b.querySelectorAll('[data-cat]'),function(el){ el.onclick=function(){ wiz.cat=el.dataset.cat; wiz.service=null; wiz.techId=null; wiz.date=null; wiz.time=null; wiz.step=2; render(); }; });
+  }
+
+  function renderService(b){
+    var c=catById(wiz.cat);
+    b.innerHTML = '<div class="wiz-title">Choose your service</div><div class="wiz-sub">'+c.cat+'</div>'+
+      '<div class="choice-grid">'+c.items.map(function(it){ return '<div class="choice '+(wiz.service===it.name?'sel':'')+'" data-svc="'+it.name+'" data-price="'+priceLabel(it)+'"><div><div class="c-name">'+it.name+'</div><div class="c-meta">'+priceLabel(it)+'</div></div><i class="ti ti-chevron-right" style="color:var(--rose-mid)"></i></div>'; }).join('')+'</div>'+
+      '<div class="wiz-actions"><button class="wiz-back"><i class="ti ti-arrow-left"></i> Back</button><span></span></div>';
+    Array.prototype.forEach.call(b.querySelectorAll('[data-svc]'),function(el){ el.onclick=function(){ wiz.service=el.dataset.svc; wiz.priceLabel=el.dataset.price; wiz.techId=null; wiz.date=null; wiz.time=null; wiz.step=3; render(); }; });
+    b.querySelector('.wiz-back').onclick=function(){ wiz.step=1; render(); };
+  }
+
+  function renderTech(b){
+    var avail = techs.filter(function(t){ return t.cats.indexOf(wiz.cat)>-1; });
+    var list;
+    if(avail.length===0){
+      list = '<div class="empty-techs"><i class="ti ti-user-question"></i><p>No nail techs are set up for this service yet.<br>Please call us at (281) 747-7421.</p></div>';
+    } else {
+      var anyCard='<div class="choice '+(wiz.techId==='any'?'sel':'')+'" data-tech="any" style="border-color:var(--rose-dark)">'+
+        '<div style="display:flex;align-items:center;gap:12px"><span class="cat-ico"><i class="ti ti-users"></i></span>'+
+        '<div><div class="c-name">Anyone available</div><div class="c-meta">Show me all open times</div></div></div>'+
+        '<i class="ti ti-chevron-right" style="color:var(--rose-mid)"></i></div>';
+      list = '<div class="choice-grid">'+anyCard+avail.map(function(t){
+        var dayNames = Object.keys(t.days).filter(function(k){ return t.days[k]; }).map(function(k){ return DOW[k]; }).join(', ');
+        return '<div class="choice '+(wiz.techId===t.id?'sel':'')+'" data-tech="'+t.id+'"><div><div class="c-name">'+t.name+'</div><div class="c-meta">Works '+dayNames+'</div></div><span class="tech-ava">'+hourLabel(t.start)+'&ndash;'+hourLabel(t.end)+'</span></div>';
+      }).join('')+'</div>';
+    }
+    b.innerHTML = '<div class="wiz-title">Choose your nail tech</div><div class="wiz-sub">These techs can do your '+wiz.service.toLowerCase()+'</div>'+list+
+      '<div class="wiz-actions"><button class="wiz-back"><i class="ti ti-arrow-left"></i> Back</button><span></span></div>';
+    Array.prototype.forEach.call(b.querySelectorAll('[data-tech]'),function(el){ el.onclick=function(){ wiz.techId=el.dataset.tech; wiz.date=null; wiz.time=null; wiz.step=4; render(); }; });
+    b.querySelector('.wiz-back').onclick=function(){ wiz.step=2; render(); };
+  }
+
+  function renderDate(b){
+    var isAny=wiz.techId==='any';
+    var tech=isAny?null:techs.filter(function(t){return t.id===wiz.techId;})[0];
+    var eligTechs=isAny?techs.filter(function(t){return t.cats.indexOf(wiz.cat)>-1;}):null;
+    var y=calRef.getFullYear(), m=calRef.getMonth();
+    var monthName = calRef.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    var firstDow = new Date(y,m,1).getDay();
+    var daysIn = new Date(y,m+1,0).getDate();
+    var thisMonth = new Date(); var atStart = (y===thisMonth.getFullYear() && m===thisMonth.getMonth());
+    var cells='';
+    for(var i=0;i<firstDow;i++) cells+='<div class="cal-day empty"></div>';
+    for(var d=1; d<=daysIn; d++){
+      var ds = y+'-'+pad(m+1)+'-'+pad(d);
+      var st;
+      if(isAny){
+        if(ds<todayStr) st='past';
+        else st=eligTechs.some(function(t){return techSlots(t,ds).length>0;})?'open':'off';
+      } else {
+        st=dayState(tech,ds);
+      }
+      if(st==='open') cells+='<div class="cal-day open '+(wiz.date===ds?'sel':'')+'" data-date="'+ds+'">'+d+'</div>';
+      else cells+='<div class="cal-day blocked">'+d+'</div>';
+    }
+    var wiz_sub=isAny?'Dates when at least one tech is available':'Available days with '+tech.name+' are highlighted';
+    b.innerHTML = '<div class="wiz-title">Pick a date</div><div class="wiz-sub">'+wiz_sub+'</div>'+
+      '<div class="cal-head"><button class="cal-nav" id="calPrev" '+(atStart?'disabled':'')+'><i class="ti ti-chevron-left"></i></button><div class="cal-mon">'+monthName+'</div><button class="cal-nav" id="calNext"><i class="ti ti-chevron-right"></i></button></div>'+
+      '<div class="cal-grid">'+DOW.map(function(d){ return '<div class="cal-dow">'+d+'</div>'; }).join('')+cells+'</div>'+
+      '<div class="cal-legend"><span><span class="lg-dot" style="background:var(--rose);border:1.5px solid var(--rose-mid)"></span> Available</span><span><span class="lg-dot" style="background:#eadede"></span> Booked / closed</span></div>'+
+      '<div class="wiz-actions"><button class="wiz-back"><i class="ti ti-arrow-left"></i> Back</button><span></span></div>';
+    Array.prototype.forEach.call(b.querySelectorAll('[data-date]'),function(el){ el.onclick=function(){ wiz.date=el.dataset.date; wiz.time=null; wiz.step=5; render(); }; });
+    b.querySelector('#calPrev').onclick=function(){ if(!atStart){ calRef.setMonth(calRef.getMonth()-1); render(); } };
+    b.querySelector('#calNext').onclick=function(){ calRef.setMonth(calRef.getMonth()+1); render(); };
+    b.querySelector('.wiz-back').onclick=function(){ wiz.step=3; render(); };
+  }
+
+  function renderTimeStep(b){
+    var isAny=wiz.techId==='any';
+    var tech=isAny?null:techs.filter(function(t){return t.id===wiz.techId;})[0];
+    var slots=[], workingTechs=[], subtitle='';
+    if(isAny){
+      var eligTechs2=techs.filter(function(t){return t.cats.indexOf(wiz.cat)>-1;});
+      var p2=wiz.date.split('-'),dow2=new Date(+p2[0],+p2[1]-1,+p2[2]).getDay();
+      workingTechs=eligTechs2.filter(function(t){return t.days[dow2];});
+      var slotMap={}; workingTechs.forEach(function(t){techSlots(t,wiz.date).forEach(function(s){slotMap[s]=true;});});
+      slots=Object.keys(slotMap).sort();
+      subtitle=fmtDateLong(wiz.date)+' &mdash; any available tech';
+    } else {
+      slots=techSlots(tech,wiz.date);
+      subtitle=fmtDateLong(wiz.date)+' with '+tech.name;
+    }
+    b.innerHTML='<div class="wiz-title">Pick a time</div><div class="wiz-sub">'+subtitle+'</div>'+
+      '<div class="slot-grid">'+slots.map(function(s){return '<div class="slot" style="opacity:.5">'+fmtTime(s)+'</div>';}).join('')+'</div>'+
+      '<div class="wiz-checking"><i class="ti ti-loader"></i> Checking availability...</div>'+
+      '<div class="wiz-actions"><button class="wiz-back"><i class="ti ti-arrow-left"></i> Back</button><span></span></div>';
+    b.querySelector('.wiz-back').onclick=function(){wiz.step=4;render();};
+    var doRender=function(takenSlots){
+      var grid=b.querySelector('.slot-grid'); if(!grid) return;
+      var chk=b.querySelector('.wiz-checking'); if(chk) chk.remove();
+      grid.innerHTML=slots.map(function(s){
+        var taken=takenSlots.indexOf(s)>-1;
+        return '<div class="slot'+(taken?' taken':'')+(wiz.time===s?' sel':'')+'"'+(taken?'':' data-time="'+s+'"')+'>'+fmtTime(s)+(taken?'<div style="font-size:10px;font-weight:400;margin-top:2px">Booked</div>':'')+'</div>';
+      }).join('');
+      Array.prototype.forEach.call(b.querySelectorAll('[data-time]'),function(el){el.onclick=function(){wiz.time=el.dataset.time;wiz.step=6;render();};});
+    };
+    if(typeof BOOKING_API!=='undefined'&&BOOKING_API){
+      var url=isAny?BOOKING_API+'/api/book?slots=1&tech=any&date='+wiz.date:BOOKING_API+'/api/book?slots=1&tech='+encodeURIComponent(tech.name)+'&date='+wiz.date;
+      fetch(url).then(function(r){return r.json();}).then(function(d){
+        if(isAny){
+          var bbt=d.bookedByTech||{};
+          var wt=workingTechs;
+          var taken=slots.filter(function(s){
+            var tw=wt.filter(function(t){return techSlots(t,wiz.date).indexOf(s)>-1;});
+            return tw.length>0&&tw.every(function(t){return (bbt[t.name]||[]).indexOf(s)>-1;});
+          });
+          doRender(taken);
+        } else {
+          if(d.blocked&&d.blocked.indexOf('ALL_DAY')>-1){ doRender(slots); }
+          else { doRender(d.booked||[]); }
+        }
+      }).catch(function(){doRender([]);});
+    } else {doRender([]);}
+  }
+
+  function renderDetails(b){
+    var isAny=wiz.techId==='any';
+    var tech=isAny?{name:'To be assigned'}:techs.filter(function(t){return t.id===wiz.techId;})[0];
+    b.innerHTML = '<div class="wiz-title">Your details</div><div class="wiz-sub">Almost done! We\'ll use this to confirm your appointment</div>'+
+      '<div class="summary">'+
+        '<div><span>Service</span><strong>'+wiz.service+(wiz.priceLabel?' ('+wiz.priceLabel+')':'')+'</strong></div>'+
+        '<div><span>Nail tech</span><strong>'+tech.name+'</strong></div>'+
+        '<div><span>Date</span><strong>'+fmtDateLong(wiz.date)+'</strong></div>'+
+        '<div><span>Time</span><strong>'+fmtTime(wiz.time)+'</strong></div>'+
+      '</div>'+
+      '<div class="field-row"><div class="field"><label>Your name</label><input id="dName" placeholder="Jane Doe"></div><div class="field"><label>Phone number</label><input id="dPhone" placeholder="(281) 555-0000"></div></div>'+
+      '<div class="field"><label>Email (optional)</label><input id="dEmail" placeholder="you@email.com"></div>'+
+      '<div class="field"><label>Notes (optional)</label><textarea id="dNotes" placeholder="Any special requests?"></textarea></div>'+
+      '<button class="btn btn-primary" id="submitBtn" style="width:100%;justify-content:center;"><i class="ti ti-calendar-check"></i> Request appointment</button>'+
+      '<div class="wiz-actions"><button class="wiz-back"><i class="ti ti-arrow-left"></i> Back</button><span></span></div>';
+    b.querySelector('#submitBtn').onclick=function(){
+      var name=b.querySelector('#dName').value.trim(); var phone=b.querySelector('#dPhone').value.trim();
+      if(!name||!phone){ showToast('Please enter your name and phone number'); return; }
+      var btn=b.querySelector('#submitBtn'); btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Sending...';
+      var isReschedule=!!(wiz.rescheduleToken);
+      var endpoint=isReschedule?(BOOKING_API+'/api/booking'):(BOOKING_API+'/api/book');
+      var payload=isReschedule?
+        {original_token:wiz.rescheduleToken,name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||''}:
+        {name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||''};
+      fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d.success){ wiz.step=7; render(); }
+        else{ btn.disabled=false; btn.innerHTML='<i class="ti ti-calendar-check"></i> Request appointment'; showToast('Something went wrong. Please call (281) 747-7421.'); }
+      })
+      .catch(function(){ btn.disabled=false; btn.innerHTML='<i class="ti ti-calendar-check"></i> Request appointment'; showToast('Could not connect. Please call (281) 747-7421.'); });
+    };
+    b.querySelector('.wiz-back').onclick=function(){ wiz.step=5; render(); };
+  }
+
+  function renderConfirmed(b){
+    document.getElementById('wizSteps').innerHTML='';
+    var isReschedule=!!(wiz.rescheduleToken);
+    b.innerHTML = '<div class="wiz-done">'+
+      '<div class="check"><i class="ti ti-check"></i></div>'+
+      '<h3>'+(isReschedule?'Reschedule request sent!':'Request received!')+'</h3>'+
+      '<p>'+(isReschedule?
+        'We received your reschedule request and will confirm it shortly. Your original appointment stays active until we approve the change.':
+        'We\'ve got your request and will confirm it shortly. If you provided an email, you\'ll get a confirmation there. You can also reach us at <a href="tel:2817477421">(281) 747-7421</a>.')+
+      '</p>'+
+      '<div class="pending-note"><i class="ti ti-info-circle"></i> Status: pending approval from the salon.</div>'+
+      '<button class="btn btn-ghost" id="againBtn" style="margin-top:1.5rem;"><i class="ti ti-plus"></i> Book another</button>'+
+      '</div>';
+    b.querySelector('#againBtn').onclick=function(){ wiz={step:1,cat:null,service:null,priceLabel:null,techId:null,date:null,time:null}; calRef=new Date(); calRef.setDate(1); render(); };
+  }
+
+  function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2600); }
+
+  var ownerTab='appts';
+  function renderDash(){
+    var d=document.getElementById('dashView');
+    d.innerHTML = '<div class="tabs">'+
+      '<button class="tab '+(ownerTab==='appts'?'active':'')+'" data-tab="appts">Appointments</button>'+
+      '<button class="tab '+(ownerTab==='blocks'?'active':'')+'" data-tab="blocks">Block time</button>'+
+      '<button class="tab '+(ownerTab==='promo'?'active':'')+'" data-tab="promo">Promotion</button>'+
+      '<button class="tab '+(ownerTab==='photos'?'active':'')+'" data-tab="photos">Photos</button>'+
+      '<button class="tab '+(ownerTab==='techs'?'active':'')+'" data-tab="techs">Nail techs</button>'+
+      '<button class="tab '+(ownerTab==='services'?'active':'')+'" data-tab="services">Services &amp; prices</button>'+
+      '<button class="tab '+(ownerTab==='hours'?'active':'')+'" data-tab="hours">Hours &amp; info</button>'+
+      '<button class="tab '+(ownerTab==='msglog'?'active':'')+'" data-tab="msglog">Message log</button>'+
+      '</div><div id="tabBody"></div>';
+    Array.prototype.forEach.call(d.querySelectorAll('[data-tab]'),function(el){ el.onclick=function(){ ownerTab=el.dataset.tab; renderDash(); }; });
+    if(ownerTab==='appts') renderApptsTab();
+    else if(ownerTab==='blocks') renderBlocksTab();
+    else if(ownerTab==='promo') renderPromoTab();
+    else if(ownerTab==='photos') renderPhotosTab();
+    else if(ownerTab==='techs') renderTechsTab();
+    else if(ownerTab==='services') renderServicesTab();
+    else if(ownerTab==='msglog') renderMsgLogTab();
+    else renderHoursTab();
+  }
+
+  function renderBlocksTab(){
+    var tb=document.getElementById('tabBody');
+    tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading...</p></div>';
+    fetch(BOOKING_API+'/api/blocks')
+    .then(function(r){return r.json();})
+    .then(function(blocks){
+      var list=blocks.length?blocks.map(function(b){
+        return '<div class="tech-row"><div><div class="t-name">'+(b.tech_name||'All techs')+' — '+b.date+'</div>'+
+          '<div class="t-meta">'+(b.start_time&&b.end_time?b.start_time+' to '+b.end_time:'All day')+(b.reason?' &middot; '+escHtml(b.reason):'')+'</div></div>'+
+          '<button class="mini no" data-delblock="'+b.id+'"><i class="ti ti-trash"></i></button></div>';
+      }).join(''):'<div class="dash-empty"><i class="ti ti-calendar-check"></i><p>No blocked times. Add one below.</p></div>';
+      var techOpts='<option value="">All techs</option>'+techs.map(function(t){return '<option value="'+escHtml(t.name)+'">'+escHtml(t.name)+'</option>';}).join('');
+      tb.innerHTML='<div class="help">Block off time when a tech is unavailable or the salon is closed. Customers won\'t be able to book those slots.</div>'+
+        list+
+        '<div class="add-form"><h4>Block off time</h4>'+
+        '<div class="field-row"><div class="field"><label>Tech</label><select id="blkTech">'+techOpts+'</select></div><div class="field"><label>Date</label><input type="date" id="blkDate" min="'+new Date().toISOString().slice(0,10)+'"></div></div>'+
+        '<div class="field-row"><div class="field"><label>Start time <span style="font-weight:400;color:var(--text-soft)">(optional — leave blank for all day)</span></label><input type="time" id="blkStart"></div><div class="field"><label>End time</label><input type="time" id="blkEnd"></div></div>'+
+        '<div class="field"><label>Reason (optional)</label><input id="blkReason" placeholder="e.g. Sick day, Holiday, Training"></div>'+
+        '<button class="btn btn-primary btn-big" id="blkAdd"><i class="ti ti-ban"></i> Block this time</button></div>';
+      Array.prototype.forEach.call(tb.querySelectorAll('[data-delblock]'),function(el){
+        el.onclick=function(){
+          showConfirm({title:'Remove blocked time?',message:'This time slot will become available for bookings again.',confirmLabel:'Remove',onConfirm:function(){
+            fetch(BOOKING_API+'/api/blocks?id='+el.dataset.delblock,{method:'DELETE'})
+            .then(function(r){return r.json();})
+            .then(function(d){if(d.success){showToast('Block removed');renderDash();}else showToast('Could not remove.');});
+          }});
+        };
+      });
+      tb.querySelector('#blkAdd').onclick=function(){
+        var date=tb.querySelector('#blkDate').value;
+        if(!date){showToast('Please pick a date');return;}
+        var tech=tb.querySelector('#blkTech').value;
+        var start=tb.querySelector('#blkStart').value;
+        var end=tb.querySelector('#blkEnd').value;
+        var reason=tb.querySelector('#blkReason').value.trim();
+        fetch(BOOKING_API+'/api/blocks',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({tech_name:tech||null,date:date,start_time:start||null,end_time:end||null,reason:reason||null})})
+        .then(function(r){return r.json();})
+        .then(function(d){if(d.success){showToast('Time blocked!');renderDash();}else showToast('Could not save.');});
+      };
+    })
+    .catch(function(){tb.innerHTML='<div class="dash-empty"><i class="ti ti-alert-circle"></i><p>Could not load. Check connection.</p></div>';});
+  }
+
+  function renderApptsTab(){
+    var tb=document.getElementById('tabBody');
+    tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading appointments...</p></div>';
+    if(typeof SUPABASE_URL==='undefined'||!SUPABASE_URL){ tb.innerHTML='<div class="dash-empty"><p>Supabase not configured.</p></div>'; return; }
+    fetch(SUPABASE_URL+'/rest/v1/appointments?order=created_at.desc',{
+      headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+    })
+    .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(rows){
+      var pending=rows.filter(function(a){return a.status==='pending';}).length;
+      var confirmed=rows.filter(function(a){return a.status==='confirmed';}).length;
+      var html='<div class="dash-stats"><div class="stat"><div class="s-label">Total</div><div class="s-val">'+rows.length+'</div></div><div class="stat"><div class="s-label">Pending</div><div class="s-val">'+pending+'</div></div><div class="stat"><div class="s-label">Confirmed</div><div class="s-val">'+confirmed+'</div></div></div>';
+      if(!rows.length){ html+='<div class="dash-empty"><i class="ti ti-calendar-off"></i><p>No appointments yet. Once customers book, they\'ll show up here.</p></div>'; tb.innerHTML=html; return; }
+      html+=rows.map(function(a){
+        var p=(a.date||'').split('-'); var dt=p.length===3?new Date(p[0],p[1]-1,p[2]):new Date();
+        var actions=a.status==='pending'?
+          '<div class="mini-btns"><button class="mini ok" data-ok="'+a.id+'"><i class="ti ti-check"></i> Approve</button><button class="mini no" data-no="'+a.id+'">Decline</button></div>':
+          '<span class="badge '+a.status+'">'+a.status+'</span>';
+        return '<div class="appt"><div class="a-date"><div class="ad-day">'+dt.getDate()+'</div><div class="ad-mon">'+dt.toLocaleDateString('en-US',{month:'short'})+'</div></div>'+
+          '<div><div class="a-name">'+escHtml(a.name||'')+'</div>'+
+          '<div class="a-meta"><i class="ti ti-phone" style="font-size:11px"></i> <a href="tel:'+escHtml(a.phone||'')+'">'+escHtml(a.phone||'')+'</a>'+(a.email?' &middot; '+escHtml(a.email):'')+'</div>'+
+          '<div class="a-svc">'+escHtml(a.service||'')+(a.tech_name?' &middot; with '+escHtml(a.tech_name):'')+(a.time?' &middot; '+fmtTime(a.time):'')+(a.price?' &middot; '+escHtml(a.price):'')+(a.notes?' &middot; <em>'+escHtml(a.notes)+'</em>':'')+'</div></div>'+
+          '<div class="a-right">'+actions+'</div></div>';
+      }).join('');
+      tb.innerHTML=html;
+      Array.prototype.forEach.call(tb.querySelectorAll('[data-ok]'),function(el){
+        el.onclick=function(){
+          var row=rows.filter(function(r){return r.id===el.dataset.ok;})[0];
+          el.disabled=true; el.textContent='Updating...';
+          updateApptStatus(row.id,'confirmed',row.name,row.email,row.service,row.date,row.time);
+        };
+      });
+      Array.prototype.forEach.call(tb.querySelectorAll('[data-no]'),function(el){
+        el.onclick=function(){
+          var row=rows.filter(function(r){return r.id===el.dataset.no;})[0];
+          el.disabled=true; el.textContent='Updating...';
+          updateApptStatus(row.id,'declined',row.name,row.email,row.service,row.date,row.time);
+        };
+      });
+    })
+    .catch(function(e){ console.error(e); tb.innerHTML='<div class="dash-empty"><i class="ti ti-alert-circle"></i><p>Could not load appointments. Check your connection.</p></div>'; });
+  }
+
+  function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  function updateApptStatus(id,status,name,email,service,date,time){
+    if(typeof BOOKING_API==='undefined'||!BOOKING_API){ showToast('Booking API not configured'); return; }
+    fetch(BOOKING_API+'/api/update-status',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({id:id,status:status,name:name||'',email:email||'',service:service||'',date:date||'',time:time||''})
+    })
+    .then(function(r){return r.json();})
+    .then(function(d){ if(d.success){ showToast('Appointment '+status+'!'); renderDash(); } else showToast('Could not update. Try again.'); })
+    .catch(function(){ showToast('Connection error.'); });
+  }
+
+
+  function renderTechsTab(){
+    var tb=document.getElementById('tabBody');
+    var html = '<div class="help">Add your nail techs and check which <b>types of service</b> each one does, plus their working days and hours. Tap <b>Edit</b> to update someone, or the trash icon to remove them.</div>';
+    html += techs.length ? techs.map(function(t){
+      var dayNames=Object.keys(t.days).filter(function(k){return t.days[k];}).map(function(k){return DOW[k];}).join(', ');
+      return '<div class="tech-row">'+
+          '<div><div class="t-name">'+t.name+'</div><div class="t-meta">'+t.cats.length+' service types &middot; '+(dayNames||'no days set')+' &middot; '+hourLabel(t.start)+'&ndash;'+hourLabel(t.end)+(t.phone?' &middot; <i class="ti ti-phone" style="font-size:11px"></i> '+t.phone:'')+'</div></div>'+
+          '<div style="display:flex;gap:.4rem;flex-shrink:0">'+
+            '<button class="mini" style="background:#efe6f5;color:#6b4e86" data-edit="'+t.id+'"><i class="ti ti-pencil"></i> Edit</button>'+
+            '<button class="mini no" data-del="'+t.id+'"><i class="ti ti-trash"></i></button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="tech-editor" id="ed-'+t.id+'"></div>';
+    }).join('') : '<div class="dash-empty"><i class="ti ti-user-off"></i><p>No nail techs yet. Add one below.</p></div>';
+    html += '<div class="add-form">'+
+      '<h4>Add a nail tech</h4>'+
+      '<div class="field-row"><div class="field"><label>Name</label><input id="ntName" placeholder="e.g. Anna"></div><div class="field"><label>Cell phone <span style="font-weight:400;color:var(--text-soft)">(for text notifications)</span></label><input id="ntPhone" placeholder="e.g. 7135550000" type="tel"></div></div>'+
+      '<span class="lbl">Service types they do</span><div class="chk-grid" id="ntCats">'+CATALOG.map(function(c){ return '<label class="chk"><input type="checkbox" value="'+c.id+'"> '+c.cat+'</label>'; }).join('')+'</div>'+
+      '<span class="lbl">Working days</span><div class="chk-grid" id="ntDays">'+DOW.map(function(d,i){ return '<label class="chk"><input type="checkbox" value="'+i+'"> '+d+'</label>'; }).join('')+'</div>'+
+      '<div class="field-row"><div class="field"><label>Starts at</label><select id="ntStart">'+[8,9,10,11,12].map(function(h){ return '<option value="'+h+'" '+(h===9?'selected':'')+'>'+hourLabel(h)+'</option>'; }).join('')+'</select></div><div class="field"><label>Ends at</label><select id="ntEnd">'+[15,16,17,18,19,20].map(function(h){ return '<option value="'+h+'" '+(h===18?'selected':'')+'>'+hourLabel(h)+'</option>'; }).join('')+'</select></div></div>'+
+      '<button class="btn btn-primary btn-big" id="addTechBtn"><i class="ti ti-user-plus"></i> Add nail tech</button>'+
+      '</div>';
+    tb.innerHTML=html;
+
+    function bindChk(scope){ Array.prototype.forEach.call(scope.querySelectorAll('.chk input'),function(c){ c.onchange=function(){ c.closest('.chk').classList.toggle('on',c.checked); }; }); }
+    function hourOpts(arr,sel){ return arr.map(function(h){ return '<option value="'+h+'" '+(h===sel?'selected':'')+'>'+hourLabel(h)+'</option>'; }).join(''); }
+    bindChk(tb);
+
+    function openEditor(id){
+      var t=techs.filter(function(x){return x.id===id;})[0]; if(!t) return;
+      var ed=document.getElementById('ed-'+id);
+      if(ed.innerHTML){ ed.innerHTML=''; return; }
+      ed.innerHTML='<div class="add-form" style="margin:.4rem 0 1rem">'+
+        '<h4>Edit '+t.name+'</h4>'+
+        '<div class="field-row"><div class="field"><label>Name</label><input class="etName" value="'+t.name.replace(/"/g,'&quot;')+'"></div><div class="field"><label>Cell phone <span style="font-weight:400;color:var(--text-soft)">(for texts)</span></label><input class="etPhone" placeholder="7135550000" type="tel" value="'+(t.phone||'').replace(/"/g,'&quot;')+'"></div></div>'+
+        '<span class="lbl">Service types they do</span><div class="chk-grid etCats">'+CATALOG.map(function(c){ var on=t.cats.indexOf(c.id)>-1; return '<label class="chk'+(on?' on':'')+'"><input type="checkbox" value="'+c.id+'"'+(on?' checked':'')+'> '+c.cat+'</label>'; }).join('')+'</div>'+
+        '<span class="lbl">Working days</span><div class="chk-grid etDays">'+DOW.map(function(d,i){ var on=!!t.days[i]; return '<label class="chk'+(on?' on':'')+'"><input type="checkbox" value="'+i+'"'+(on?' checked':'')+'> '+d+'</label>'; }).join('')+'</div>'+
+        '<div class="field-row"><div class="field"><label>Starts at</label><select class="etStart">'+hourOpts([8,9,10,11,12],t.start)+'</select></div><div class="field"><label>Ends at</label><select class="etEnd">'+hourOpts([15,16,17,18,19,20],t.end)+'</select></div></div>'+
+        '<div style="display:flex;gap:.5rem"><button class="mini" data-cancel="1">Cancel</button><button class="btn btn-primary btn-big" data-save="1"><i class="ti ti-device-floppy"></i> Save changes</button></div>'+
+      '</div>';
+      bindChk(ed);
+      ed.querySelector('[data-cancel]').onclick=function(){ ed.innerHTML=''; };
+      ed.querySelector('[data-save]').onclick=function(){
+        var name=ed.querySelector('.etName').value.trim();
+        var phone=ed.querySelector('.etPhone').value.trim().replace(/\D/g,'');
+        var cats=Array.prototype.map.call(ed.querySelectorAll('.etCats input:checked'),function(c){return c.value;});
+        var dayArr=Array.prototype.map.call(ed.querySelectorAll('.etDays input:checked'),function(c){return +c.value;});
+        if(!name){ showToast('Please enter a name'); return; }
+        if(!cats.length){ showToast('Select at least one service type'); return; }
+        if(!dayArr.length){ showToast('Select at least one working day'); return; }
+        var days={}; dayArr.forEach(function(d){ days[d]=1; });
+        t.name=name; t.phone=phone; t.cats=cats; t.days=days; t.start=+ed.querySelector('.etStart').value; t.end=+ed.querySelector('.etEnd').value;
+        save('porters_techs2',techs);
+        // Sync to Supabase so booking wizard picks up the update
+        if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:t.id,name:t.name,phone:t.phone||null,cats:t.cats,days:t.days,start_hour:t.start,end_hour:t.end})}).catch(function(){});
+        showToast(name+' updated!'); renderDash();
+      };
+    }
+
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-edit]'),function(el){ el.onclick=function(){ openEditor(el.dataset.edit); }; });
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-del]'),function(el){ el.onclick=function(){
+      var techName=techs.filter(function(t){return t.id===el.dataset.del;})[0];
+      var name=techName?techName.name:'this tech';
+      showConfirm({title:'Remove '+name+'?',message:'This will remove them from your team and they won\'t appear in the booking wizard.',confirmLabel:'Remove',onConfirm:function(){
+        techs=techs.filter(function(t){return t.id!==el.dataset.del;}); save('porters_techs2',techs);
+        if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs?id='+el.dataset.del,{method:'DELETE'}).catch(function(){});
+        renderDash();
+      }});
+    }; });
+    tb.querySelector('#addTechBtn').onclick=function(){
+      var name=tb.querySelector('#ntName').value.trim();
+      var phone=tb.querySelector('#ntPhone').value.trim().replace(/\D/g,'');
+      var cats=Array.prototype.map.call(tb.querySelectorAll('#ntCats input:checked'),function(c){return c.value;});
+      var dayArr=Array.prototype.map.call(tb.querySelectorAll('#ntDays input:checked'),function(c){return +c.value;});
+      if(!name){ showToast('Please enter a name'); return; }
+      if(!cats.length){ showToast('Select at least one service type'); return; }
+      if(!dayArr.length){ showToast('Select at least one working day'); return; }
+      var days={}; dayArr.forEach(function(d){ days[d]=1; });
+      var newTech={ id:'t'+Date.now(), name:name, phone:phone, cats:cats, days:days, start:+tb.querySelector('#ntStart').value, end:+tb.querySelector('#ntEnd').value };
+      techs.push(newTech); save('porters_techs2',techs);
+      if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newTech.id,name:newTech.name,phone:newTech.phone||null,cats:newTech.cats,days:newTech.days,start_hour:newTech.start,end_hour:newTech.end})}).catch(function(){});
+      showToast(name+' added!'); renderDash();
+    };
+  }
+
+  function renderPromoTab(){
+    var tb=document.getElementById('tabBody');
+    tb.innerHTML =
+      '<div class="help">Use this to show a coloured banner across the very top of your website &mdash; great for deals or news, like <b>&ldquo;20% off gel sets this week!&rdquo;</b><br>Turn it on, type your message, and press Save.</div>'+
+      '<div class="toggle-row"><span class="tr-label">Show the banner on the website</span>'+
+        '<label class="switch"><input type="checkbox" id="promoActive" '+(promo.active?'checked':'')+'><span class="slider-sw"></span></label></div>'+
+      '<label class="big-label">Banner message</label>'+
+      '<input class="big-input" id="promoMsg" maxlength="120" placeholder="e.g. 20% off gel manicures this week!" value="'+(promo.text||'').replace(/"/g,'&quot;')+'">'+
+      '<button class="btn btn-primary btn-big" id="promoSave"><i class="ti ti-device-floppy"></i> Save banner</button>';
+    tb.querySelector('#promoSave').onclick=function(){
+      promo.text=tb.querySelector('#promoMsg').value.trim();
+      promo.active=tb.querySelector('#promoActive').checked;
+      save('porters_promo',promo); syncSetting('promo',promo); renderPromo();
+      showToast(promo.active&&promo.text?'Banner is now showing!':'Saved.');
+    };
+  }
+
+  function renderPhotosTab(){
+    var tb=document.getElementById('tabBody');
+    var list = gallery.length ? gallery.map(function(p,i){
+      return '<div class="gphoto-row"><img src="'+p.url+'" alt=""><div class="gp-cap">'+(p.caption||'(no caption)')+(i===0?' &middot; <span style="color:var(--rose-dark)">featured</span>':'')+'</div><button class="mini no" data-delp="'+p.id+'" data-delurl="'+p.url+'"><i class="ti ti-trash"></i></button></div>';
+    }).join('') : '<div class="dash-empty"><i class="ti ti-photo-off"></i><p>No photos yet. Upload your first one below.</p></div>';
+    tb.innerHTML =
+      '<div class="help">Upload photos of your nail work straight from your phone or computer. The <b>first photo is the featured one</b> shown at the top of the gallery.</div>'+
+      list +
+      '<div class="add-form"><h4>Upload a photo</h4>'+
+      '<div class="upload-zone" id="uploadZone">'+
+        '<i class="ti ti-cloud-upload" style="font-size:32px;color:var(--rose-mid)"></i>'+
+        '<p style="margin:.5rem 0 .25rem;font-weight:700;color:var(--rose-text)">Tap to choose a photo</p>'+
+        '<p style="font-size:12px;color:var(--text-soft)">JPG, PNG, WEBP — max 10MB</p>'+
+        '<input type="file" id="photoFile" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer">'+
+      '</div>'+
+      '<div id="uploadPreview" style="display:none;margin:.75rem 0"><img id="previewImg" style="max-height:120px;border-radius:10px;object-fit:cover"><span id="previewName" style="font-size:12px;color:var(--text-soft);display:block;margin-top:.3rem"></span></div>'+
+      '<label class="big-label">Caption (optional)</label>'+
+      '<input class="big-input" id="newPhotoCap" placeholder="e.g. Spring floral set">'+
+      '<button class="btn btn-primary btn-big" id="addPhoto" disabled><i class="ti ti-upload"></i> Upload photo</button>'+
+      '<div id="uploadProgress" style="display:none;margin-top:.5rem;font-size:13px;color:var(--text-soft)"><i class="ti ti-loader"></i> Uploading...</div>'+
+      '</div>';
+
+    // File picker preview
+    var fileInput=tb.querySelector('#photoFile');
+    var selectedFile=null;
+    fileInput.onchange=function(){
+      if(!fileInput.files[0]) return;
+      selectedFile=fileInput.files[0];
+      var reader=new FileReader();
+      reader.onload=function(e){
+        tb.querySelector('#previewImg').src=e.target.result;
+        tb.querySelector('#previewName').textContent=selectedFile.name+' ('+Math.round(selectedFile.size/1024)+'KB)';
+        tb.querySelector('#uploadPreview').style.display='block';
+        tb.querySelector('#addPhoto').disabled=false;
+      };
+      reader.readAsDataURL(selectedFile);
+    };
+
+    // Delete photo
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-delp]'),function(el){
+      el.onclick=function(){
+        showConfirm({title:'Remove photo?',message:'This photo will be removed from your gallery on the website.',confirmLabel:'Remove photo',onConfirm:function(){
+          gallery=gallery.filter(function(p){return p.id!==el.dataset.delp;});
+          save('porters_gallery',gallery); syncSetting('gallery',gallery); renderGalleryPublic(); renderDash();
+        }});
+      };
+    });
+
+    // Upload photo to Supabase Storage
+    tb.querySelector('#addPhoto').onclick=function(){
+      if(!selectedFile){ showToast('Please pick a photo first'); return; }
+      var btn=tb.querySelector('#addPhoto');
+      var prog=tb.querySelector('#uploadProgress');
+      btn.disabled=true; prog.style.display='block';
+      var ext=selectedFile.name.split('.').pop().toLowerCase();
+      var fname='gallery/'+Date.now()+'.'+ext;
+      var uploadUrl=SUPABASE_URL+'/storage/v1/object/'+fname;
+      fetch(uploadUrl,{
+        method:'POST',
+        headers:{
+          'Authorization':'Bearer '+SUPABASE_ANON_KEY,
+          'apikey':SUPABASE_ANON_KEY,
+          'Content-Type':selectedFile.type,
+          'x-upsert':'true'
+        },
+        body:selectedFile
+      })
+      .then(function(r){ if(!r.ok) throw new Error('Upload failed '+r.status); return r.json(); })
+      .then(function(){
+        var publicUrl=SUPABASE_URL+'/storage/v1/object/public/'+fname;
+        gallery.push({ id:'g'+Date.now(), url:publicUrl, caption:tb.querySelector('#newPhotoCap').value.trim() });
+        save('porters_gallery',gallery); syncSetting('gallery',gallery); renderGalleryPublic(); showToast('Photo uploaded!'); renderDash();
+      })
+      .catch(function(e){ btn.disabled=false; prog.style.display='none'; showToast('Upload failed: '+e.message); });
+    };
+  }
+
+  function timeOptions(sel){
+    var out='';
+    for(var h=7; h<=21; h++){ for(var m=0;m<60;m+=30){ var v=pad(h)+':'+pad(m); out+='<option value="'+v+'" '+(v===sel?'selected':'')+'>'+fmtTime(v)+'</option>'; } }
+    return out;
+  }
+  function renderMsgLogTab(){
+    var tb=document.getElementById('tabBody');
+    tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading...</p></div>';
+    var filter='all';
+
+    function load(){
+      fetch(SUPABASE_URL+'/rest/v1/message_log?order=created_at.desc&limit=100',{
+        headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+      })
+      .then(function(r){return r.json();})
+      .then(function(rows){
+        if(!Array.isArray(rows)||rows.length===0){
+          tb.innerHTML='<div class="help">Message history will appear here after the first booking is made.</div>';
+          return;
+        }
+        var filtered = filter==='all' ? rows : rows.filter(function(r){ return r.type===filter; });
+        var html='<div class="help">Showing the last '+rows.length+' messages sent by the system.</div>';
+        html+='<div class="msglog-filters">'
+          +'<button class="msglog-filter-btn'+(filter==='all'?' active':'')+'" data-f="all">All</button>'
+          +'<button class="msglog-filter-btn'+(filter==='sms'?' active':'')+'" data-f="sms"><i class="ti ti-message"></i> SMS</button>'
+          +'<button class="msglog-filter-btn'+(filter==='email'?' active':'')+'" data-f="email"><i class="ti ti-mail"></i> Email</button>'
+          +'<button class="msglog-filter-btn" id="clearLogBtn" style="margin-left:auto;border-color:#e57373;color:#c62828"><i class="ti ti-trash"></i> Clear log</button>'
+          +'</div>';
+        if(filtered.length===0){
+          html+='<div class="msglog-empty">No messages of this type yet.</div>';
+        } else {
+          html+='<div style="overflow-x:auto"><table class="msglog-table">'
+            +'<thead><tr><th>Time</th><th>Type</th><th>Recipient</th><th>Trigger</th><th>Preview</th></tr></thead><tbody>';
+          html+=filtered.map(function(m){
+            var d=new Date(m.created_at);
+            var timeStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+            var typeTag = m.type==='sms'
+              ? '<span class="msg-type-sms"><i class="ti ti-message" style="font-size:11px"></i> SMS</span>'
+              : '<span class="msg-type-email"><i class="ti ti-mail" style="font-size:11px"></i> Email</span>';
+            var recipient = (m.recipient_name ? m.recipient_name+'<br><span style="color:var(--text-muted);font-size:11px">'+m.recipient+'</span>' : m.recipient);
+            var trigger = '<span class="msg-trigger">'+(m.trigger||'—').replace(/_/g,' ')+'</span>';
+            var preview = '<div class="msg-preview">'+(m.body_preview||m.subject||'—')+'</div>';
+            return '<tr><td style="white-space:nowrap;color:var(--text-muted);font-size:12px">'+timeStr+'</td><td>'+typeTag+'</td><td>'+recipient+'</td><td>'+trigger+'</td><td>'+preview+'</td></tr>';
+          }).join('');
+          html+='</tbody></table></div>';
+        }
+        tb.innerHTML=html;
+        Array.prototype.forEach.call(tb.querySelectorAll('[data-f]'),function(btn){
+          btn.onclick=function(){ filter=btn.dataset.f; load(); };
+        });
+        var clearBtn=tb.querySelector('#clearLogBtn');
+        if(clearBtn){ clearBtn.onclick=function(){
+          var pwd=prompt('Enter password to clear message log:');
+          if(pwd===null) return;
+          if(pwd!=='895623'){ showToast('Incorrect password.'); return; }
+          showConfirm({title:'Clear message log?', message:'This will permanently delete all '+rows.length+' log entries. This cannot be undone.', confirmLabel:'Clear all', onConfirm:function(){
+            fetch(SUPABASE_URL+'/rest/v1/message_log?id=gt.0',{
+              method:'DELETE',
+              headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY}
+            }).then(function(r){
+              if(r.ok){ showToast('Message log cleared.'); load(); }
+              else showToast('Error clearing log.');
+            }).catch(function(){ showToast('Error clearing log.'); });
+          }});
+        }; }
+      })
+      .catch(function(err){
+        tb.innerHTML='<div class="help">Could not load message log: '+err.message+'</div>';
+      });
+    }
+    load();
+  }
+
+  function renderHoursTab(){
+    var tb=document.getElementById('tabBody');
+    var rows=info.hours.map(function(d,i){
+      return '<div class="hours-edit-row" data-day="'+i+'">'+
+        '<span class="hd-day">'+['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][i]+'</span>'+
+        '<select class="hd-state">'+
+          '<option value="open" '+(d.closed?'':'selected')+'>Open</option>'+
+          '<option value="closed" '+(d.closed?'selected':'')+'>Closed</option></select>'+
+        '<span class="hd-times">'+
+          '<select class="hd-open">'+timeOptions(d.open)+'</select> to '+
+          '<select class="hd-close">'+timeOptions(d.close)+'</select></span></div>';
+    }).join('');
+    tb.innerHTML =
+      '<div class="help">Update your <b>phone, address, and hours</b> here. These show in the footer and the &ldquo;Open now&rdquo; sign updates automatically. Press Save when you&rsquo;re done.</div>'+
+      '<label class="big-label">Phone number</label><input class="big-input" id="infoPhone" value="'+info.phone.replace(/"/g,'&quot;')+'">'+
+      '<label class="big-label">Address</label><input class="big-input" id="infoAddr" value="'+info.address.replace(/"/g,'&quot;')+'">'+
+      '<label class="big-label" style="margin-bottom:.6rem">Opening hours</label>'+rows+
+      '<label class="big-label" style="margin-top:1.25rem">Hero photo <span style="font-weight:400;color:var(--text-soft)">(the large image on your homepage)</span></label>'+
+      (info.heroPhoto ? '<div style="margin-bottom:.75rem"><img src="'+info.heroPhoto+'" style="height:100px;border-radius:12px;object-fit:cover"> <button class="mini no" id="removeHero" style="vertical-align:top;margin-left:.5rem"><i class="ti ti-trash"></i> Remove</button></div>' : '')+
+      '<div class="upload-zone" id="heroUploadZone" style="margin-bottom:1rem">'+
+        '<i class="ti ti-cloud-upload" style="font-size:28px;color:var(--rose-mid)"></i>'+
+        '<p style="margin:.4rem 0 .2rem;font-weight:700;color:var(--rose-text)">Tap to upload a salon photo</p>'+
+        '<p style="font-size:12px;color:var(--text-soft)">JPG, PNG — best at 4:5 portrait ratio</p>'+
+        '<input type="file" id="heroFile" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer">'+
+      '</div>'+
+      '<div id="heroUploadStatus" style="font-size:13px;color:var(--text-soft);margin-bottom:.75rem;display:none"><i class="ti ti-loader"></i> Uploading...</div>'+
+      '<label class="big-label" style="margin-top:1.25rem">Full menu PDF <span style="font-weight:400;color:var(--text-soft)">(optional — overrides the default <code>/menu.pdf</code> on your Hostinger site)</span></label>'+
+      '<input class="big-input" id="menuPdfUrl" placeholder="Leave blank to use /menu.pdf on Hostinger" value="'+(info.menuPdfUrl||'').replace(/"/g,'&quot;')+'">'+
+      '<p style="font-size:12px;color:var(--text-soft);margin:.3rem 0 1rem">Just upload <b>menu.pdf</b> to your Hostinger file manager alongside index.html — the button will appear automatically. Paste a URL here only if you want to use a different file.</p>'+
+      '<button class="btn btn-primary btn-big" id="infoSave" style="margin-top:1rem"><i class="ti ti-device-floppy"></i> Save changes</button>';
+    tb.querySelector('#infoSave').onclick=function(){
+      info.phone=tb.querySelector('#infoPhone').value.trim()||info.phone;
+      info.address=tb.querySelector('#infoAddr').value.trim()||info.address;
+      Array.prototype.forEach.call(tb.querySelectorAll('.hours-edit-row'),function(row){
+        var i=+row.dataset.day;
+        info.hours[i]={ closed: row.querySelector('.hd-state').value==='closed',
+                        open: row.querySelector('.hd-open').value,
+                        close: row.querySelector('.hd-close').value };
+      });
+      var pdfUrl=tb.querySelector('#menuPdfUrl').value.trim();
+      info.menuPdfUrl=pdfUrl;
+      save('porters_info',info); syncSetting('info',info); syncSetting('menu_pdf_url',pdfUrl); applyInfo(); renderHoursPublic(); renderOpenBadge();
+      showToast('Saved! Your website is updated.');
+    };
+    // Remove hero photo
+    var removeBtn=tb.querySelector('#removeHero');
+    if(removeBtn) removeBtn.onclick=function(){
+      info.heroPhoto=''; save('porters_info',info); applyInfo();
+      // Sync removal to Supabase
+      fetch(SUPABASE_URL+'/rest/v1/site_settings',{method:'POST',headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({key:'hero_photo',value:''})}).catch(function(){});
+      renderDash();
+    };
+    // Hero photo upload
+    var heroFile=tb.querySelector('#heroFile');
+    if(heroFile) heroFile.onchange=function(){
+      if(!heroFile.files[0]) return;
+      var file=heroFile.files[0];
+      var status=tb.querySelector('#heroUploadStatus');
+      status.style.display='block';
+      var ext=file.name.split('.').pop().toLowerCase();
+      var fname='gallery/hero_'+Date.now()+'.'+ext;
+      fetch(SUPABASE_URL+'/storage/v1/object/'+fname,{
+        method:'POST',
+        headers:{'Authorization':'Bearer '+SUPABASE_ANON_KEY,'apikey':SUPABASE_ANON_KEY,'Content-Type':file.type,'x-upsert':'true'},
+        body:file
+      })
+      .then(function(r){ if(!r.ok) throw new Error('Upload failed '+r.status); return r.json(); })
+      .then(function(){
+        info.heroPhoto=SUPABASE_URL+'/storage/v1/object/public/'+fname;
+        save('porters_info',info); applyInfo();
+        // Sync to Supabase so all devices see the new hero photo
+        fetch(SUPABASE_URL+'/rest/v1/site_settings',{method:'POST',headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({key:'hero_photo',value:info.heroPhoto})}).catch(function(){});
+        showToast('Hero photo updated!'); renderDash();
+      })
+      .catch(function(e){ status.style.display='none'; showToast('Upload failed: '+e.message); });
+    };
+  }
+
+  function renderServicesTab(){
+    var tb=document.getElementById('tabBody');
+    var html = '<div class="help">Tap the <b>pencil</b> next to any item to edit its name, price, or description. In the description box, put each bullet on its own line. Changes update the website and booking instantly.</div>';
+    html += CATALOG.map(function(c){
+      var rows = c.items.map(function(it){
+        var priceLbl = '$'+it.price+(it.plus?'+':'');
+        var safe = it.name.replace(/"/g,'&quot;');
+        return '<tr class="se-item" data-iid="'+it.id+'" data-cid="'+c.id+'">'
+          +'<td class="se-item-name">'+it.name+'</td>'
+          +'<td class="se-item-price">'+priceLbl+'</td>'
+          +'<td class="se-item-actions"><button class="se-edit-btn" data-editi="'+it.id+'" data-editc="'+c.id+'" title="Edit"><i class="ti ti-pencil"></i></button></td>'
+          +'</tr>'
+          +'<tr class="se-edit-row" id="erow-'+it.id+'">'
+          +'<td colspan="3"><div class="se-edit-inner">'
+          +'<div class="se-edit-fields"><input class="se-name" value="'+safe+'" placeholder="Service name"><input class="se-price" type="number" min="0" value="'+it.price+'" placeholder="$"></div>'
+          +'<div class="se-desc-label">Description</div>'
+          +'<textarea class="se-desc" placeholder="Short description (optional)">'+(it.desc||'').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</textarea>'
+          +'<div class="se-edit-btns"><label><input type="checkbox" class="se-plus" '+(it.plus?'checked':'')+'>  Starting price (+)</label>'
+          +'<div class="btn-grp"><button class="mini no" data-deli="'+it.id+'" data-delc="'+c.id+'"><i class="ti ti-trash"></i> Delete</button>'
+          +'<button class="mini ok" data-savei="'+it.id+'" data-savec="'+c.id+'"><i class="ti ti-device-floppy"></i> Save</button></div></div>'
+          +'</div></td>'
+          +'</tr>';
+      }).join('');
+      return '<div class="menu-edit-cat">'
+        +'<div class="menu-cat-head"><span class="mc-ico"><i class="ti '+c.icon+'"></i></span><h3>'+c.cat+'</h3></div>'
+        +'<table class="se-table">'+rows+'</table>'
+        +'<div class="se-add-row"><input class="ai-name" id="ain-'+c.id+'" placeholder="New item name"><input class="ai-price" id="aip-'+c.id+'" type="number" min="0" placeholder="$"><button class="mini ok" data-addc="'+c.id+'"><i class="ti ti-plus"></i> Add</button></div>'
+        +'</div>';
+    }).join('');
+    tb.innerHTML=html;
+
+    function findItem(cid,iid){ var c=catById(cid); return c?c.items.filter(function(x){return x.id===iid;})[0]:null; }
+
+    // Toggle edit row open/closed
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-editi]'),function(el){ el.onclick=function(){
+      var erow=document.getElementById('erow-'+el.dataset.editi);
+      if(!erow) return;
+      var isOpen=erow.classList.contains('open');
+      // Close all others first
+      Array.prototype.forEach.call(tb.querySelectorAll('.se-edit-row.open'),function(r){ r.classList.remove('open'); });
+      if(!isOpen) erow.classList.add('open');
+    }; });
+
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-savei]'),function(el){ el.onclick=function(){
+      var erow=document.getElementById('erow-'+el.dataset.savei); var it=findItem(el.dataset.savec, el.dataset.savei); if(!it) return;
+      var nm=erow.querySelector('.se-name').value.trim(); var pr=parseInt(erow.querySelector('.se-price').value,10);
+      if(!nm){ showToast('Name cannot be empty'); return; }
+      if(isNaN(pr)||pr<0){ showToast('Enter a valid price'); return; }
+      it.name=nm; it.price=pr; it.plus=erow.querySelector('.se-plus').checked; it.desc=erow.querySelector('.se-desc').value.trim();
+      save('porters_catalog',CATALOG); syncSetting('catalog',CATALOG); renderPublicServices(); showToast('Saved!'); renderServicesTab();
+    }; });
+
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-deli]'),function(el){ el.onclick=function(){
+      showConfirm({title:'Delete item?', message:'Remove "'+el.dataset.deli+'" from the menu?', confirmLabel:'Delete', onConfirm:function(){
+        var c=catById(el.dataset.delc); if(!c) return;
+        c.items=c.items.filter(function(x){return x.id!==el.dataset.deli;});
+        save('porters_catalog',CATALOG); syncSetting('catalog',CATALOG); renderPublicServices(); showToast('Item removed'); renderServicesTab();
+      }});
+    }; });
+
+    Array.prototype.forEach.call(tb.querySelectorAll('[data-addc]'),function(el){ el.onclick=function(){
+      var cid=el.dataset.addc; var c=catById(cid);
+      var nm=tb.querySelector('#ain-'+cid).value.trim(); var pr=parseInt(tb.querySelector('#aip-'+cid).value,10);
+      if(!nm){ showToast('Enter an item name'); return; }
+      if(isNaN(pr)||pr<0){ showToast('Enter a price'); return; }
+      c.items.push({ id:cid+'_'+Date.now(), name:nm, price:pr, plus:false });
+      save('porters_catalog',CATALOG); syncSetting('catalog',CATALOG); renderPublicServices(); showToast(nm+' added!'); renderServicesTab();
+    }; });
+  }
+
+  // ── Customer booking view (via ?booking=TOKEN link) ────────────────────
+  function showBookingView(token){
+    var bv=document.getElementById('bookingView'); if(!bv) return;
+    bv.style.display='flex';
+    bv.innerHTML='<div class="bv-card"><div style="text-align:center;padding:2rem"><i class="ti ti-loader" style="font-size:32px;color:var(--rose-mid)"></i><p style="margin-top:.5rem;color:var(--text-soft)">Loading your booking...</p></div></div>';
+    fetch(BOOKING_API+'/api/booking?token='+token)
+    .then(function(r){return r.json();})
+    .then(function(a){
+      if(a.error){ bv.innerHTML='<div class="bv-card"><h2 style="color:var(--rose-text)">Booking not found</h2><p style="color:var(--text-soft)">This link may have expired. Please call us at (281) 747-7421.</p></div>'; return; }
+      var sc=a.status==='confirmed'?'#3B6D11':a.status==='cancelled'?'#9a5a5a':'#8a5a00';
+      var canAct=a.status==='pending'||a.status==='confirmed';
+      bv.innerHTML='<div class="bv-card">'+
+        '<div class="bv-head"><img src="porters-logo.png" style="height:36px"><h2>Your Appointment</h2></div>'+
+        '<div class="bv-status" style="background:none;color:'+sc+';font-size:14px;padding:0 0 .75rem">● '+a.status.charAt(0).toUpperCase()+a.status.slice(1)+'</div>'+
+        '<div class="bv-details">'+
+          '<div><span>Service</span><strong>'+escHtmlPub(a.service||'')+'</strong></div>'+
+          '<div><span>Tech</span><strong>'+escHtmlPub(a.tech_name||'')+'</strong></div>'+
+          '<div><span>Date</span><strong>'+escHtmlPub(a.date||'')+'</strong></div>'+
+          '<div><span>Time</span><strong>'+(a.time?fmtTime(a.time):'')+'</strong></div>'+
+        '</div>'+
+        (canAct?'<div class="bv-actions"><button class="btn btn-primary" id="bvReschedule"><i class="ti ti-calendar-event"></i> Request Reschedule</button><button class="btn btn-ghost" id="bvCancel" style="color:var(--text-soft)">Cancel my appointment</button></div>':'')+
+        '<p style="font-size:13px;margin-top:1rem;color:var(--text-soft)">Questions? Call <a href="tel:2817477421" style="color:var(--rose-text)">(281) 747-7421</a></p>'+
+      '</div>';
+      if(canAct){
+        document.getElementById('bvReschedule').onclick=function(){
+          bv.style.display='none';
+          wiz={step:1,cat:null,service:null,priceLabel:null,techId:null,date:null,time:null,rescheduleToken:token,rescheduleAppt:a};
+          calRef=new Date(); calRef.setDate(1); render();
+          var bkEl=document.getElementById('booking'); if(bkEl) bkEl.scrollIntoView({behavior:'smooth'});
+        };
+        document.getElementById('bvCancel').onclick=function(){
+          if(!confirm('Cancel your '+a.service+' on '+a.date+'?')) return;
+          fetch(BOOKING_API+'/api/update-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:a.id,status:'cancelled',name:a.name||'',email:a.email||'',service:a.service||'',date:a.date||'',time:a.time||''})})
+          .then(function(r){return r.json();})
+          .then(function(d){ if(d.success) bv.innerHTML='<div class="bv-card"><h2 style="color:var(--rose-text)">Appointment cancelled</h2><p>We hope to see you again soon! <a href="tel:2817477421" style="color:var(--rose-text)">(281) 747-7421</a></p></div>'; });
+        };
+      }
+    })
+    .catch(function(){ bv.innerHTML='<div class="bv-card"><h2>Could not load booking</h2><p>Please try again or call (281) 747-7421.</p></div>'; });
+  }
+  function escHtmlPub(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+
+var _apptView='upcoming', _apptWeek=0, _apptCache=null;
+
+function _todayStr(){ return new Date().toISOString().slice(0,10); }
+function _ym2(d){ return d.toISOString().slice(0,10); }
+function _wkDates(off){ var d=new Date(),day=d.getDay(),mon=new Date(d); mon.setDate(d.getDate()-((day+6)%7)+off*7); return [0,1,2,3,4,5].map(function(i){var x=new Date(mon);x.setDate(mon.getDate()+i);return x;}); }
+function _mon(d){ return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]; }
+function _dname(d){ return ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][((d.getDay()+6)%7)]; }
+function _isToday(d){ return _ym2(d)===_todayStr(); }
+function _safeDate(s){ var p=s?s.split('-'):[]; return p.length===3?new Date(+p[0],+p[1]-1,+p[2]):new Date(); }
+function _isActive(a){ return a.status==='pending'||a.status==='confirmed'; }
+function _isPast(a){ return !_isActive(a)||(a.status==='confirmed'&&a.date<_todayStr()); }
+function _isAnyTech(a){ return !a.tech_name||a.tech_name==='Any available'||a.tech_name==='To be assigned'; }
+function fmtTime(t){ if(!t) return ''; var p=t.split(':'); if(p.length<2) return t; var h=+p[0],m=p[1],ap=h>=12?'PM':'AM'; return (h%12||12)+':'+m+' '+ap; }
+
+function _loadAppts(cb){
+  if(_apptCache){cb(_apptCache);return;}
+  fetch(BOOKING_API+'/api/book')
+  .then(function(r){return r.json();})
+  .then(function(d){_apptCache=d;cb(d);})
+  .catch(function(){document.getElementById('tabBody').innerHTML='<div class="dash-empty"><i class="ti ti-alert-circle"></i><p>Could not load appointments. Check your connection.</p></div>';});
+}
+
+function renderApptsTab(){
+  var tb=document.getElementById('tabBody');
+  tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading appointments...</p></div>';
+  _apptCache=null;
+  _loadAppts(_drawAppts);
+}
+
+function _techPickerHTML(a){
+  var opts=techs.map(function(t){return '<option value="'+escHtml(t.name)+'">'+escHtml(t.name)+'</option>';}).join('');
+  return '<div class="tech-picker" data-pid="'+a.id+'">'+
+    '<select class="tpsel" style="font-size:12px;padding:4px 8px;border:1px solid var(--rose-mid);border-radius:8px;font-family:Nunito;color:var(--rose-text)"><option value="">Pick a tech...</option>'+opts+'</select>'+
+    '<button class="mini ok tpconfirm" data-pid="'+a.id+'" data-aname="'+escHtml(a.name||'')+'" data-aemail="'+escHtml(a.email||'')+'" data-asvc="'+escHtml(a.service||'')+'" data-adate="'+escHtml(a.date||'')+'" data-atime="'+escHtml(a.time||'')+'">Confirm</button>'+
+    '<button class="mini tpcancel" style="background:#f0e8e8;color:#9a5a5a">✕</button>'+
+  '</div>';
+}
+
+function _actionBtns(a){
+  var rescheduleBtn='<button class="mini" style="background:#e8f0fe;color:#185FA5" data-reschedule="'+a.id+'" data-aname="'+escHtml(a.name||'')+'" data-aemail="'+escHtml(a.email||'')+'" data-aphone="'+escHtml(a.phone||'')+'" data-asvc="'+escHtml(a.service||'')+'" data-acat="'+escHtml(a.category||'')+'" data-adate="'+escHtml(a.date||'')+'" data-atime="'+escHtml(a.time||'')+'" data-atech="'+escHtml(a.tech_name||'')+'"><i class="ti ti-calendar-event"></i> Reschedule</button>';
+  var cancelBtn='<button class="mini" style="background:#f0e8e8;color:#9a5a5a" data-cancel="'+a.id+'" data-aname="'+escHtml(a.name||'')+'" data-aemail="'+escHtml(a.email||'')+'" data-asvc="'+escHtml(a.service||'')+'" data-adate="'+escHtml(a.date||'')+'" data-atime="'+escHtml(a.time||'')+'"><i class="ti ti-x"></i> Cancel</button>';
+  var declineBtn='<button class="mini no" data-decline="'+a.id+'" data-aname="'+escHtml(a.name||'')+'" data-aemail="'+escHtml(a.email||'')+'" data-asvc="'+escHtml(a.service||'')+'" data-adate="'+escHtml(a.date||'')+'" data-atime="'+escHtml(a.time||'')+'"><i class="ti ti-x"></i> Decline</button>';
+  if(a.status==='pending'){
+    if(_isAnyTech(a)){
+      return '<button class="mini ok" data-assign="'+a.id+'" data-aname="'+escHtml(a.name||'')+'" data-aemail="'+escHtml(a.email||'')+'" data-asvc="'+escHtml(a.service||'')+'" data-adate="'+escHtml(a.date||'')+'" data-atime="'+escHtml(a.time||'')+'"><i class="ti ti-user-check"></i> Assign & Approve</button>'+declineBtn;
+    }
+    return '<button class="mini ok" data-approve="'+a.id+'" data-aname="'+escHtml(a.name||'')+'" data-aemail="'+escHtml(a.email||'')+'" data-asvc="'+escHtml(a.service||'')+'" data-adate="'+escHtml(a.date||'')+'" data-atime="'+escHtml(a.time||'')+'"><i class="ti ti-check"></i> Approve</button>'+declineBtn;
+  }
+  if(a.status==='confirmed'){
+    return '<span class="badge confirmed">confirmed</span>'+rescheduleBtn+cancelBtn;
+  }
+  return '<span class="badge '+a.status+'">'+a.status+'</span>';
+}
+
+function _walkinForm(){
+  var catOpts=(typeof CATALOG!=='undefined'?CATALOG:[]).map(function(c){return '<option value="'+escHtml(c.id)+'">'+escHtml(c.cat)+'</option>';}).join('');
+  var techOpts='<option value="Any available">Anyone available</option>'+(typeof techs!=='undefined'?techs.map(function(t){return '<option value="'+escHtml(t.name)+'">'+escHtml(t.name)+'</option>';}).join(''):'');
+  var today=_todayStr();
+  return '<div class="add-form" id="walkinForm" style="margin-top:1rem">'+
+    '<h4><i class="ti ti-user-plus" style="color:var(--rose-text)"></i> Add walk-in / manual booking</h4>'+
+    '<div class="field-row"><div class="field"><label>Customer name</label><input id="wiName" placeholder="Full name"></div><div class="field"><label>Phone</label><input id="wiPhone" placeholder="(713) 555-0000" type="tel"></div></div>'+
+    '<div class="field"><label>Email (optional)</label><input id="wiEmail" placeholder="customer@email.com" type="email"></div>'+
+    '<div class="field-row"><div class="field"><label>Service category</label><select id="wiCat">'+catOpts+'</select></div><div class="field"><label>Service</label><select id="wiSvc"></select></div></div>'+
+    '<div class="field-row"><div class="field"><label>Nail tech</label><select id="wiTech">'+techOpts+'</select></div><div class="field"><label>Date</label><input type="date" id="wiDate" value="'+today+'" min="'+today+'"></div></div>'+
+    '<div class="field-row"><div class="field"><label>Time</label><input type="time" id="wiTime" value="09:00"></div><div class="field"><label>Notes (optional)</label><input id="wiNotes" placeholder="Any notes..."></div></div>'+
+    '<div style="display:flex;gap:.5rem;margin-top:.5rem">'+
+      '<button class="mini" id="wiCancel">Cancel</button>'+
+      '<button class="btn btn-primary btn-big" id="wiSubmit" style="flex:1"><i class="ti ti-check"></i> Add as confirmed</button>'+
+    '</div>'+
+  '</div>';
+}
+
+function _drawAppts(data){
+  var tb=document.getElementById('tabBody'); if(!tb) return;
+  var today=_todayStr();
+  var upcoming=data.filter(function(a){ return _isActive(a)&&a.date>=today; });
+  var pending=upcoming.filter(function(a){return a.status==='pending';}).length;
+  var confirmed=upcoming.filter(function(a){return a.status==='confirmed';}).length;
+  var wdates=_wkDates(_apptWeek), wkeys=wdates.map(_ym2);
+  var wAppts=data.filter(function(a){ return wkeys.indexOf(a.date)>-1&&_isActive(a); });
+  var techMap={}; data.forEach(function(a){if(a.tech_name&&!_isAnyTech(a))techMap[a.tech_name]=1;});
+  if(typeof techs!=='undefined') techs.forEach(function(t){techMap[t.name]=1;});
+  var techList=Object.keys(techMap).sort();
+  var TC=[['#fdf0f4','#B84A6E'],['#e1f5ee','#0F6E56'],['#fdefd5','#8a5a00'],['#e6f1fb','#185FA5']];
+  var wLabel=_mon(wdates[0])+' '+wdates[0].getDate()+' – '+_mon(wdates[5])+' '+wdates[5].getDate()+', '+wdates[0].getFullYear();
+  var h='';
+  h+='<div class="sch-stats"><div class="sch-stat"><div class="ss-l">Upcoming</div><div class="ss-v">'+upcoming.length+'</div></div><div class="sch-stat"><div class="ss-l">Pending</div><div class="ss-v" style="color:#8a5a00">'+pending+'</div></div><div class="sch-stat"><div class="ss-l">Confirmed</div><div class="ss-v" style="color:#3B6D11">'+confirmed+'</div></div><button class="mini ok" id="addWalkinBtn" style="margin-left:auto"><i class="ti ti-plus"></i> Walk-in / Add</button></div>';
+  h+='<div id="walkinFormWrap"></div>';
+  h+='<div class="sch-bar"><div class="sch-views"><button class="svb'+(_apptView==='week'?' svo':'')+'" data-v="week">Week</button><button class="svb'+(_apptView==='upcoming'?' svo':'')+'" data-v="upcoming">Upcoming</button><button class="svb'+(_apptView==='past'?' svo':'')+'" data-v="past">Past</button></div>';
+  if(_apptView==='week') h+='<div class="sch-wnav"><button class="wnb" id="wprev">&#8592;</button><span class="wnl">'+wLabel+'</span><button class="wnb" id="wtoday">Today</button><button class="wnb" id="wnext">&#8594;</button></div>';
+  h+='</div>';
+
+  if(_apptView==='week'){
+    var anyPending=wAppts.filter(function(a){return _isAnyTech(a)&&a.status==='pending';});
+    if(anyPending.length){
+      h+='<div class="any-alert"><i class="ti ti-user-question"></i> <strong>'+anyPending.length+' unassigned</strong> — tap Upcoming to assign a tech</div>';
+    }
+    if(!techList.length){ h+='<div class="dash-empty"><i class="ti ti-calendar-off"></i><p>No appointments yet.</p></div>'; }
+    else{
+      h+='<div class="sch-grid"><div class="sch-hrow"><div class="sch-tc"></div>';
+      wdates.forEach(function(d){h+='<div class="sch-dh'+(_isToday(d)?' schtoday':'')+'"><div class="shdow">'+_dname(d)+'</div><div class="shdate">'+d.getDate()+'</div></div>';});
+      h+='</div>';
+      techList.forEach(function(tech,ti){
+        var bg=TC[ti%4][0],tc=TC[ti%4][1];
+        h+='<div class="sch-trow"><div class="sch-thead" data-ti="'+ti+'"><div class="sch-tc"><div class="tav" style="background:'+bg+';color:'+tc+'">'+tech.charAt(0)+'</div><span>'+escHtml(tech)+'</span></div>';
+        wdates.forEach(function(d){
+          var dk=_ym2(d);
+          var da=wAppts.filter(function(a){return a.tech_name===tech&&a.date===dk;});
+          h+='<div class="sch-dc">';
+          if(!da.length){ h+='<div class="sch-em">—</div>'; }
+          else{ da.forEach(function(a){ var ip=a.status==='pending'; h+='<div class="sch-chip'+(ip?' schp':'')+'" data-ti2="'+ti+'">'+(a.time?'<span class="chtime">'+fmtTime(a.time)+'</span>':'')+'<div class="chsvc">'+escHtml((a.service||'').split(' ').slice(0,3).join(' '))+'</div></div>'; }); }
+          h+='</div>';
+        });
+        h+='</div>';
+        h+='<div class="sch-td" id="std-'+ti+'">';
+        var twa=wAppts.filter(function(a){return a.tech_name===tech;}).sort(function(a,b){return(a.date+a.time).localeCompare(b.date+b.time);});
+        if(!twa.length){ h+='<div style="padding:10px;font-size:13px;color:var(--text-soft)">No active appointments this week.</div>'; }
+        else{ twa.forEach(function(a){ h+=_apptCard(a,ti); }); }
+        h+='</div></div>';
+      });
+      h+='</div>';
+    }
+  } else if(_apptView==='upcoming'){
+    var list=upcoming.sort(function(a,b){return(a.date+a.time).localeCompare(b.date+b.time);});
+    if(!list.length){ h+='<div class="dash-empty"><i class="ti ti-calendar-off"></i><p>No upcoming appointments.</p></div>'; }
+    else{ h+=_renderList(list); }
+  } else {
+    var pastList=data.filter(_isPast).sort(function(a,b){return(b.date+b.time).localeCompare(a.date+a.time);});
+    if(!pastList.length){ h+='<div class="dash-empty"><i class="ti ti-history"></i><p>No past appointments yet.</p></div>'; }
+    else{ h+=_renderList(pastList); }
+  }
+
+  tb.innerHTML=h;
+  _wireApptEvents(tb);
+}
+
+function _apptCard(a, ti){
+  var rescheduleNote = a.reschedule_of ? '<div class="sdr-nt" style="color:#185FA5"><i class="ti ti-calendar-event" style="font-size:12px"></i> Reschedule request</div>' : '';
+  return '<div class="sdr-dr" id="acard-'+a.id+'">'+
+    '<span class="sdr-d">'+_dname(_safeDate(a.date))+'</span>'+
+    '<span class="sdr-t">'+fmtTime(a.time||'09:00')+'</span>'+
+    '<div class="sdr-s"><span class="sdr-svc">'+escHtml(a.service||'')+'</span>'+(a.price?'<span class="sdr-pr">'+escHtml(a.price)+'</span>':'')+'</div>'+
+    '<div class="sdr-n">'+escHtml(a.name||'')+'<br><a href="tel:'+escHtml(a.phone||'')+'" style="font-size:11px;color:#B84A6E">'+escHtml(a.phone||'')+'</a></div>'+
+    '<div class="sdr-ax" id="ax-'+a.id+'">'+_actionBtns(a)+'</div>'+
+    (a.notes?'<div class="sdr-nt"><i class="ti ti-notes" style="font-size:12px"></i> '+escHtml(a.notes)+'</div>':'')+
+    rescheduleNote+
+  '</div>';
+}
+
+function _renderList(list){
+  var h='<div class="sch-lv">';
+  list.forEach(function(a){
+    var rescheduleNote = a.reschedule_of ? ' <span style="font-size:11px;color:#185FA5;font-weight:700">↻ Reschedule request</span>' : '';
+    h+='<div class="sch-lr"><div class="slrd"><div class="slrdn">'+_dname(_safeDate(a.date))+'</div><div class="slrmd">'+_mon(_safeDate(a.date))+' '+_safeDate(a.date).getDate()+'</div></div>'+
+      '<div class="slrt">'+fmtTime(a.time||'09:00')+'</div>'+
+      '<div class="slri"><div class="slrsvc">'+escHtml(a.service||'')+rescheduleNote+'</div><div class="slrtech">'+escHtml(a.tech_name||'')+'</div></div>'+
+      '<div class="slrc">'+escHtml(a.name||'')+'<br><a href="tel:'+escHtml(a.phone||'')+'" style="font-size:12px;color:#B84A6E">'+escHtml(a.phone||'')+'</a></div>'+
+      '<div class="slrax" id="ax-'+a.id+'">'+_actionBtns(a)+'</div></div>';
+  });
+  h+='</div>';
+  return h;
+}
+
+function _wireApptEvents(tb){
+  // View switcher
+  Array.prototype.forEach.call(tb.querySelectorAll('.svb'),function(b){b.onclick=function(){_apptView=b.dataset.v;_drawAppts(_apptCache);};});
+  var wp=tb.querySelector('#wprev'); if(wp)wp.onclick=function(){_apptWeek--;_drawAppts(_apptCache);};
+  var wn=tb.querySelector('#wnext'); if(wn)wn.onclick=function(){_apptWeek++;_drawAppts(_apptCache);};
+  var wt=tb.querySelector('#wtoday'); if(wt)wt.onclick=function(){_apptWeek=0;_drawAppts(_apptCache);};
+  Array.prototype.forEach.call(tb.querySelectorAll('.sch-thead'),function(el){
+    el.onclick=function(){var d=document.getElementById('std-'+el.dataset.ti);if(d)d.style.display=d.style.display==='none'?'block':'none';};
+  });
+  Array.prototype.forEach.call(tb.querySelectorAll('.sch-chip'),function(c){
+    c.onclick=function(e){e.stopPropagation();var d=document.getElementById('std-'+c.dataset.ti2);if(d)d.style.display='block';};
+  });
+
+  // Walk-in / Add button
+  var wib=tb.querySelector('#addWalkinBtn');
+  if(wib) wib.onclick=function(){
+    var wrap=tb.querySelector('#walkinFormWrap');
+    if(wrap.innerHTML){ wrap.innerHTML=''; return; }
+    wrap.innerHTML=_walkinForm();
+    // Populate services when category changes
+    var catSel=wrap.querySelector('#wiCat');
+    var svcSel=wrap.querySelector('#wiSvc');
+    function populateSvcs(){
+      var cat=(typeof CATALOG!=='undefined'?CATALOG:[]).filter(function(c){return c.id===catSel.value;})[0];
+      svcSel.innerHTML=cat?(cat.items||[]).map(function(i){var pLabel=i.price?" ($"+i.price+")":""; return "<option value=\""+escHtml(i.name)+pLabel+"\">"+escHtml(i.name)+(i.price?" — $"+i.price:"")+"</option>";}).join(""):"";
+    }
+    populateSvcs(); catSel.onchange=populateSvcs;
+    wrap.querySelector('#wiCancel').onclick=function(){wrap.innerHTML='';};
+    wrap.querySelector('#wiSubmit').onclick=function(){
+      var name=wrap.querySelector('#wiName').value.trim();
+      var phone=wrap.querySelector('#wiPhone').value.trim();
+      var date=wrap.querySelector('#wiDate').value;
+      var time=wrap.querySelector('#wiTime').value;
+      var svcVal=wrap.querySelector('#wiSvc').value;
+      var svcName=svcVal.split(' ($')[0];
+      var techName=wrap.querySelector('#wiTech').value;
+      var cat=(typeof CATALOG!=='undefined'?CATALOG:[]).filter(function(c){return c.id===catSel.value;})[0];
+      var catName=cat?cat.cat:'';
+      if(!name||!phone||!date||!time||!svcName){showToast('Please fill in all required fields');return;}
+      var btn=wrap.querySelector('#wiSubmit'); btn.disabled=true; btn.innerHTML='Adding...';
+      fetch(BOOKING_API+'/api/book',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:name,phone:phone,email:wrap.querySelector('#wiEmail').value.trim(),service:svcName,category:catName,techName:techName,date:date,time:time,notes:wrap.querySelector('#wiNotes').value.trim(),priceLabel:'',walkin:true})
+      })
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d.success){ showToast(name+' added and confirmed!'); _apptCache=null; wrap.innerHTML=''; renderApptsTab(); }
+        else{ btn.disabled=false; btn.innerHTML='<i class="ti ti-check"></i> Add as confirmed'; showToast('Could not save. Try again.'); }
+      })
+      .catch(function(){ btn.disabled=false; btn.innerHTML='<i class="ti ti-check"></i> Add as confirmed'; showToast('Connection error.'); });
+    };
+  };
+
+  // Plain approve
+  Array.prototype.forEach.call(tb.querySelectorAll('[data-approve]'),function(el){
+    el.onclick=function(){el.disabled=true;el.innerHTML='...';updateApptStatus(el.dataset.approve,'confirmed',el.dataset.aname,el.dataset.aemail,el.dataset.asvc,el.dataset.adate,el.dataset.atime,null);};
+  });
+
+  // Assign & Approve (any available)
+  Array.prototype.forEach.call(tb.querySelectorAll('[data-assign]'),function(el){
+    el.onclick=function(){
+      var container=el.closest('.sdr-ax')||el.closest('.slrax'); if(!container) return;
+      var opts=techs.map(function(t){return '<option value="'+escHtml(t.name)+'">'+escHtml(t.name)+'</option>';}).join('');
+      container.innerHTML='<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'+
+        '<select class="tpsel" style="font-size:12px;padding:4px 8px;border:1px solid var(--rose-mid);border-radius:8px;font-family:Nunito"><option value="">Pick a tech...</option>'+opts+'</select>'+
+        '<button class="mini ok" id="tpconfirm">Confirm</button>'+
+        '<button class="mini" id="tpcancel" style="background:#f0e8e8;color:#9a5a5a">✕</button>'+
+      '</div><div id="tpwarn" style="font-size:12px;color:#9a2a2a;margin-top:4px;display:none"></div>';
+      container.querySelector('#tpcancel').onclick=function(){_drawAppts(_apptCache);};
+      container.querySelector('#tpconfirm').onclick=function(){
+        var sel=container.querySelector('.tpsel');
+        if(!sel||!sel.value){showToast('Please pick a tech first');return;}
+        var techName=sel.value;
+        var btn=container.querySelector('#tpconfirm');
+        var warn=container.querySelector('#tpwarn');
+        btn.disabled=true; btn.innerHTML='Checking...';
+        fetch(BOOKING_API+'/api/book?slots=1&tech='+encodeURIComponent(techName)+'&date='+el.dataset.adate+'&exclude='+el.dataset.assign)
+        .then(function(r){return r.json();})
+        .then(function(d){
+          var booked=d.booked||[];
+          if(booked.indexOf(el.dataset.atime)>-1){
+            btn.disabled=false; btn.innerHTML='Confirm';
+            warn.style.display='block';
+            warn.innerHTML='⚠️ <strong>'+escHtml(techName)+'</strong> is already booked at '+fmtTime(el.dataset.atime)+'. Pick a different tech.';
+          } else {
+            btn.innerHTML='Confirming...';
+            updateApptStatus(el.dataset.assign,'confirmed',el.dataset.aname,el.dataset.aemail,el.dataset.asvc,el.dataset.adate,el.dataset.atime,techName);
+          }
+        })
+        .catch(function(){ btn.innerHTML='Confirming...'; updateApptStatus(el.dataset.assign,'confirmed',el.dataset.aname,el.dataset.aemail,el.dataset.asvc,el.dataset.adate,el.dataset.atime,techName); });
+      };
+    };
+  });
+
+  // Reschedule — inline date/time picker
+  Array.prototype.forEach.call(tb.querySelectorAll('[data-reschedule]'),function(el){
+    el.onclick=function(){
+      var ax=document.getElementById('ax-'+el.dataset.reschedule); if(!ax) return;
+      var today=_todayStr();
+      ax.innerHTML='<div style="display:flex;flex-direction:column;gap:6px;min-width:220px">'+
+        '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+          '<input type="date" id="rsDate-'+el.dataset.reschedule+'" value="'+escHtml(el.dataset.adate)+'" min="'+today+'" style="font-size:12px;padding:4px 8px;border:1px solid var(--rose-mid);border-radius:8px;flex:1">'+
+          '<input type="time" id="rsTime-'+el.dataset.reschedule+'" value="'+escHtml(el.dataset.atime)+'" style="font-size:12px;padding:4px 8px;border:1px solid var(--rose-mid);border-radius:8px;flex:1">'+
+        '</div>'+
+        '<div style="display:flex;gap:6px">'+
+          '<button class="mini" id="rsCancel-'+el.dataset.reschedule+'" style="background:#f0e8e8;color:#9a5a5a">✕ Cancel</button>'+
+          '<button class="mini ok" id="rsConfirm-'+el.dataset.reschedule+'"><i class="ti ti-check"></i> Save & notify</button>'+
+        '</div>'+
+        '<div id="rsWarn-'+el.dataset.reschedule+'" style="font-size:12px;color:#9a2a2a;display:none"></div>'+
+      '</div>';
+      document.getElementById('rsCancel-'+el.dataset.reschedule).onclick=function(){_drawAppts(_apptCache);};
+      document.getElementById('rsConfirm-'+el.dataset.reschedule).onclick=function(){
+        var newDate=document.getElementById('rsDate-'+el.dataset.reschedule).value;
+        var newTime=document.getElementById('rsTime-'+el.dataset.reschedule).value;
+        var warn=document.getElementById('rsWarn-'+el.dataset.reschedule);
+        if(!newDate||!newTime){showToast('Please pick a date and time');return;}
+        showConfirm({title:'Reschedule appointment?',
+          message:escHtml(el.dataset.aname)+'\'s '+escHtml(el.dataset.asvc)+' will be moved from '+escHtml(el.dataset.adate)+' at '+fmtTime(el.dataset.atime)+' to '+newDate+' at '+fmtTime(newTime)+'. They\'ll be notified by text and email.',
+          confirmLabel:'Reschedule & notify',
+          danger:false,
+          onConfirm:function(){
+            var btn=document.getElementById('rsConfirm-'+el.dataset.reschedule);
+            if(btn){btn.disabled=true;btn.innerHTML='Saving...';}
+            fetch(BOOKING_API+'/api/update-status',{
+              method:'POST',
+              headers:{'Content-Type':'application/json'},
+              body:JSON.stringify({id:el.dataset.reschedule,status:'rescheduled',name:el.dataset.aname,email:el.dataset.aemail,phone:el.dataset.aphone,service:el.dataset.asvc,date:newDate,time:newTime,tech_name:el.dataset.atech,new_date:newDate,new_time:newTime,old_date:el.dataset.adate,old_time:el.dataset.atime})
+            })
+            .then(function(r){return r.json();})
+            .then(function(d){
+              if(d.success){showToast(el.dataset.aname+' rescheduled!');_apptCache=null;renderApptsTab();}
+              else{showToast('Could not save. Try again.');}
+            })
+            .catch(function(){showToast('Connection error.');});
+          }
+        });
+      };
+    };
+  });
+
+  // Decline
+  Array.prototype.forEach.call(tb.querySelectorAll('[data-decline]'),function(el){
+    el.onclick=function(){
+      showConfirm({title:'Decline booking?',message:escHtml(el.dataset.aname)+' will be notified that their request for '+escHtml(el.dataset.asvc)+' was not accepted.',confirmLabel:'Decline',onConfirm:function(){
+        updateApptStatus(el.dataset.decline,'declined',el.dataset.aname,el.dataset.aemail,el.dataset.asvc,el.dataset.adate,el.dataset.atime,null);
+      }});
+    };
+  });
+
+  // Cancel
+  Array.prototype.forEach.call(tb.querySelectorAll('[data-cancel]'),function(el){
+    el.onclick=function(){
+      showConfirm({title:'Cancel appointment?',message:escHtml(el.dataset.aname)+'\'s '+escHtml(el.dataset.asvc)+' on '+escHtml(el.dataset.adate)+' will be cancelled and they\'ll be notified.',confirmLabel:'Cancel appointment',onConfirm:function(){
+        updateApptStatus(el.dataset.cancel,'cancelled',el.dataset.aname,el.dataset.aemail,el.dataset.asvc,el.dataset.adate,el.dataset.atime,null);
+      }});
+    };
+  });
+}
+
+  function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function updateApptStatus(id,status,name,email,service,date,time,techName){
+    var body={id:id,status:status,name:name||'',email:email||'',service:service||'',date:date||'',time:time||''};
+    if(techName) body.tech_name=techName;
+    fetch(BOOKING_API+'/api/update-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();})
+    .then(function(d){ if(d.success){ _apptCache=null; showToast(techName?'Assigned to '+techName+' and confirmed!':('Appointment '+status+'!')); renderDash(); } else showToast('Could not update.'); })
+    .catch(function(){ showToast('Connection error.'); });
+  }
+
+  document.getElementById('dashView').style.display='block';
+  ownerTab='appts';
+  renderDash();
+</script>
+</body>
+</html>
