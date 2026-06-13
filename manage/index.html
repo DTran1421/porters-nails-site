@@ -533,7 +533,7 @@
       <button class="manage-back" onclick="doLogout()" style="background:none;border:none;cursor:pointer;color:var(--text-soft);font-size:13px;font-weight:600;display:flex;align-items:center;gap:5px;"><i class="ti ti-logout"></i> Sign out</button>
     </div>
   </header>
-  <div class="manage-body">
+  <div class="manage-body" id="managebody" style="display:none">
     <aside class="manage-sidebar">
       <span class="sidebar-label">Bookings</span>
       <button class="sidebar-item active" onclick="showTab('appts')"><i class="ti ti-calendar"></i> Appointments</button>
@@ -2005,8 +2005,9 @@ function _wireApptEvents(tb){
     .catch(function(){ showToast('Connection error.'); });
   }
 
-  document.getElementById('dashView').style.display='block';
-  ownerTab='appts';
+  // Dashboard render is triggered by auth after login
+  // document.getElementById('dashView').style.display='block';
+  // ownerTab='appts';
 
 </script>
 
@@ -2019,6 +2020,9 @@ function clearSession(){ sessionStorage.removeItem(SESSION_KEY); }
 
 function showDashboard(){
   document.getElementById('loginScreen').style.display='none';
+  document.getElementById('managebody').style.display='flex';
+  document.getElementById('dashView').style.display='block';
+  ownerTab='appts';
   if(typeof renderDash === 'function') renderDash();
 }
 
