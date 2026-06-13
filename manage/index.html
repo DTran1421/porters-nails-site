@@ -404,6 +404,10 @@
   .manage-content{ flex:1; padding:2rem; overflow-y:auto; }
   .manage-page #dashView{ background:transparent; }
   .manage-wrap{ display:none; }
+  .sidebar-toggle{ background:none; border:none; cursor:pointer; color:var(--rose-text); font-size:20px; padding:6px; border-radius:8px; display:flex; align-items:center; transition:background .15s; }
+  .sidebar-toggle:hover{ background:var(--rose); }
+  .manage-body.sidebar-collapsed .manage-sidebar{ width:0; overflow:hidden; padding:0; border:none; }
+  .manage-body.sidebar-collapsed .manage-content{ padding:2rem; }
   @media(max-width:768px){ .manage-sidebar{ display:none; } .manage-content{ padding:1rem; } }
   .sch-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
   .sch-stat{background:var(--cream);border-radius:14px;padding:.7rem 1rem;border:1px solid var(--rose-mid)}
@@ -475,6 +479,7 @@
 <body class="manage-page">
   <header class="manage-header">
     <div class="manage-header-left">
+      <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar"><i class="ti ti-layout-sidebar"></i></button>
       <img src="../porters-logo-icon.png" alt="Porter's Nails &amp; Spa" class="manage-logo" />
       <span class="manage-title">Owner Dashboard</span>
     </div>
@@ -1046,6 +1051,9 @@
   function showToast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2600); }
 
   var ownerTab='appts';
+  function toggleSidebar(){
+    document.querySelector('.manage-body').classList.toggle('sidebar-collapsed');
+  }
   function showTab(tab){
     ownerTab=tab;
     // Update sidebar active state
@@ -1710,7 +1718,8 @@ function _drawAppts(data){
   var TC=[['#fdf0f4','#B84A6E'],['#e1f5ee','#0F6E56'],['#fdefd5','#8a5a00'],['#e6f1fb','#185FA5']];
   var wLabel=_mon(wdates[0])+' '+wdates[0].getDate()+' – '+_mon(wdates[5])+' '+wdates[5].getDate()+', '+wdates[0].getFullYear();
   var h='';
-  h+='<div class="sch-stats"><div class="sch-stat"><div class="ss-l">Upcoming</div><div class="ss-v">'+upcoming.length+'</div></div><div class="sch-stat"><div class="ss-l">Pending</div><div class="ss-v" style="color:#8a5a00">'+pending+'</div></div><div class="sch-stat"><div class="ss-l">Confirmed</div><div class="ss-v" style="color:#3B6D11">'+confirmed+'</div></div><button class="mini ok" id="addWalkinBtn" style="margin-left:auto"><i class="ti ti-plus"></i> Walk-in / Add</button></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem"><h2 style="font-family:Playfair Display,serif;font-size:22px;color:var(--rose-text)">Appointments</h2><button class="btn btn-primary" id="addWalkinBtn" style="font-size:13px;padding:.5rem 1.2rem"><i class="ti ti-plus"></i> Walk-in / Add</button></div>';
+  h+='<div class="sch-stats"><div class="sch-stat"><div class="ss-l">Upcoming</div><div class="ss-v">'+upcoming.length+'</div></div><div class="sch-stat"><div class="ss-l">Pending</div><div class="ss-v" style="color:#8a5a00">'+pending+'</div></div><div class="sch-stat"><div class="ss-l">Confirmed</div><div class="ss-v" style="color:#3B6D11">'+confirmed+'</div></div></div>';
   h+='<div id="walkinFormWrap"></div>';
   h+='<div class="sch-bar"><div class="sch-views"><button class="svb'+(_apptView==='week'?' svo':'')+'" data-v="week">Week</button><button class="svb'+(_apptView==='upcoming'?' svo':'')+'" data-v="upcoming">Upcoming</button><button class="svb'+(_apptView==='past'?' svo':'')+'" data-v="past">Past</button></div>';
   if(_apptView==='week') h+='<div class="sch-wnav"><button class="wnb" id="wprev">&#8592;</button><span class="wnl">'+wLabel+'</span><button class="wnb" id="wtoday">Today</button><button class="wnb" id="wnext">&#8594;</button></div>';
