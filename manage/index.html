@@ -503,8 +503,21 @@
       <div class="login-title">Owner Dashboard</div>
       <div class="login-sub" id="loginSub">Sign in to manage your salon</div>
       <div class="login-error" id="loginError"></div>
-      <input class="login-field" type="password" id="loginPwd" placeholder="Password" autocomplete="current-password" />
-      <button class="login-btn" id="loginBtn" onclick="doLogin()">Sign in</button>
+
+      <!-- Login form -->
+      <div id="loginForm">
+        <input class="login-field" type="password" id="loginPwd" placeholder="Password" autocomplete="current-password" />
+        <button class="login-btn" onclick="doLogin()">Sign in</button>
+        <p style="margin-top:1rem;font-size:13px;color:var(--text-muted)">First time? <a href="#" onclick="showRegister(event)" style="color:var(--rose-dark);font-weight:700;text-decoration:none">Create account</a></p>
+      </div>
+
+      <!-- Register form -->
+      <div id="registerForm" style="display:none">
+        <input class="login-field" type="password" id="regPwd" placeholder="Choose a password (min 6 characters)" />
+        <input class="login-field" type="password" id="regConfirm" placeholder="Confirm password" />
+        <button class="login-btn" onclick="doRegister()">Create account</button>
+        <p style="margin-top:1rem;font-size:13px;color:var(--text-muted)">Already have an account? <a href="#" onclick="showLogin(event)" style="color:var(--rose-dark);font-weight:700;text-decoration:none">Sign in</a></p>
+      </div>
     </div>
   </div>
   <header class="manage-header">
