@@ -538,6 +538,8 @@
       <button class="sidebar-item" onclick="showTab('hours')"><i class="ti ti-clock"></i> Hours & info</button>
       <button class="sidebar-item" onclick="showChangePw()"><i class="ti ti-lock"></i> Change password</button>
       <button class="sidebar-item" onclick="showTab('msglog')"><i class="ti ti-message"></i> Message log</button>
+      <span class="sidebar-label" id="adminLabel" style="display:none">Admin</span>
+      <button class="sidebar-item" id="accountsBtn" style="display:none" onclick="showTab('accounts')"><i class="ti ti-users-group"></i> Accounts</button>
     </aside>
     <main class="manage-content">
       <div id="dashView"></div>
@@ -2006,6 +2008,7 @@ function _wireApptEvents(tb){
 <script>
 var SESSION_KEY = 'porters_session';
 var BOOKING_API_AUTH = 'https://porters-nails-api.vercel.app';
+
 function getSession(){ return sessionStorage.getItem(SESSION_KEY); }
 function setSession(t){ sessionStorage.setItem(SESSION_KEY, t); }
 function clearSession(){ sessionStorage.removeItem(SESSION_KEY); }
@@ -2015,7 +2018,6 @@ async function showDashboard(){
   document.getElementById('managebody').style.display='flex';
   document.getElementById('dashView').style.display='block';
   ownerTab='appts';
-  // Check role and show admin items
   try{
     var token=getSession();
     var r=await fetch(BOOKING_API_AUTH+'/api/auth',{headers:{'x-session-token':token}});
@@ -2030,22 +2032,76 @@ async function showDashboard(){
   if(typeof renderDash === 'function') renderDash();
 }
 
-function showRegister(e){
-  if(e) e.preventDefault();
-  document.getElementById('loginForm').style.display='none';
-  document.getElementById('registerForm').style.display='block';
-  document.getElementById('loginSub').textContent='Create your owner account';
-  document.getElementById('loginError').style.display='none';
-  return false;
+async function initAuth(){
+  try{
+    var token=getSession();
+    if(token){
+      var r=await fetch(BOOKING_API_AUTH+'/api/auth',{headers:{'x-session-token':token}});
+      var d=await r.json();
+      if(d.valid){ showDashboard(); return; }
+      clearSession();
+    }
+  }catch(e){}
+  document.getElementById('loginScreen').style.display='flex';
 }
 
-function showLogin(e){
-  if(e && e.preventDefault) e.preventDefault();
-  document.getElementById('registerForm').style.display='none';
-  document.getElementById('loginForm').style.display='block';
-  document.getElementById('loginSub').textContent='Sign in to manage your salon';
-  document.getElementById('loginError').style.display='none';
-  return false;
+async function doLogin(){
+  var username=(document.getElementById('loginUsername').value||'').trim();
+  var pwd=document.getElementById('loginPwd').value;
+  var errEl=document.getElementById('loginError');
+  errEl.style.display='none';
+  if(!username){errEl.textContent='Please enter your username.';errEl.style.display='block';return;}
+  if(!pwd){errEl.textContent='Please enter your password.';errEl.style.display='block';return;}
+  try{
+    var r=await fetch(BOOKING_API_AUTH+'/api/auth',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'login',username:username,password:pwd})
+    });
+    var d=await r.json();
+    if(d.success){setSession(d.token);showDashboard();}
+    else{errEl.textContent=d.error||'Incorrect username or password.';errEl.style.display='block';}
+  }catch(e){errEl.textContent='Connection error. Try again.';errEl.style.display='block';}
+}
+
+async function doLogout(){
+  var token=getSession();
+  clearSession();
+  if(token) fetch(BOOKING_API_AUTH+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'logout'})}).catch(function(){});
+  location.reload();
+}
+
+function showChangePw(){
+  var wrap=document.createElement('div');
+  wrap.className='chpw-wrap';wrap.id='chpwWrap';
+  wrap.innerHTML='<div class="chpw-card">'+
+    '<h3>Change Password</h3>'+
+    '<input class="login-field" type="password" id="chpwCurrent" placeholder="Current password" />'+
+    '<input class="login-field" type="password" id="chpwNew" placeholder="New password (min 6 characters)" />'+
+    '<input class="login-field" type="password" id="chpwConfirm" placeholder="Confirm new password" />'+
+    '<div class="login-error" id="chpwError"></div>'+
+    '<div style="display:flex;gap:.5rem;margin-top:.5rem">'+
+    '<button class="btn btn-ghost" style="flex:1;padding:.65rem" onclick="document.getElementById(&quot;chpwWrap&quot;).remove()">Cancel</button>'+
+    '<button class="btn btn-primary" style="flex:1;padding:.65rem;font-size:14px" onclick="doChangePw()">Update</button>'+
+    '</div></div>';
+  document.body.appendChild(wrap);
+}
+
+async function doChangePw(){
+  var cur=document.getElementById('chpwCurrent').value;
+  var nw=document.getElementById('chpwNew').value;
+  var cf=document.getElementById('chpwConfirm').value;
+  var err=document.getElementById('chpwError');
+  err.style.display='none';
+  if(!cur){err.textContent='Enter current password.';err.style.display='block';return;}
+  if(nw.length<6){err.textContent='New password must be at least 6 characters.';err.style.display='block';return;}
+  if(nw!==cf){err.textContent='Passwords do not match.';err.style.display='block';return;}
+  var token=getSession();
+  try{
+    var r=await fetch(BOOKING_API_AUTH+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'change',password:cur,newPassword:nw})});
+    var d=await r.json();
+    if(d.success){showToast('Password updated! Please sign in again.');document.getElementById('chpwWrap').remove();setTimeout(doLogout,1500);}
+    else{err.textContent=d.error||'Could not update password.';err.style.display='block';}
+  }catch(e){err.textContent='Connection error.';err.style.display='block';}
 }
 
 function renderAccountsTab(){
@@ -2054,8 +2110,7 @@ function renderAccountsTab(){
   tb.innerHTML='<div class="dash-empty"><i class="ti ti-loader"></i><p>Loading accounts...</p></div>';
   var token=getSession();
   fetch(BOOKING_API_AUTH+'/api/auth',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','x-session-token':token},
+    method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},
     body:JSON.stringify({action:'list_accounts'})
   }).then(function(r){return r.json();}).then(function(accounts){
     var h='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">';
@@ -2068,15 +2123,15 @@ function renderAccountsTab(){
       h+='<div><div style="font-weight:700;color:var(--rose-text);font-size:15px">'+a.username+'</div>';
       h+='<div style="font-size:12px;color:var(--text-muted);margin-top:2px">'+a.role+(a.last_login?' &middot; Last login: '+new Date(a.last_login).toLocaleDateString():'')+'</div></div>';
       if(a.role!=='admin'){
-        h+='<button class="mini no" onclick="deleteAccount(\''+a.username+'\')"><i class="ti ti-trash"></i> Remove</button>';
-      } else {
+        h+='<button class="mini no" onclick="deleteAccount(&quot;'+a.username+'&quot;)"><i class="ti ti-trash"></i> Remove</button>';
+      }else{
         h+='<span style="font-size:12px;color:var(--text-muted)">Admin</span>';
       }
       h+='</div>';
     });
     h+='</div>';
     tb.innerHTML=h;
-  }).catch(function(){ tb.innerHTML='<div class="dash-empty"><p>Could not load accounts.</p></div>'; });
+  }).catch(function(){tb.innerHTML='<div class="dash-empty"><p>Could not load accounts.</p></div>';});
 }
 
 function showAddAccount(){
@@ -2124,107 +2179,7 @@ async function deleteAccount(username){
   }});
 }
 
-async function initAuth(){
-  try {
-    var token = getSession();
-    if(token){
-      var r = await fetch(BOOKING_API_AUTH+'/api/auth', { headers:{'x-session-token':token} });
-      var d = await r.json();
-      if(d.valid){ showDashboard(); return; }
-      clearSession();
-    }
-  } catch(e){}
-  document.getElementById('loginScreen').style.display='flex';
-}
-
-async function doLogin(){
-  var username = (document.getElementById('loginUsername').value||'').trim();
-  var pwd = document.getElementById('loginPwd').value;
-  var errEl = document.getElementById('loginError');
-  errEl.style.display='none';
-  if(!username){ errEl.textContent='Please enter your username.'; errEl.style.display='block'; return; }
-  if(!pwd){ errEl.textContent='Please enter your password.'; errEl.style.display='block'; return; }
-  try {
-    var r = await fetch(BOOKING_API_AUTH+'/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'login', username:username, password:pwd})
-    });
-    var d = await r.json();
-    if(d.success){ setSession(d.token); showDashboard(); }
-    else { errEl.textContent = d.error || 'Incorrect username or password.'; errEl.style.display='block'; }
-  } catch(e){ errEl.textContent='Connection error. Try again.'; errEl.style.display='block'; }
-}
-
-async function doRegister(){
-  var username = (document.getElementById('regUsername').value||'').trim();
-  var pwd = document.getElementById('regPwd').value;
-  var confirm = document.getElementById('regConfirm').value;
-  var errEl = document.getElementById('loginError');
-  errEl.style.display='none';
-  if(!username || username.length < 3){ errEl.textContent='Username must be at least 3 characters.'; errEl.style.display='block'; return; }
-  if(!pwd || pwd.length < 6){ errEl.textContent='Password must be at least 6 characters.'; errEl.style.display='block'; return; }
-  if(pwd !== confirm){ errEl.textContent='Passwords do not match.'; errEl.style.display='block'; return; }
-  try {
-    var r = await fetch(BOOKING_API_AUTH+'/api/auth', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({action:'setup', username:username, password:pwd})
-    });
-    var d = await r.json();
-    if(d.success){
-      document.getElementById('loginUsername').value = username;
-      document.getElementById('loginPwd').value = pwd;
-      showLogin(null);
-      await doLogin();
-    } else {
-      errEl.textContent = d.error || 'Could not create account.';
-      errEl.style.display='block';
-    }
-  } catch(e){ errEl.textContent='Connection error. Try again.'; errEl.style.display='block'; }
-}
-
-async function doLogout(){
-  var token = getSession();
-  clearSession();
-  if(token) fetch(BOOKING_API_AUTH+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'logout'})}).catch(function(){});
-  location.reload();
-}
-
-function showChangePw(){
-  var wrap=document.createElement('div');
-  wrap.className='chpw-wrap'; wrap.id='chpwWrap';
-  wrap.innerHTML='<div class="chpw-card">'+
-    '<h3>Change Password</h3>'+
-    '<input class="login-field" type="password" id="chpwCurrent" placeholder="Current password" />'+
-    '<input class="login-field" type="password" id="chpwNew" placeholder="New password (min 6 characters)" />'+
-    '<input class="login-field" type="password" id="chpwConfirm" placeholder="Confirm new password" />'+
-    '<div class="login-error" id="chpwError"></div>'+
-    '<div style="display:flex;gap:.5rem;margin-top:.5rem">'+
-    '<button class="btn btn-ghost" style="flex:1;padding:.65rem" onclick="document.getElementById(&quot;chpwWrap&quot;).remove()">Cancel</button>'+
-    '<button class="btn btn-primary" style="flex:1;padding:.65rem;font-size:14px" onclick="doChangePw()">Update</button>'+
-    '</div></div>';
-  document.body.appendChild(wrap);
-}
-
-async function doChangePw(){
-  var cur=document.getElementById('chpwCurrent').value;
-  var nw=document.getElementById('chpwNew').value;
-  var cf=document.getElementById('chpwConfirm').value;
-  var err=document.getElementById('chpwError');
-  err.style.display='none';
-  if(!cur){err.textContent='Enter current password.';err.style.display='block';return;}
-  if(nw.length<6){err.textContent='New password must be at least 6 characters.';err.style.display='block';return;}
-  if(nw!==cf){err.textContent='Passwords do not match.';err.style.display='block';return;}
-  var token=getSession();
-  try{
-    var r=await fetch(BOOKING_API_AUTH+'/api/auth',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},body:JSON.stringify({action:'change',password:cur,newPassword:nw})});
-    var d=await r.json();
-    if(d.success){showToast('Password updated! Please sign in again.');document.getElementById('chpwWrap').remove();setTimeout(doLogout,1500);}
-    else{err.textContent=d.error||'Could not update password.';err.style.display='block';}
-  }catch(e){err.textContent='Connection error.';err.style.display='block';}
-}
-
 document.getElementById('loginPwd').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-document.getElementById('regConfirm').addEventListener('keydown',function(e){if(e.key==='Enter')doRegister();});
 initAuth();
 </script>
 </body>
