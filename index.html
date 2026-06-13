@@ -1174,14 +1174,17 @@
         '<div><span>Date</span><strong>'+fmtDateLong(wiz.date)+'</strong></div>'+
         '<div><span>Time</span><strong>'+fmtTime(wiz.time)+'</strong></div>'+
       '</div>'+
-      '<div class="field-row"><div class="field"><label>Your name</label><input id="dName" placeholder="Jane Doe"></div><div class="field"><label>Phone number</label><input id="dPhone" placeholder="(281) 555-0000"></div></div>'+
-      '<div class="field"><label>Email (optional)</label><input id="dEmail" placeholder="you@email.com"></div>'+
+      '<div class="field-row"><div class="field"><label>Your name</label><input id="dName" type="text" autocomplete="name" placeholder="Jane Doe"></div><div class="field"><label>Phone number</label><input id="dPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(281) 555-0000"></div></div>'+
+      '<div class="field"><label>Email (optional)</label><input id="dEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com"></div>'+
       '<div class="field"><label>Notes (optional)</label><textarea id="dNotes" placeholder="Any special requests?"></textarea></div>'+
       '<button class="btn btn-primary" id="submitBtn" style="width:100%;justify-content:center;"><i class="ti ti-calendar-check"></i> Request appointment</button>'+
       '<div class="wiz-actions"><button class="wiz-back"><i class="ti ti-arrow-left"></i> Back</button><span></span></div>';
     b.querySelector('#submitBtn').onclick=function(){
       var name=b.querySelector('#dName').value.trim(); var phone=b.querySelector('#dPhone').value.trim();
       if(!name||!phone){ showToast('Please enter your name and phone number'); return; }
+      if(phone.replace(/\D/g,'').length<10){ showToast('Please enter a valid 10-digit phone number'); return; }
+      var emailVal=b.querySelector('#dEmail').value.trim();
+      if(emailVal && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailVal)){ showToast('Please enter a valid email or leave it blank'); return; }
       var btn=b.querySelector('#submitBtn'); btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Sending...';
       var isReschedule=!!(wiz.rescheduleToken);
       var endpoint=isReschedule?(BOOKING_API+'/api/booking'):(BOOKING_API+'/api/book');
