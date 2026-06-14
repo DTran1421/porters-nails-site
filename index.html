@@ -1234,6 +1234,64 @@
   // Check for booking token in URL
   var _btoken=new URLSearchParams(window.location.search).get('booking');
   if(_btoken && typeof BOOKING_API!=='undefined') showBookingView(_btoken);
+
+  function showBookingView(token){
+    var box=document.getElementById('bookingView');
+    box.style.display='flex';
+    box.innerHTML='<div class="bv-card"><div class="bv-head"><img src="porters-logo-icon.png" style="height:36px"><h2>Your Appointment</h2></div><p style="color:var(--text-soft)">Loading...</p></div>';
+    fetch(BOOKING_API+'/api/booking?token='+encodeURIComponent(token))
+    .then(function(r){ if(!r.ok) throw new Error('not found'); return r.json(); })
+    .then(function(a){
+      var statusLabel={pending:'Pending confirmation',confirmed:'Confirmed',declined:'Not available',cancelled:'Cancelled'}[a.status]||a.status;
+      var statusColor={pending:'#8a5a00',confirmed:'#3B6D11',declined:'#9a5a5a',cancelled:'#9a5a5a'}[a.status]||'var(--rose-dark)';
+      var canModify=(a.status==='pending'||a.status==='confirmed');
+      var h='<div class="bv-card">';
+      h+='<div class="bv-head"><img src="porters-logo-icon.png" style="height:36px"><h2>Your Appointment</h2></div>';
+      h+='<div class="bv-status" style="background:'+statusColor+'22;color:'+statusColor+'">'+statusLabel+'</div>';
+      h+='<div class="bv-details">';
+      h+='<div><span>Service</span><strong>'+a.service+'</strong></div>';
+      h+='<div><span>Date</span><strong>'+a.date+'</strong></div>';
+      h+='<div><span>Time</span><strong>'+a.time+'</strong></div>';
+      h+='<div><span>Nail tech</span><strong>'+(a.tech_name||'Any available')+'</strong></div>';
+      if(a.price) h+='<div><span>Price</span><strong>'+a.price+'</strong></div>';
+      h+='</div>';
+      h+='<div class="bv-actions">';
+      if(canModify){
+        h+='<button class="btn btn-primary" id="bvReschedule"><i class="ti ti-calendar"></i> Reschedule</button>';
+        h+='<button class="btn btn-ghost" id="bvCancel" style="color:#9a5a5a"><i class="ti ti-x"></i> Cancel appointment</button>';
+      }
+      h+='<button class="btn btn-ghost" id="bvClose">Close</button>';
+      h+='</div></div>';
+      box.innerHTML=h;
+      var closeBtn=document.getElementById('bvClose');
+      if(closeBtn) closeBtn.onclick=function(){ box.style.display='none'; window.history.replaceState({},'',window.location.pathname); };
+      var rb=document.getElementById('bvReschedule');
+      if(rb) rb.onclick=function(){
+        box.style.display='none';
+        wiz={step:1,cat:null,service:null,priceLabel:null,techId:null,date:null,time:null,rescheduleToken:token};
+        calRef=new Date(); calRef.setDate(1);
+        document.getElementById('book').style.display='';
+        render();
+        document.getElementById('book').scrollIntoView({behavior:'smooth'});
+      };
+      var cb=document.getElementById('bvCancel');
+      if(cb) cb.onclick=function(){
+        if(!confirm('Are you sure you want to cancel this appointment?')) return;
+        cb.disabled=true; cb.innerHTML='Cancelling...';
+        fetch(BOOKING_API+'/api/booking?token='+encodeURIComponent(token),{method:'DELETE'})
+        .then(function(r){return r.json();})
+        .then(function(d){
+          if(d.success){ showBookingView(token); }
+          else { cb.disabled=false; cb.innerHTML='<i class="ti ti-x"></i> Cancel appointment'; showToast(d.error||'Could not cancel. Please call us.'); }
+        })
+        .catch(function(){ cb.disabled=false; cb.innerHTML='<i class="ti ti-x"></i> Cancel appointment'; showToast('Could not connect. Please call (281) 747-7421.'); });
+      };
+    })
+    .catch(function(){
+      box.innerHTML='<div class="bv-card"><div class="bv-head"><img src="porters-logo-icon.png" style="height:36px"><h2>Appointment</h2></div><p style="color:var(--text-soft)">We couldn\'t find this appointment. It may have been cancelled, or the link may be incorrect. Call us at (281) 747-7421 for help.</p><div class="bv-actions"><button class="btn btn-ghost" onclick="document.getElementById(\'bookingView\').style.display=\'none\'">Close</button></div></div>';
+    });
+  }
+
 </script>
 </body>
 </html>
