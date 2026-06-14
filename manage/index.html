@@ -2094,15 +2094,18 @@ function renderAccountsTab(){
     h+='<div id="addAccountWrap"></div>';
     h+='<div style="display:flex;flex-direction:column;gap:.75rem">';
     accounts.forEach(function(a){
-      h+='<div style="background:#fff;border:1px solid var(--rose-mid);border-radius:14px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between">';
-      h+='<div><div style="font-weight:700;color:var(--rose-text);font-size:15px">'+a.username+'</div>';
-      h+='<div style="font-size:12px;color:var(--text-muted);margin-top:2px">'+a.role+(a.last_login?' &middot; Last login: '+new Date(a.last_login).toLocaleDateString():'')+'</div></div>';
+      var phoneDisplay = a.phone ? formatPhone(a.phone) : 'No phone — won\'t get texts';
+      h+='<div style="background:#fff;border:1px solid var(--rose-mid);border-radius:14px;padding:1rem 1.25rem">';
+      h+='<div style="display:flex;align-items:center;justify-content:space-between">';
+      h+='<div><div style="font-weight:700;color:var(--rose-text);font-size:15px">'+a.username+(a.role==='admin'?' <span style=\'font-size:11px;color:var(--text-muted);font-weight:600\'>(admin)</span>':'')+'</div>';
+      h+='<div style="font-size:12px;color:'+(a.phone?'var(--text-soft)':'var(--text-muted)')+';margin-top:2px"><i class="ti ti-phone" style="font-size:13px"></i> '+phoneDisplay+'</div>';
+      h+=(a.last_login?'<div style="font-size:11px;color:var(--text-muted);margin-top:2px">Last login: '+new Date(a.last_login).toLocaleDateString()+'</div>':'')+'</div>';
+      h+='<div style="display:flex;gap:.5rem;align-items:center">';
+      h+='<button class="mini" onclick="editPhone(&quot;'+a.username+'&quot;,&quot;'+(a.phone||'')+'&quot;)"><i class="ti ti-edit"></i> Phone</button>';
       if(a.role!=='admin'){
-        h+='<button class="mini no" onclick="deleteAccount(&quot;'+a.username+'&quot;)"><i class="ti ti-trash"></i> Remove</button>';
-      }else{
-        h+='<span style="font-size:12px;color:var(--text-muted)">Admin</span>';
+        h+='<button class="mini no" onclick="deleteAccount(&quot;'+a.username+'&quot;)"><i class="ti ti-trash"></i></button>';
       }
-      h+='</div>';
+      h+='</div></div></div>';
     });
     h+='</div>';
     tb.innerHTML=h;
@@ -2116,6 +2119,7 @@ function showAddAccount(){
     '<h4 style="margin-bottom:1rem;color:var(--rose-text)">New Account</h4>'+
     '<input class="login-field" type="text" id="newUser" placeholder="Username" style="margin-bottom:.5rem" />'+
     '<input class="login-field" type="password" id="newPwd" placeholder="Password (min 6 characters)" style="margin-bottom:.5rem" />'+
+    '<input class="login-field" type="tel" id="newPhone" placeholder="Cell phone (for booking texts)" style="margin-bottom:.5rem" />'+
     '<div style="display:flex;gap:.5rem">'+
     '<button class="btn btn-ghost" style="flex:1;padding:.6rem;font-size:13px" onclick="document.getElementById(&quot;addAccountWrap&quot;).innerHTML=&quot;&quot;">Cancel</button>'+
     '<button class="btn btn-primary" style="flex:1;padding:.6rem;font-size:13px" onclick="createAccount()">Create</button>'+
@@ -2125,17 +2129,39 @@ function showAddAccount(){
 async function createAccount(){
   var username=(document.getElementById('newUser').value||'').trim();
   var password=document.getElementById('newPwd').value;
+  var phone=(document.getElementById('newPhone').value||'').trim();
   if(!username||username.length<3){showToast('Username must be at least 3 characters.');return;}
   if(!password||password.length<6){showToast('Password must be at least 6 characters.');return;}
   var token=getSession();
   try{
     var r=await fetch(BOOKING_API_AUTH+'/api/auth',{
       method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},
-      body:JSON.stringify({action:'create_account',targetUsername:username,targetPassword:password,targetRole:'owner'})
+      body:JSON.stringify({action:'create_account',targetUsername:username,targetPassword:password,targetPhone:phone,targetRole:'owner'})
     });
     var d=await r.json();
     if(d.success){showToast('Account created!');renderAccountsTab();}
     else{showToast(d.error||'Could not create account.');}
+  }catch(e){showToast('Connection error.');}
+}
+
+function formatPhone(p){
+  var d=(p||'').replace(/\D/g,'');
+  if(d.length===10) return '('+d.slice(0,3)+') '+d.slice(3,6)+'-'+d.slice(6);
+  return p;
+}
+
+async function editPhone(username,current){
+  var phone=prompt('Cell phone for '+username+' (for booking texts):',formatPhone(current));
+  if(phone===null) return;
+  var token=getSession();
+  try{
+    var r=await fetch(BOOKING_API_AUTH+'/api/auth',{
+      method:'POST',headers:{'Content-Type':'application/json','x-session-token':token},
+      body:JSON.stringify({action:'update_phone',targetUsername:username,targetPhone:phone})
+    });
+    var d=await r.json();
+    if(d.success){showToast('Phone updated!');renderAccountsTab();}
+    else{showToast(d.error||'Could not update phone.');}
   }catch(e){showToast('Connection error.');}
 }
 
