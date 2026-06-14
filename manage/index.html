@@ -750,12 +750,12 @@
   }
   // Always refresh techs from Supabase via Vercel so booking wizard stays in sync
   if(typeof BOOKING_API!=='undefined'&&BOOKING_API){
-    fetch(BOOKING_API+'/api/book?techs=1')
+    fetch(BOOKING_API+'/api/techs?all=1')
     .then(function(r){return r.json();})
     .then(function(rows){
       if(!rows||!rows.length) return;
       // Convert Supabase format back to app format
-      var synced=rows.map(function(r){return{id:r.id,name:r.name,phone:r.phone||'',cats:r.cats||[],days:r.days||{},start:r.start_hour||9,end:r.end_hour||18,isManager:!!r.is_manager};});
+      var synced=rows.map(function(r){return{id:r.id,name:r.name,phone:r.phone||'',cats:r.cats||[],days:r.days||{},start:r.start_hour||9,end:r.end_hour||18,isManager:!!r.is_manager,managerOnly:!!r.manager_only};});
       techs=synced; save('porters_techs2',techs);
     })
     .catch(function(){}); // silently fall back to localStorage if fetch fails
@@ -1207,7 +1207,7 @@
     html += techs.length ? techs.map(function(t){
       var dayNames=Object.keys(t.days).filter(function(k){return t.days[k];}).map(function(k){return DOW[k];}).join(', ');
       return '<div class="tech-row">'+
-          '<div><div class="t-name">'+t.name+'</div><div class="t-meta">'+t.cats.length+' service types &middot; '+(dayNames||'no days set')+' &middot; '+hourLabel(t.start)+'&ndash;'+hourLabel(t.end)+(t.phone?' &middot; <i class="ti ti-phone" style="font-size:11px"></i> '+t.phone:'')+(t.isManager?' &middot; <span style="color:var(--rose-dark);font-weight:700"><i class="ti ti-bell" style="font-size:11px"></i> Manager</span>':'')+'</div></div>'+
+          '<div><div class="t-name">'+t.name+'</div><div class="t-meta">'+t.cats.length+' service types &middot; '+(dayNames||'no days set')+' &middot; '+hourLabel(t.start)+'&ndash;'+hourLabel(t.end)+(t.phone?' &middot; <i class="ti ti-phone" style="font-size:11px"></i> '+t.phone:'')+(t.isManager?' &middot; <span style="color:var(--rose-dark);font-weight:700"><i class="ti ti-bell" style="font-size:11px"></i> Manager'+(t.managerOnly?' only':'')+'</span>':'')+'</div></div>'+
           '<div style="display:flex;gap:.4rem;flex-shrink:0">'+
             '<button class="mini" style="background:#efe6f5;color:#6b4e86" data-edit="'+t.id+'"><i class="ti ti-pencil"></i> Edit</button>'+
             '<button class="mini no" data-del="'+t.id+'"><i class="ti ti-trash"></i></button>'+
@@ -1250,14 +1250,17 @@
         var phone=ed.querySelector('.etPhone').value.trim().replace(/\D/g,'');
         var cats=Array.prototype.map.call(ed.querySelectorAll('.etCats input:checked'),function(c){return c.value;});
         var dayArr=Array.prototype.map.call(ed.querySelectorAll('.etDays input:checked'),function(c){return +c.value;});
+        var isMgr=ed.querySelector('.etManager').checked;
+        var managerOnly=isMgr && !cats.length;
         if(!name){ showToast('Please enter a name'); return; }
-        if(!cats.length){ showToast('Select at least one service type'); return; }
-        if(!dayArr.length){ showToast('Select at least one working day'); return; }
+        if(!managerOnly && !cats.length){ showToast('Select at least one service type (or check Booking manager for a manager-only account)'); return; }
+        if(!managerOnly && !dayArr.length){ showToast('Select at least one working day'); return; }
+        if(managerOnly && !phone){ showToast('A manager needs a phone number to receive booking texts'); return; }
         var days={}; dayArr.forEach(function(d){ days[d]=1; });
-        t.name=name; t.phone=phone; t.cats=cats; t.days=days; t.start=+ed.querySelector('.etStart').value; t.end=+ed.querySelector('.etEnd').value; t.isManager=ed.querySelector('.etManager').checked;
+        t.name=name; t.phone=phone; t.cats=cats; t.days=days; t.start=+ed.querySelector('.etStart').value; t.end=+ed.querySelector('.etEnd').value; t.isManager=isMgr; t.managerOnly=managerOnly;
         save('porters_techs2',techs);
         // Sync to Supabase so booking wizard picks up the update
-        if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:t.id,name:t.name,phone:t.phone||null,cats:t.cats,days:t.days,start_hour:t.start,end_hour:t.end,is_manager:t.isManager})}).catch(function(){});
+        if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:t.id,name:t.name,phone:t.phone||null,cats:t.cats,days:t.days,start_hour:t.start,end_hour:t.end,is_manager:t.isManager,manager_only:t.managerOnly})}).catch(function(){});
         showToast(name+' updated!'); renderDash();
       };
     }
@@ -1277,13 +1280,16 @@
       var phone=tb.querySelector('#ntPhone').value.trim().replace(/\D/g,'');
       var cats=Array.prototype.map.call(tb.querySelectorAll('#ntCats input:checked'),function(c){return c.value;});
       var dayArr=Array.prototype.map.call(tb.querySelectorAll('#ntDays input:checked'),function(c){return +c.value;});
+      var isMgr=tb.querySelector('#ntManager').checked;
+      var managerOnly=isMgr && !cats.length;
       if(!name){ showToast('Please enter a name'); return; }
-      if(!cats.length){ showToast('Select at least one service type'); return; }
-      if(!dayArr.length){ showToast('Select at least one working day'); return; }
+      if(!managerOnly && !cats.length){ showToast('Select at least one service type (or check Booking manager for a manager-only account)'); return; }
+      if(!managerOnly && !dayArr.length){ showToast('Select at least one working day'); return; }
+      if(managerOnly && !phone){ showToast('A manager needs a phone number to receive booking texts'); return; }
       var days={}; dayArr.forEach(function(d){ days[d]=1; });
-      var newTech={ id:'t'+Date.now(), name:name, phone:phone, cats:cats, days:days, start:+tb.querySelector('#ntStart').value, end:+tb.querySelector('#ntEnd').value, isManager:tb.querySelector('#ntManager').checked };
+      var newTech={ id:'t'+Date.now(), name:name, phone:phone, cats:cats, days:days, start:+tb.querySelector('#ntStart').value, end:+tb.querySelector('#ntEnd').value, isManager:isMgr, managerOnly:managerOnly };
       techs.push(newTech); save('porters_techs2',techs);
-      if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newTech.id,name:newTech.name,phone:newTech.phone||null,cats:newTech.cats,days:newTech.days,start_hour:newTech.start,end_hour:newTech.end,is_manager:newTech.isManager})}).catch(function(){});
+      if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newTech.id,name:newTech.name,phone:newTech.phone||null,cats:newTech.cats,days:newTech.days,start_hour:newTech.start,end_hour:newTech.end,is_manager:newTech.isManager,manager_only:newTech.managerOnly})}).catch(function(){});
       showToast(name+' added!'); renderDash();
     };
   }
