@@ -755,7 +755,7 @@
     .then(function(rows){
       if(!rows||!rows.length) return;
       // Convert Supabase format back to app format
-      var synced=rows.map(function(r){return{id:r.id,name:r.name,phone:r.phone||'',cats:r.cats||[],days:r.days||{},start:r.start_hour||9,end:r.end_hour||18};});
+      var synced=rows.map(function(r){return{id:r.id,name:r.name,phone:r.phone||'',cats:r.cats||[],days:r.days||{},start:r.start_hour||9,end:r.end_hour||18,isManager:!!r.is_manager};});
       techs=synced; save('porters_techs2',techs);
     })
     .catch(function(){}); // silently fall back to localStorage if fetch fails
@@ -1207,7 +1207,7 @@
     html += techs.length ? techs.map(function(t){
       var dayNames=Object.keys(t.days).filter(function(k){return t.days[k];}).map(function(k){return DOW[k];}).join(', ');
       return '<div class="tech-row">'+
-          '<div><div class="t-name">'+t.name+'</div><div class="t-meta">'+t.cats.length+' service types &middot; '+(dayNames||'no days set')+' &middot; '+hourLabel(t.start)+'&ndash;'+hourLabel(t.end)+(t.phone?' &middot; <i class="ti ti-phone" style="font-size:11px"></i> '+t.phone:'')+'</div></div>'+
+          '<div><div class="t-name">'+t.name+'</div><div class="t-meta">'+t.cats.length+' service types &middot; '+(dayNames||'no days set')+' &middot; '+hourLabel(t.start)+'&ndash;'+hourLabel(t.end)+(t.phone?' &middot; <i class="ti ti-phone" style="font-size:11px"></i> '+t.phone:'')+(t.isManager?' &middot; <span style="color:var(--rose-dark);font-weight:700"><i class="ti ti-bell" style="font-size:11px"></i> Manager</span>':'')+'</div></div>'+
           '<div style="display:flex;gap:.4rem;flex-shrink:0">'+
             '<button class="mini" style="background:#efe6f5;color:#6b4e86" data-edit="'+t.id+'"><i class="ti ti-pencil"></i> Edit</button>'+
             '<button class="mini no" data-del="'+t.id+'"><i class="ti ti-trash"></i></button>'+
@@ -1218,6 +1218,7 @@
     html += '<div class="add-form">'+
       '<h4>Add a nail tech</h4>'+
       '<div class="field-row"><div class="field"><label>Name</label><input id="ntName" placeholder="e.g. Anna"></div><div class="field"><label>Cell phone <span style="font-weight:400;color:var(--text-soft)">(for text notifications)</span></label><input id="ntPhone" placeholder="e.g. 7135550000" type="tel"></div></div>'+
+      '<label class="chk" style="display:flex;align-items:center;gap:8px;margin:.5rem 0;font-weight:600"><input type="checkbox" id="ntManager"> Booking manager <span style="font-weight:400;color:var(--text-soft);font-size:13px">(gets booking texts &amp; can confirm/decline by SMS)</span></label>'+
       '<span class="lbl">Service types they do</span><div class="chk-grid" id="ntCats">'+CATALOG.map(function(c){ return '<label class="chk"><input type="checkbox" value="'+c.id+'"> '+c.cat+'</label>'; }).join('')+'</div>'+
       '<span class="lbl">Working days</span><div class="chk-grid" id="ntDays">'+DOW.map(function(d,i){ return '<label class="chk"><input type="checkbox" value="'+i+'"> '+d+'</label>'; }).join('')+'</div>'+
       '<div class="field-row"><div class="field"><label>Starts at</label><select id="ntStart">'+[8,9,10,11,12].map(function(h){ return '<option value="'+h+'" '+(h===9?'selected':'')+'>'+hourLabel(h)+'</option>'; }).join('')+'</select></div><div class="field"><label>Ends at</label><select id="ntEnd">'+[15,16,17,18,19,20].map(function(h){ return '<option value="'+h+'" '+(h===18?'selected':'')+'>'+hourLabel(h)+'</option>'; }).join('')+'</select></div></div>'+
@@ -1236,6 +1237,7 @@
       ed.innerHTML='<div class="add-form" style="margin:.4rem 0 1rem">'+
         '<h4>Edit '+t.name+'</h4>'+
         '<div class="field-row"><div class="field"><label>Name</label><input class="etName" value="'+t.name.replace(/"/g,'&quot;')+'"></div><div class="field"><label>Cell phone <span style="font-weight:400;color:var(--text-soft)">(for texts)</span></label><input class="etPhone" placeholder="7135550000" type="tel" value="'+(t.phone||'').replace(/"/g,'&quot;')+'"></div></div>'+
+        '<label class="chk" style="display:flex;align-items:center;gap:8px;margin:.5rem 0;font-weight:600"><input type="checkbox" class="etManager"'+(t.isManager?' checked':'')+'> Booking manager <span style="font-weight:400;color:var(--text-soft);font-size:13px">(gets booking texts &amp; can confirm/decline by SMS)</span></label>'+
         '<span class="lbl">Service types they do</span><div class="chk-grid etCats">'+CATALOG.map(function(c){ var on=t.cats.indexOf(c.id)>-1; return '<label class="chk'+(on?' on':'')+'"><input type="checkbox" value="'+c.id+'"'+(on?' checked':'')+'> '+c.cat+'</label>'; }).join('')+'</div>'+
         '<span class="lbl">Working days</span><div class="chk-grid etDays">'+DOW.map(function(d,i){ var on=!!t.days[i]; return '<label class="chk'+(on?' on':'')+'"><input type="checkbox" value="'+i+'"'+(on?' checked':'')+'> '+d+'</label>'; }).join('')+'</div>'+
         '<div class="field-row"><div class="field"><label>Starts at</label><select class="etStart">'+hourOpts([8,9,10,11,12],t.start)+'</select></div><div class="field"><label>Ends at</label><select class="etEnd">'+hourOpts([15,16,17,18,19,20],t.end)+'</select></div></div>'+
@@ -1252,10 +1254,10 @@
         if(!cats.length){ showToast('Select at least one service type'); return; }
         if(!dayArr.length){ showToast('Select at least one working day'); return; }
         var days={}; dayArr.forEach(function(d){ days[d]=1; });
-        t.name=name; t.phone=phone; t.cats=cats; t.days=days; t.start=+ed.querySelector('.etStart').value; t.end=+ed.querySelector('.etEnd').value;
+        t.name=name; t.phone=phone; t.cats=cats; t.days=days; t.start=+ed.querySelector('.etStart').value; t.end=+ed.querySelector('.etEnd').value; t.isManager=ed.querySelector('.etManager').checked;
         save('porters_techs2',techs);
         // Sync to Supabase so booking wizard picks up the update
-        if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:t.id,name:t.name,phone:t.phone||null,cats:t.cats,days:t.days,start_hour:t.start,end_hour:t.end})}).catch(function(){});
+        if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:t.id,name:t.name,phone:t.phone||null,cats:t.cats,days:t.days,start_hour:t.start,end_hour:t.end,is_manager:t.isManager})}).catch(function(){});
         showToast(name+' updated!'); renderDash();
       };
     }
@@ -1279,9 +1281,9 @@
       if(!cats.length){ showToast('Select at least one service type'); return; }
       if(!dayArr.length){ showToast('Select at least one working day'); return; }
       var days={}; dayArr.forEach(function(d){ days[d]=1; });
-      var newTech={ id:'t'+Date.now(), name:name, phone:phone, cats:cats, days:days, start:+tb.querySelector('#ntStart').value, end:+tb.querySelector('#ntEnd').value };
+      var newTech={ id:'t'+Date.now(), name:name, phone:phone, cats:cats, days:days, start:+tb.querySelector('#ntStart').value, end:+tb.querySelector('#ntEnd').value, isManager:tb.querySelector('#ntManager').checked };
       techs.push(newTech); save('porters_techs2',techs);
-      if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newTech.id,name:newTech.name,phone:newTech.phone||null,cats:newTech.cats,days:newTech.days,start_hour:newTech.start,end_hour:newTech.end})}).catch(function(){});
+      if(typeof BOOKING_API!=='undefined') fetch(BOOKING_API+'/api/techs',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:newTech.id,name:newTech.name,phone:newTech.phone||null,cats:newTech.cats,days:newTech.days,start_hour:newTech.start,end_hour:newTech.end,is_manager:newTech.isManager})}).catch(function(){});
       showToast(name+' added!'); renderDash();
     };
   }
@@ -1463,8 +1465,7 @@
     }).join('');
     tb.innerHTML =
       '<div class="help">Update your <b>phone, address, and hours</b> here. These show in the footer and the &ldquo;Open now&rdquo; sign updates automatically. Press Save when you&rsquo;re done.</div>'+
-      '<label class="big-label">Phone number <span style="font-weight:400;color:var(--text-soft)">(shown to customers in the footer)</span></label><input class="big-input" id="infoPhone" value="'+info.phone.replace(/"/g,'&quot;')+'">'+
-      '<label class="big-label">Booking manager cell <span style="font-weight:400;color:var(--text-soft)">(gets a text for every booking — reply CONFIRM/DECLINE. Leave blank to disable)</span></label><input class="big-input" id="mgrPhone" type="tel" placeholder="(281) 555-0000" value="'+(info.managerPhone||'').replace(/"/g,'&quot;')+'">'+
+      '<label class="big-label">Phone number</label><input class="big-input" id="infoPhone" value="'+info.phone.replace(/"/g,'&quot;')+'">'+
       '<label class="big-label">Address</label><input class="big-input" id="infoAddr" value="'+info.address.replace(/"/g,'&quot;')+'">'+
       '<label class="big-label" style="margin-bottom:.6rem">Opening hours</label>'+rows+
       '<label class="big-label" style="margin-top:1.25rem">Hero photo <span style="font-weight:400;color:var(--text-soft)">(the large image on your homepage)</span></label>'+
@@ -1483,8 +1484,6 @@
     tb.querySelector('#infoSave').onclick=function(){
       info.phone=tb.querySelector('#infoPhone').value.trim()||info.phone;
       info.address=tb.querySelector('#infoAddr').value.trim()||info.address;
-      info.managerPhone=tb.querySelector('#mgrPhone').value.trim();
-      syncSetting('manager_phone',info.managerPhone);
       Array.prototype.forEach.call(tb.querySelectorAll('.hours-edit-row'),function(row){
         var i=+row.dataset.day;
         info.hours[i]={ closed: row.querySelector('.hd-state').value==='closed',
