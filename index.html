@@ -498,6 +498,17 @@
     .nav-cta { text-align:center; margin-top:0.75rem; padding:0.85rem; }
     .nav-owner { justify-content:center; padding:0.9rem; }
   }
+
+  .reviews { background:linear-gradient(170deg,var(--cream) 0%,var(--rose) 100%); }
+  .reviews-card { max-width:680px; margin:0 auto; background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; text-align:center; box-shadow:var(--shadow); }
+  .reviews-stars { font-size:34px; color:#F5A623; letter-spacing:4px; margin-bottom:.5rem; }
+  .reviews-rating { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; color:var(--rose-text); line-height:1; }
+  .reviews-rating small { font-size:18px; color:var(--text-muted); font-weight:400; font-family:'Nunito'; }
+  .reviews-sub { color:var(--text-soft); font-size:16px; margin:.75rem 0 1.75rem; }
+  .reviews-btns { display:flex; gap:.85rem; justify-content:center; flex-wrap:wrap; }
+  .reviews-btns .btn i { font-size:18px; }
+  .g-logo-mark { display:inline-flex; align-items:center; gap:7px; font-size:13px; color:var(--text-muted); font-weight:600; margin-bottom:1.25rem; }
+  @media(max-width:900px){ .reviews-card{ padding:2rem 1.25rem; } .reviews-btns{ flex-direction:column; } .reviews-btns .btn{ width:100%; justify-content:center; } }
 </style>
 </head>
 <body>
@@ -585,6 +596,21 @@
   </div>
 </section>
 
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="sec-head"><div class="sec-eyebrow" data-i18n="rev.eyebrow" data-en="Loved by our guests">Loved by our guests</div><h2 data-i18n="rev.h2" data-en="Reviews">Reviews</h2><p data-i18n="rev.sub" data-en="See what our clients are saying — and share your own visit">See what our clients are saying — and share your own visit</p></div>
+    <div class="reviews-card">
+      <div class="g-logo-mark"><i class="ti ti-brand-google"></i> <span data-i18n="rev.on" data-en="Reviews on Google">Reviews on Google</span></div>
+      <div class="reviews-stars">★★★★★</div>
+      <div class="reviews-sub" data-i18n="rev.cta" data-en="Your experience means the world to us. Tap below to read our reviews or leave one of your own.">Your experience means the world to us. Tap below to read our reviews or leave one of your own.</div>
+      <div class="reviews-btns">
+        <a href="https://g.page/r/CRQQpmWl4wmYEAI/review" target="_blank" rel="noopener" class="btn btn-primary"><i class="ti ti-star"></i> <span data-i18n="rev.leave" data-en="Leave a review">Leave a review</span></a>
+        <a href="https://www.google.com/search?q=Porter%27s+Nails+and+Spa+Porter+TX" target="_blank" rel="noopener" class="btn btn-ghost"><i class="ti ti-brand-google"></i> <span data-i18n="rev.read" data-en="Read reviews">Read reviews</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="faq" id="faq">
   <div class="wrap">
     <div class="sec-head"><div class="sec-eyebrow" data-i18n="faq.eyebrow">Good to know</div><h2 data-i18n="faq.h2">Questions &amp; answers</h2><p data-i18n="faq.sub">A few things our guests often ask</p></div>
@@ -655,7 +681,8 @@
   // --- language toggle (English / Spanish). Spanish is a first draft — have a native speaker review. ---
   var I18N = {
     es: {
-      'nav.services':'Servicios','nav.gallery':'Galería','nav.about':'Nosotros','nav.faq':'Preguntas','nav.book':'Reservar','nav.owner':'Acceso dueños',
+      'nav.services':'Servicios','nav.gallery':'Galería','nav.reviews':'Reseñas','nav.about':'Nosotros','nav.faq':'Preguntas','nav.book':'Reservar','nav.owner':'Acceso dueños',
+      'rev.eyebrow':'Lo que dicen nuestras clientas','rev.h2':'Reseñas','rev.sub':'Mira lo que dicen nuestras clientas — y comparte tu propia visita','rev.on':'Reseñas en Google','rev.cta':'Tu experiencia significa todo para nosotros. Toca abajo para leer nuestras reseñas o dejar la tuya.','rev.leave':'Dejar una reseña','rev.read':'Leer reseñas',
       'hero.badge':'Bajo nueva administración &middot; Porter, TX',
       'hero.h1':'Uñas que te hacen sentir <em>hermosa.</em>',
       'hero.sub':'Cuidado profesional de uñas y tratamientos de spa en un espacio cálido y acogedor. Reserva en línea en segundos.',
