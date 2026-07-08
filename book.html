@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Book an Appointment | Porter's Nails &amp; Spa</title>
+<meta name="robots" content="noindex, follow" />
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --rose:#FBEAF0; --rose-mid:#F4C0D1; --rose-dark:#B84A6E; --rose-text:#72243E;
+    --cream:#FDF8F5; --text:#3a2a2a; --text-soft:#6b4f4f; --text-muted:#9c8585; --white:#fff;
+  }
+  body { font-family:'Nunito',sans-serif; background:var(--cream); color:var(--text); min-height:100vh; display:flex; flex-direction:column; }
+  header { background:var(--white); border-bottom:1px solid var(--rose-mid); padding:1rem 1.5rem; display:flex; align-items:center; gap:12px; }
+  header img { height:42px; }
+  header span { font-family:'Playfair Display',serif; font-size:20px; color:var(--rose-text); font-weight:600; }
+  main { flex:1; display:flex; align-items:center; justify-content:center; padding:2rem 1.5rem; }
+  .card { background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; max-width:480px; width:100%; box-shadow:0 10px 40px rgba(184,74,110,.08); }
+  h1 { font-family:'Playfair Display',serif; font-size:28px; font-weight:600; color:var(--rose-text); margin-bottom:.4rem; }
+  .subtitle { color:var(--text-soft); font-size:15px; margin-bottom:2rem; }
+  .field { display:flex; flex-direction:column; gap:6px; margin-bottom:1.1rem; }
+  .field label { font-size:14px; font-weight:700; color:var(--rose-text); }
+  .field input, .field select { font-family:'Nunito'; font-size:15px; padding:.75rem 1rem; border:1.5px solid var(--rose-mid); border-radius:12px; background:var(--cream); color:var(--text); outline:none; width:100%; }
+  .field input:focus, .field select:focus { border-color:var(--rose-dark); }
+  .consent-box { background:var(--rose); border:1.5px solid var(--rose-mid); border-radius:14px; padding:1rem 1.1rem; margin:1.25rem 0; }
+  .consent-box label { display:flex; align-items:flex-start; gap:10px; cursor:pointer; }
+  .consent-box input[type="checkbox"] { margin-top:3px; accent-color:var(--rose-dark); width:18px; height:18px; flex-shrink:0; }
+  .consent-box .consent-text { font-size:13px; color:var(--text-soft); line-height:1.6; }
+  .consent-box .consent-text a { color:var(--rose-dark); font-weight:700; }
+  .btn { width:100%; background:var(--rose-dark); color:#fff; border:none; border-radius:30px; padding:1rem; font-family:'Nunito'; font-size:16px; font-weight:700; cursor:pointer; margin-top:.5rem; transition:opacity .2s; }
+  .btn:hover { opacity:.9; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .note { font-size:12px; color:var(--text-muted); text-align:center; margin-top:1rem; line-height:1.6; }
+  .note a { color:var(--rose-dark); }
+  .or-divider { text-align:center; color:var(--text-muted); font-size:13px; margin:1.5rem 0 1rem; position:relative; }
+  .or-divider::before { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:var(--rose-mid); }
+  .or-divider span { background:var(--white); padding:0 .75rem; position:relative; }
+  .call-link { display:flex; align-items:center; justify-content:center; gap:8px; padding:.85rem; border:2px solid var(--rose-mid); border-radius:30px; color:var(--rose-text); font-weight:700; font-size:15px; text-decoration:none; transition:background .2s; }
+  .call-link:hover { background:var(--rose); }
+  .success { display:none; text-align:center; padding:1rem 0; }
+  .success .check { width:64px; height:64px; background:#E1F5EE; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem; font-size:32px; }
+  .success h2 { font-family:'Playfair Display',serif; font-size:24px; color:var(--rose-text); margin-bottom:.5rem; }
+  .success p { color:var(--text-soft); font-size:15px; }
+  footer { background:var(--rose-text); color:#f0c8d8; padding:1.5rem; text-align:center; font-size:13px; }
+  footer a { color:#f0c8d8; }
+  @media(max-width:520px){ .card { padding:1.75rem 1.25rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/"><img src="/porters-logo-icon.png" alt="Porter's Nails & Spa" /></a>
+  <span>Porter's Nails &amp; Spa</span>
+</header>
+
+<main>
+  <div class="card">
+
+    <div id="formArea">
+      <h1>Request an Appointment</h1>
+      <p class="subtitle">Fill out the form below and we'll confirm your appointment shortly.</p>
+
+      <div class="field">
+        <label for="fname">Your name</label>
+        <input type="text" id="fname" autocomplete="name" placeholder="Jane Doe" required />
+      </div>
+
+      <div class="field">
+        <label for="fphone">Phone number</label>
+        <input type="tel" id="fphone" inputmode="tel" autocomplete="tel" placeholder="(281) 555-0000" required />
+      </div>
+
+      <div class="field">
+        <label for="femail">Email address (optional)</label>
+        <input type="email" id="femail" inputmode="email" autocomplete="email" placeholder="you@email.com" />
+      </div>
+
+      <div class="field">
+        <label for="fservice">Service requested</label>
+        <select id="fservice">
+          <option value="">— Select a service —</option>
+          <optgroup label="Pedicure">
+            <option>Basic / Express Pedicure ($25)</option>
+            <option>Classic Spa Pedicure ($30)</option>
+            <option>Deluxe Spa Pedicure ($35)</option>
+            <option>Luxury Spa Pedicure ($40)</option>
+            <option>Golden Spa Pedicure ($45)</option>
+            <option>Pearl Spa Pedicure ($55)</option>
+          </optgroup>
+          <optgroup label="Manicure">
+            <option>Classic Manicure ($20)</option>
+            <option>Shellac Manicure ($32)</option>
+          </optgroup>
+          <optgroup label="Artificial Nail">
+            <option>Solar Nails Full Set ($49+)</option>
+            <option>Gel X Full Set ($65+)</option>
+            <option>Ombre Full Set ($59+)</option>
+            <option>Dipping Powder Full Set ($49+)</option>
+          </optgroup>
+          <optgroup label="Kids' Services">
+            <option>Kids' Spa Pedicure & Color ($25)</option>
+            <option>Kids' Pedicure ($20)</option>
+            <option>Kids' Manicure ($12)</option>
+          </optgroup>
+          <optgroup label="Waxing">
+            <option>Brows ($10)</option>
+            <option>Full Face ($30+)</option>
+          </optgroup>
+          <option value="other">Other / Not sure</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="fnotes">Preferred date &amp; time (optional)</label>
+        <input type="text" id="fnotes" placeholder="e.g. Saturday afternoon" />
+      </div>
+
+      <!-- SMS CONSENT — unchecked by default, voluntary -->
+      <div class="consent-box">
+        <label>
+          <input type="checkbox" id="smsConsent" />
+          <span class="consent-text">
+            <strong>Text message updates (optional):</strong> I agree to receive text messages from Porter's Nails &amp; Spa about my appointment — including confirmations, updates, and reminders. Msg &amp; data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to opt out at any time. Reply <strong>HELP</strong> for help.<br />
+            <a href="/terms.html" target="_blank">Terms &amp; Conditions</a> &middot; <a href="/privacy.html" target="_blank">Privacy Policy</a>
+          </span>
+        </label>
+      </div>
+
+      <button class="btn" id="submitBtn" onclick="submitForm()">Request appointment</button>
+
+      <div class="or-divider"><span>or</span></div>
+      <a href="tel:2817477421" class="call-link">📞 Call us: (281) 747-7421</a>
+
+      <p class="note">
+        We'll confirm your appointment by email or phone within a few hours.<br />
+        Checking the box above is optional — you can book without it.
+      </p>
+    </div>
+
+    <div class="success" id="successArea">
+      <div class="check">✓</div>
+      <h2>Request received!</h2>
+      <p>We'll confirm your appointment soon. Questions? Call <a href="tel:2817477421">(281) 747-7421</a>.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  &copy; 2026 Porter's Nails and Spa &middot; <a href="/">portersnailsandspa.com</a> &middot;
+  <a href="/privacy.html">Privacy Policy</a> &middot; <a href="/terms.html">Terms &amp; Conditions</a>
+</footer>
+
+<script>
+var BOOKING_API = 'https://porters-nails-api.vercel.app';
+
+function submitForm() {
+  var name = document.getElementById('fname').value.trim();
+  var phone = document.getElementById('fphone').value.trim();
+  var email = document.getElementById('femail').value.trim();
+  var service = document.getElementById('fservice').value;
+  var notes = document.getElementById('fnotes').value.trim();
+  var smsOptIn = document.getElementById('smsConsent').checked;
+
+  if (!name) { alert('Please enter your name.'); return; }
+  if (!phone || phone.replace(/\D/g,'').length < 10) { alert('Please enter a valid phone number.'); return; }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  fetch(BOOKING_API + '/api/book', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: name,
+      phone: phone,
+      email: email || null,
+      service: service || 'Not specified',
+      category: 'other',
+      techName: 'Any available',
+      date: notes || 'To be scheduled',
+      time: 'Flexible',
+      notes: notes || null,
+      priceLabel: '',
+      smsOptIn: smsOptIn
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    if (d.success || d.id) {
+      document.getElementById('formArea').style.display = 'none';
+      document.getElementById('successArea').style.display = 'block';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Request appointment';
+      alert('Something went wrong. Please call us at (281) 747-7421.');
+    }
+  })
+  .catch(function() {
+    btn.disabled = false;
+    btn.textContent = 'Request appointment';
+    alert('Could not connect. Please call us at (281) 747-7421.');
+  });
+}
+</script>
+
+</body>
+</html>
