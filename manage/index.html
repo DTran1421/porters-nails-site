@@ -1713,6 +1713,10 @@ function _walkinForm(){
     '<div class="field-row"><div class="field"><label>Service category</label><select id="wiCat">'+catOpts+'</select></div><div class="field"><label>Service</label><select id="wiSvc"></select></div></div>'+
     '<div class="field-row"><div class="field"><label>Nail tech</label><select id="wiTech">'+techOpts+'</select></div><div class="field"><label>Date</label><input type="date" id="wiDate" value="'+today+'" min="'+today+'"></div></div>'+
     '<div class="field-row"><div class="field"><label>Time</label><input type="time" id="wiTime" value="09:00"></div><div class="field"><label>Notes (optional)</label><input id="wiNotes" placeholder="Any notes..."></div></div>'+
+    '<label style="display:flex;align-items:flex-start;gap:.55rem;font-size:12px;color:var(--text-muted);line-height:1.5;margin:.6rem 0;cursor:pointer">'+
+      '<input type="checkbox" id="wiSmsConsent" style="margin-top:2px;flex:none;width:16px;height:16px;accent-color:var(--rose-dark)">'+
+      '<span>Customer <strong>verbally agreed</strong> to receive appointment text messages (confirmations, updates, reminders) from Porter\'s Nails &amp; Spa. Msg &amp; data rates may apply, msg frequency varies, reply STOP to opt out, HELP for help. Optional \u2014 not required to book.</span>'+
+    '</label>'+
     '<div style="display:flex;gap:.5rem;margin-top:.5rem">'+
       '<button class="mini" id="wiCancel">Cancel</button>'+
       '<button class="btn btn-primary btn-big" id="wiSubmit" style="flex:1"><i class="ti ti-check"></i> Add as confirmed</button>'+
@@ -1855,7 +1859,7 @@ function _wireApptEvents(tb){
       fetch(BOOKING_API+'/api/book',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:name,phone:phone,email:wrap.querySelector('#wiEmail').value.trim(),service:svcName,category:catName,techName:techName,date:date,time:time,notes:wrap.querySelector('#wiNotes').value.trim(),priceLabel:'',walkin:true})
+        body:JSON.stringify({name:name,phone:phone,email:wrap.querySelector('#wiEmail').value.trim(),service:svcName,category:catName,techName:techName,date:date,time:time,notes:wrap.querySelector('#wiNotes').value.trim(),priceLabel:'',walkin:true,smsOptIn:!!(wrap.querySelector('#wiSmsConsent')&&wrap.querySelector('#wiSmsConsent').checked)})
       })
       .then(function(r){return r.json();})
       .then(function(d){
