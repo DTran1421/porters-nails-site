@@ -500,6 +500,13 @@
   }
 
   .reviews { background:linear-gradient(170deg,var(--cream) 0%,var(--rose) 100%); }
+  .quotes-grid { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:1.25rem; max-width:1000px; margin:0 auto 2.5rem; }
+  .quote-card { background:var(--white); border:1px solid var(--rose-mid); border-radius:20px; padding:1.75rem; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; }
+  .quote-card .qc-stars { color:#F5A623; font-size:16px; letter-spacing:2px; margin-bottom:.75rem; }
+  .quote-card p { font-size:15px; line-height:1.55; color:var(--text); flex:1; margin-bottom:1rem; }
+  .quote-card .qc-author { font-family:'Playfair Display',serif; font-size:15px; font-weight:600; color:var(--rose-text); }
+  .quote-card.qc-featured p { font-size:16px; }
+  @media(max-width:900px){ .quotes-grid{ grid-template-columns:1fr; } }
   .reviews-card { max-width:680px; margin:0 auto; background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; text-align:center; box-shadow:var(--shadow); }
   .reviews-stars { font-size:34px; color:#F5A623; letter-spacing:4px; margin-bottom:.5rem; }
   .reviews-rating { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; color:var(--rose-text); line-height:1; }
@@ -600,6 +607,23 @@
 <section class="reviews" id="reviews">
   <div class="wrap">
     <div class="sec-head"><div class="sec-eyebrow" data-i18n="rev.eyebrow" data-en="Loved by our guests">Loved by our guests</div><h2 data-i18n="rev.h2" data-en="Reviews">Reviews</h2><p data-i18n="rev.sub" data-en="See what our clients are saying — and share your own visit">See what our clients are saying — and share your own visit</p></div>
+    <div class="quotes-grid">
+      <div class="quote-card qc-featured">
+        <div class="qc-stars">★★★★★</div>
+        <p>&ldquo;This is my absolute favorite place to come and unwind and enjoy the nail techs. I come from Downtown area and it's definitely worth the drive. Today's nails are my favorite! 10 out of 10&rdquo;</p>
+        <div class="qc-author">Felicia Reyes &middot; Google review</div>
+      </div>
+      <div class="quote-card">
+        <div class="qc-stars">★★★★★</div>
+        <p>&ldquo;Went in for pedicures this week. They did amazing! Real flower petals in the water, the tropical scrub smelled soooo good! The massage was great and everything is so new and clean and beautiful!&rdquo;</p>
+        <div class="qc-author">Angela Walker &middot; Google review</div>
+      </div>
+      <div class="quote-card">
+        <div class="qc-stars">★★★★★</div>
+        <p>&ldquo;Love love love this place, miss Ivy did a great job.&rdquo;</p>
+        <div class="qc-author">Natesha Sanders &middot; Google review</div>
+      </div>
+    </div>
     <div class="reviews-card">
       <div class="g-logo-mark"><i class="ti ti-brand-google"></i> <span data-i18n="rev.on" data-en="Reviews on Google">Reviews on Google</span></div>
       <div class="reviews-stars">★★★★★</div>
