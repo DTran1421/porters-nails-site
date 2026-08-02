@@ -507,6 +507,79 @@
   .quote-card .qc-author { font-family:'Playfair Display',serif; font-size:15px; font-weight:600; color:var(--rose-text); }
   .quote-card.qc-featured p { font-size:16px; }
   @media(max-width:900px){ .quotes-grid{ grid-template-columns:1fr; } }
+
+  /* ===== Animations & motion polish ===== */
+  html { scroll-behavior:smooth; }
+  section[id] { scroll-margin-top:88px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* Scroll reveal */
+  .reveal { opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); will-change:opacity,transform; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+  .reveal-stagger.in > * { opacity:1; transform:translateY(0); }
+  .reveal-stagger > * { opacity:0; transform:translateY(24px); transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1); }
+  .reveal-stagger.in > *:nth-child(1){ transition-delay:.05s; }
+  .reveal-stagger.in > *:nth-child(2){ transition-delay:.16s; }
+  .reveal-stagger.in > *:nth-child(3){ transition-delay:.27s; }
+  .reveal-stagger.in > *:nth-child(4){ transition-delay:.38s; }
+  .reveal-stagger.in > *:nth-child(5){ transition-delay:.49s; }
+  .reveal-stagger.in > *:nth-child(6){ transition-delay:.60s; }
+
+  /* Hero: entrance + floating blobs */
+  .hero-text > .hero-badge, .hero-text > h1, .hero-text > p, .hero-text > .hero-btns { opacity:0; transform:translateY(18px); animation:heroUp .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  .hero-text > .hero-badge { animation-delay:.05s; }
+  .hero-text > h1 { animation-delay:.16s; }
+  .hero-text > p { animation-delay:.30s; }
+  .hero-text > .hero-btns { animation-delay:.44s; }
+  .hero-visual { opacity:0; transform:translateY(18px) scale(.98); animation:heroUp .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay:.2s; }
+  @keyframes heroUp { to { opacity:1; transform:translateY(0) scale(1); } }
+  .hero::before { animation:floatSlow 9s ease-in-out infinite; }
+  .hero::after { animation:floatSlow 11s ease-in-out infinite reverse; }
+  @keyframes floatSlow { 0%,100%{ transform:translateY(0) translateX(0); } 50%{ transform:translateY(-22px) translateX(10px); } }
+
+  /* Nav underline */
+  .nav-links a { position:relative; }
+  .nav-links a::after { content:''; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:var(--rose-dark); border-radius:2px; transition:width .28s cubic-bezier(.2,.7,.2,1); }
+  .nav-links a:hover::after { width:100%; }
+
+  /* Buttons */
+  .btn { transition:transform .18s ease, box-shadow .25s ease, background .2s ease; }
+  .btn:hover { transform:translateY(-2px); }
+  .btn:active { transform:translateY(0) scale(.98); }
+  .btn-pulse { animation:btnPulse 2.6s ease-in-out infinite; }
+  @keyframes btnPulse { 0%,100%{ box-shadow:0 0 0 0 rgba(184,74,110,.35); } 50%{ box-shadow:0 0 0 10px rgba(184,74,110,0); } }
+
+  /* Info cards / FAQ items lift */
+  .info-card, .faq-item { transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .info-card:hover, .faq-item:hover { transform:translateY(-4px); box-shadow:var(--shadow-sm); }
+
+  /* Quote card lift (extends existing card styling) */
+  .quote-card { transition:transform .25s ease, box-shadow .25s ease; }
+  .quote-card:hover { transform:translateY(-5px); box-shadow:var(--shadow); }
+
+  /* Gallery zoom + lightbox */
+  .gal-photo { overflow:hidden; cursor:pointer; transition:transform .5s cubic-bezier(.2,.7,.2,1); }
+  .gal-photo:hover { transform:scale(1.045); z-index:2; box-shadow:var(--shadow); }
+  .lightbox { position:fixed; inset:0; background:rgba(30,15,20,.86); display:flex; align-items:center; justify-content:center; z-index:999; opacity:0; pointer-events:none; transition:opacity .3s ease; padding:2rem; }
+  .lightbox.open { opacity:1; pointer-events:auto; }
+  .lightbox img { max-width:90vw; max-height:85vh; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.4); transform:scale(.92); transition:transform .35s cubic-bezier(.2,.7,.2,1); }
+  .lightbox.open img { transform:scale(1); }
+  .lightbox-close { position:absolute; top:22px; right:28px; color:#fff; font-size:32px; cursor:pointer; opacity:.85; transition:opacity .2s; line-height:1; }
+  .lightbox-close:hover { opacity:1; }
+
+  /* Reviews mobile carousel */
+  @media(max-width:900px){
+    .quotes-grid.carousel-active { position:relative; display:block; padding-bottom:2.25rem; }
+    .quotes-grid.carousel-active .quote-card { display:none; opacity:0; transform:translateY(0); }
+    .quotes-grid.carousel-active .quote-card.active { display:flex; animation:fadeSlide .5s ease; }
+    @keyframes fadeSlide { from{ opacity:0; transform:translateX(14px); } to{ opacity:1; transform:translateX(0); } }
+    .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:1.25rem; }
+    .carousel-dots span { width:8px; height:8px; border-radius:50%; background:var(--rose-mid); cursor:pointer; transition:background .2s,transform .2s; }
+    .carousel-dots span.active { background:var(--rose-dark); transform:scale(1.25); }
+  }
   .reviews-card { max-width:680px; margin:0 auto; background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; text-align:center; box-shadow:var(--shadow); }
   .reviews-stars { font-size:34px; color:#F5A623; letter-spacing:4px; margin-bottom:.5rem; }
   .reviews-rating { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; color:var(--rose-text); line-height:1; }
@@ -549,7 +622,7 @@
       <h1 data-i18n="hero.h1">Nails that make you feel <em>beautiful.</em></h1>
       <p data-i18n="hero.sub">Professional nail care and spa treatments in a warm, welcoming space. Book online in seconds &mdash; choose your service, your tech, and your time.</p>
       <div class="hero-btns">
-        <a href="#book" class="btn btn-primary"><i class="ti ti-calendar"></i> <span>Book online</span></a>
+        <a href="#book" class="btn btn-primary btn-pulse"><i class="ti ti-calendar"></i> <span>Book online</span></a>
         <a href="tel:2817477421" class="btn btn-ghost"><i class="ti ti-phone"></i> (281) 747-7421</a>
       </div>
     </div>
@@ -560,8 +633,8 @@
 <section class="services" id="services">
   <div class="wrap">
     <img src="porters-logo.png" alt="Porter's Nails & Spa" class="menu-logo" />
-    <div class="sec-head"><h2 data-i18n="svc.h2">Services &amp; prices</h2><p data-i18n="svc.sub">Everything we offer — tap Book to reserve your spot</p></div>
-    <div class="services-grid" id="servicesGrid"></div>
+    <div class="sec-head reveal"><h2 data-i18n="svc.h2">Services &amp; prices</h2><p data-i18n="svc.sub">Everything we offer — tap Book to reserve your spot</p></div>
+    <div class="services-grid reveal" id="servicesGrid"></div>
     <div class="menu-pdf-bar" id="menuPdfBar" style="display:none">
       <a class="menu-pdf-btn" id="menuPdfBtn" href="#" target="_blank" rel="noopener">
         <i class="ti ti-file-text"></i> View full menu (PDF)
@@ -572,19 +645,19 @@
 
 <section id="gallery">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="gal.eyebrow">Our work</div><h2 data-i18n="gal.h2">Gallery</h2><p data-i18n="gal.sub">A peek at the looks our clients love</p></div>
-    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="gal.eyebrow">Our work</div><h2 data-i18n="gal.h2">Gallery</h2><p data-i18n="gal.sub">A peek at the looks our clients love</p></div>
+    <div class="gallery-grid reveal" id="galleryGrid"></div>
   </div>
 </section>
 
 <section class="about" id="about">
   <div class="wrap about-grid">
-    <div class="about-text">
+    <div class="about-text reveal">
       <h2 data-i18n="about.h2">A fresh start, with you in mind.</h2>
       <p data-i18n="about.p1">Porter's Nails and Spa is under new ownership with a renewed commitment to quality, cleanliness, and genuine care for every guest who walks through our door.</p>
       <p data-i18n="about.p2">We've created a calm, welcoming space where you can relax, unwind, and leave feeling your absolute best. Come treat yourself &mdash; you've earned it.</p>
     </div>
-    <div class="info-stack">
+    <div class="info-stack reveal-stagger">
       <div class="info-card"><div class="ic-ico"><i class="ti ti-map-pin"></i></div><div><strong data-i18n="about.visit">Visit us</strong><a id="aboutAddr" href="https://maps.app.goo.gl/8AW8RNzP2fiX5LpN8" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">23830 FM1314 Suite C, Porter, TX 77365</a></div></div>
       <div class="info-card"><div class="ic-ico"><i class="ti ti-phone"></i></div><div><strong>Call us</strong><span><a href="tel:2817477421" style="color:inherit">(281) 747-7421</a></span></div></div>
       <div class="info-card"><div class="ic-ico"><i class="ti ti-mail"></i></div><div><strong>Email us</strong><span><a href="mailto:portersnailsandspa@gmail.com" style="color:inherit">portersnailsandspa@gmail.com</a></span></div></div>
@@ -596,7 +669,7 @@
 
 <section class="booking" id="book">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="book.eyebrow">Reserve your spot</div><h2 data-i18n="book.h2">Book an appointment</h2><p data-i18n="book.sub">Pick your service, your nail tech, and your time</p></div>
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="book.eyebrow">Reserve your spot</div><h2 data-i18n="book.h2">Book an appointment</h2><p data-i18n="book.sub">Pick your service, your nail tech, and your time</p></div>
     <div class="wiz">
       <div class="wiz-steps" id="wizSteps"></div>
       <div id="wizBody"></div>
@@ -606,8 +679,8 @@
 
 <section class="reviews" id="reviews">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="rev.eyebrow" data-en="Loved by our guests">Loved by our guests</div><h2 data-i18n="rev.h2" data-en="Reviews">Reviews</h2><p data-i18n="rev.sub" data-en="See what our clients are saying — and share your own visit">See what our clients are saying — and share your own visit</p></div>
-    <div class="quotes-grid">
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="rev.eyebrow" data-en="Loved by our guests">Loved by our guests</div><h2 data-i18n="rev.h2" data-en="Reviews">Reviews</h2><p data-i18n="rev.sub" data-en="See what our clients are saying — and share your own visit">See what our clients are saying — and share your own visit</p></div>
+    <div class="quotes-grid reveal-stagger" id="quotesGrid">
       <div class="quote-card qc-featured">
         <div class="qc-stars">★★★★★</div>
         <p>&ldquo;This is my absolute favorite place to come and unwind and enjoy the nail techs. I come from Downtown area and it's definitely worth the drive. Today's nails are my favorite! 10 out of 10&rdquo;</p>
@@ -624,7 +697,8 @@
         <div class="qc-author">Natesha Sanders &middot; Google review</div>
       </div>
     </div>
-    <div class="reviews-card">
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="reviews-card reveal">
       <div class="g-logo-mark"><i class="ti ti-brand-google"></i> <span data-i18n="rev.on" data-en="Reviews on Google">Reviews on Google</span></div>
       <div class="reviews-stars">★★★★★</div>
       <div class="reviews-sub" data-i18n="rev.cta" data-en="Your experience means the world to us. Tap below to read our reviews or leave one of your own.">Your experience means the world to us. Tap below to read our reviews or leave one of your own.</div>
@@ -638,8 +712,8 @@
 
 <section class="faq" id="faq">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="faq.eyebrow">Good to know</div><h2 data-i18n="faq.h2">Questions &amp; answers</h2><p data-i18n="faq.sub">A few things our guests often ask</p></div>
-    <div class="faq-list">
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="faq.eyebrow">Good to know</div><h2 data-i18n="faq.h2">Questions &amp; answers</h2><p data-i18n="faq.sub">A few things our guests often ask</p></div>
+    <div class="faq-list reveal-stagger">
       <div class="faq-item"><h3><i class="ti ti-calendar"></i><span data-i18n="faq.q1">Do I need an appointment, or can I walk in?</span></h3><p data-i18n="faq.a1">Both are welcome! Walk-ins are always accepted when we have an opening, but booking ahead guarantees your spot and your favorite nail tech.</p></div>
       <div class="faq-item"><h3><i class="ti ti-credit-card"></i><span data-i18n="faq.q2">What forms of payment do you accept?</span></h3><p data-i18n="faq.a2">We accept cash and all major credit cards.</p></div>
       <div class="faq-item"><h3><i class="ti ti-car"></i><span data-i18n="faq.q3">Where do I park?</span></h3><p data-i18n="faq.a3">There's free parking right in front of the salon — we're located next to O'Reilly Auto Parts on FM1314.</p></div>
@@ -1351,6 +1425,89 @@
     });
   }
 
+</script>
+
+<div class="lightbox" id="lightbox"><span class="lightbox-close" id="lightboxClose">&times;</span><img id="lightboxImg" src="" alt="" /></div>
+
+<script>
+(function(){
+  // ---- Scroll reveal ----
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  if('IntersectionObserver' in window && revealEls.length){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+      });
+    }, { threshold:0.15, rootMargin:'0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // ---- Gallery lightbox (delegated, works with dynamically rendered photos) ----
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxClose = document.getElementById('lightboxClose');
+  function openLightbox(url){
+    if(!url) return;
+    lightboxImg.src = url;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function(e){
+    var photo = e.target.closest && e.target.closest('.gal-photo');
+    if(photo){
+      var bg = photo.style.backgroundImage || '';
+      var match = bg.match(/url\((['"]?)(.*?)\1\)/);
+      if(match && match[2]) openLightbox(match[2]);
+    }
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){ if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLightbox(); });
+
+  // ---- Reviews mobile carousel ----
+  var quotesGrid = document.getElementById('quotesGrid');
+  var dotsWrap = document.getElementById('carouselDots');
+  if(quotesGrid && dotsWrap){
+    var cards = Array.prototype.slice.call(quotesGrid.querySelectorAll('.quote-card'));
+    var idx = 0, timer = null;
+    cards.forEach(function(c,i){
+      var dot = document.createElement('span');
+      if(i===0) dot.classList.add('active');
+      dot.addEventListener('click', function(){ go(i); resetTimer(); });
+      dotsWrap.appendChild(dot);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+    function go(i){
+      idx = i;
+      cards.forEach(function(c,ci){ c.classList.toggle('active', ci===idx); });
+      dots.forEach(function(d,di){ d.classList.toggle('active', di===idx); });
+    }
+    function next(){ go((idx+1) % cards.length); }
+    function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(next, 4500); }
+    function setupCarousel(active){
+      if(active){
+        quotesGrid.classList.add('carousel-active');
+        dotsWrap.style.display = 'flex';
+        go(idx);
+        resetTimer();
+      } else {
+        quotesGrid.classList.remove('carousel-active');
+        dotsWrap.style.display = 'none';
+        if(timer) clearInterval(timer);
+      }
+    }
+    var mq = window.matchMedia('(max-width:900px)');
+    setupCarousel(mq.matches);
+    if(mq.addEventListener) mq.addEventListener('change', function(e){ setupCarousel(e.matches); });
+    else if(mq.addListener) mq.addListener(function(e){ setupCarousel(e.matches); });
+  }
+})();
 </script>
 </body>
 </html>
