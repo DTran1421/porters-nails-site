@@ -372,8 +372,6 @@
   .mr-price { font-size:15.5px; font-weight:800; color:var(--rose-dark); white-space:nowrap; }
   .mr-tog { font-size:13px; color:var(--text-muted); transition:transform .2s; flex-shrink:0; }
   .menu-row.open .mr-tog { transform:rotate(180deg); }
-  .mr-bullets { display:none; margin:5px 0 4px 0; padding:0; list-style:none; }
-  .menu-row.open .mr-bullets { display:flex; flex-direction:column; gap:3px; }
   .mr-bullets li { font-size:12.5px; color:var(--text-soft); padding-left:16px; position:relative; line-height:1.55; }
   .mr-bullets li::before { content:''; position:absolute; left:4px; top:7px; width:5px; height:5px; border-radius:50%; background:var(--rose-deep); }
   .mr-tier-badge { display:inline-block; font-size:10px; font-weight:700; border-radius:20px; padding:1px 7px; margin-left:6px; vertical-align:middle; white-space:nowrap; border:0.5px solid; }
@@ -627,6 +625,58 @@
   .divider-wave { display:block; width:100%; height:56px; margin-bottom:-1px; }
   .divider-wave path { fill:var(--cream); }
   .divider-wave.to-rose path { fill:var(--rose); }
+
+  /* ===== Services section redesign ===== */
+
+  /* Filter pills */
+  .svc-filters { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-bottom:1.25rem; }
+  .svc-filter-pill { background:var(--white); border:1.5px solid var(--rose-mid); color:var(--text-soft); font-size:13.5px; font-weight:700; padding:.5rem 1.15rem; border-radius:30px; cursor:pointer; transition:all .2s ease; }
+  .svc-filter-pill:hover { border-color:var(--rose-deep); color:var(--rose-text); }
+  .svc-filter-pill.active { background:var(--rose-dark); border-color:var(--rose-dark); color:#fff; }
+
+  /* Search */
+  .svc-search-wrap { max-width:420px; margin:0 auto 2rem; position:relative; }
+  .svc-search { width:100%; padding:.75rem 1rem .75rem 2.6rem; border-radius:30px; border:1.5px solid var(--rose-mid); background:var(--white); font-size:14.5px; font-family:inherit; color:var(--text); outline:none; transition:border-color .2s; box-sizing:border-box; }
+  .svc-search:focus { border-color:var(--rose-deep); }
+  .svc-search-wrap i { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:16px; pointer-events:none; }
+  .svc-no-results { text-align:center; color:var(--text-soft); padding:2rem 0; font-size:15px; grid-column:1/-1; display:none; }
+  .svc-no-results.show { display:block; }
+
+  /* Category accent bands (cycled by position) */
+  .menu-cat { position:relative; transition:opacity .3s ease, transform .3s ease, max-height .3s ease, margin .3s ease, padding .3s ease; }
+  .menu-cat.filtered-out { display:none; }
+  .menu-cat::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; border-radius:18px 18px 0 0; background:var(--rose-deep); }
+  .menu-cat:nth-of-type(3n+2)::before { background:var(--lavender-dark); }
+  .menu-cat:nth-of-type(3n)::before { background:var(--peach-mid); }
+  .menu-cat:nth-of-type(3n+2) .mc-ico { background:var(--lavender); }
+  .menu-cat:nth-of-type(3n+2) .mc-ico i { color:var(--lavender-dark); }
+  .menu-cat:nth-of-type(3n) .mc-ico { background:var(--peach); }
+  .menu-cat:nth-of-type(3n) .mc-ico i { color:var(--peach-text); }
+
+  /* Tier price strip (pedicure) */
+  .tier-strip { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.15rem; }
+  .tier-chip { background:var(--rose); border:1px solid var(--rose-mid); border-radius:20px; padding:.35rem .8rem; font-size:12px; font-weight:700; color:var(--rose-text); white-space:nowrap; }
+  .tier-chip b { color:var(--rose-dark); margin-left:3px; font-size:12.5px; }
+
+  /* Smooth accordion expand (replaces instant show/hide) */
+  .mr-a-wrap { display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.2,.7,.2,1); }
+  .menu-row.open .mr-a-wrap { grid-template-rows:1fr; }
+  .mr-a-inner { overflow:hidden; }
+  .mr-bullets { display:flex; flex-direction:column; gap:3px; margin:5px 0 4px 0; padding:0; list-style:none; }
+
+  /* Most requested badge */
+  .mr-popular { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:800; color:var(--rose-dark); background:var(--rose); border:1px solid var(--rose-deep); border-radius:20px; padding:1px 7px; margin-left:6px; white-space:nowrap; vertical-align:middle; }
+
+  /* Inline book button on row hover */
+  .menu-row-top { position:relative; }
+  .mr-book-btn { opacity:0; transform:translateX(-6px); pointer-events:none; flex-shrink:0; background:var(--rose-dark); color:#fff; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; border:none; cursor:pointer; transition:opacity .2s ease, transform .2s ease; white-space:nowrap; margin-left:4px; }
+  @media(hover:hover) and (pointer:fine){
+    .menu-row-top:hover .mr-book-btn { opacity:1; transform:translateX(0); pointer-events:auto; }
+  }
+  @media(max-width:760px){ .mr-book-btn { opacity:1; transform:none; pointer-events:auto; position:static; margin-top:6px; align-self:flex-start; } .menu-row-top { flex-wrap:wrap; } }
+
+  /* Skeletons must stay visible regardless of reveal-stagger pre-hidden state */
+  .skel { opacity:1 !important; transform:none !important; }
   .reviews-card { max-width:680px; margin:0 auto; background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; text-align:center; box-shadow:var(--shadow); }
   .reviews-stars { font-size:34px; color:#F5A623; letter-spacing:4px; margin-bottom:.5rem; }
   .reviews-rating { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; color:var(--rose-text); line-height:1; }
@@ -684,9 +734,12 @@
   <div class="wrap">
     <img src="porters-logo.png" alt="Porter's Nails & Spa" class="menu-logo" />
     <div class="sec-head reveal"><h2 data-i18n="svc.h2">Services &amp; prices</h2><p data-i18n="svc.sub">Everything we offer — tap Book to reserve your spot</p></div>
-    <div class="services-grid reveal" id="servicesGrid">
+    <div class="svc-search-wrap"><i class="ti ti-search"></i><input type="text" class="svc-search" id="svcSearch" placeholder="Search services..." /></div>
+    <div class="svc-filters" id="svcFilters"></div>
+    <div class="services-grid reveal-stagger" id="servicesGrid">
       <div class="skel skel-svc"></div><div class="skel skel-svc"></div><div class="skel skel-svc"></div>
     </div>
+    <div class="svc-no-results" id="svcNoResults">No services match your search.</div>
     <div class="menu-pdf-bar" id="menuPdfBar" style="display:none">
       <a class="menu-pdf-btn" id="menuPdfBtn" href="#" target="_blank" rel="noopener">
         <i class="ti ti-file-text"></i> View full menu (PDF)
@@ -1118,10 +1171,15 @@
     kids:     'ti-star',
     waxing:   'ti-droplet'
   };
+  var POPULAR_IDS = ['ped_2','man_1','enh_11'];
+  var TIER_STRIP_IDS = ['ped_1','ped_2','ped_3','ped_4','ped_5','ped_6'];
+  var TIER_STRIP_LABELS = { ped_1:'Basic', ped_2:'Classic', ped_3:'Deluxe', ped_4:'Luxury', ped_5:'Golden', ped_6:'Pearl' };
+
   function renderPublicServices(){
     var g=document.getElementById('servicesGrid');
     if(!g) return;
-    g.className='menu-cats';
+    var wasRevealed = g.classList.contains('in');
+    g.className = 'menu-cats reveal-stagger' + (wasRevealed ? ' in' : '');
 
     // Pedicure add-ons to show at the bottom of the pedicure card
     var PED_ADDON_IDS = ['add_8','add_9','add_10'];
@@ -1130,6 +1188,17 @@
     if(addCat){ pedAddons = addCat.items.filter(function(it){ return PED_ADDON_IDS.indexOf(it.id)>-1; }); }
 
     g.innerHTML = CATALOG.map(function(c){
+      // Tier price strip — pedicure only, using known tier ids if present
+      var tierStrip = '';
+      if(c.id==='pedicure'){
+        var chips = TIER_STRIP_IDS.map(function(id){
+          var it = c.items.filter(function(x){ return x.id===id; })[0];
+          if(!it) return '';
+          return '<span class="tier-chip">'+TIER_STRIP_LABELS[id]+'<b>'+priceLabel(it)+'</b></span>';
+        }).join('');
+        if(chips) tierStrip = '<div class="tier-strip">'+chips+'</div>';
+      }
+
       var rows = c.items.map(function(it){
         var hasBullets = it.desc && it.desc.length > 0;
         // Split comma-separated desc into bullet array
@@ -1158,14 +1227,18 @@
             return '<li>'+cap+badge+'</li>';
           }).join('')+'</ul>';
         }
-        return '<div class="menu-row"'+rowAttr+'>'
+        var bulletsWrap = hasBullets ? '<div class="mr-a-wrap"><div class="mr-a-inner">'+bullets+'</div></div>' : '';
+        var popular = POPULAR_IDS.indexOf(it.id)>-1 ? '<span class="mr-popular"><i class="ti ti-flame" style="font-size:10px"></i> Popular</span>' : '';
+        var safeName = it.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        return '<div class="menu-row" data-svc-name="'+it.name.toLowerCase().replace(/"/g,'&quot;')+'"'+rowAttr+'>'
           +'<div class="menu-row-top" onclick="toggleMenuRow(this)">'
-          +'<span class="mr-name">'+it.name+'</span>'
+          +'<span class="mr-name">'+it.name+popular+'</span>'
           +'<span class="mr-dots"></span>'
           +'<span class="mr-price">'+priceLabel(it)+'</span>'
           +tog
+          +'<button type="button" class="mr-book-btn" onclick="event.stopPropagation();quickBookService(\''+c.id+'\',\''+safeName+'\',\''+priceLabel(it)+'\')">Book</button>'
           +'</div>'
-          +bullets
+          +bulletsWrap
           +'</div>';
       }).join('');
 
@@ -1180,8 +1253,65 @@
           +'</div>';
       }
 
-      return '<div class="menu-cat"><div class="menu-cat-head"><span class="mc-ico"><i class="ti '+(c.icon||CAT_ICONS[c.id]||'ti-sparkles')+'"></i></span><h3>'+c.cat+'</h3></div>'+rows+addonsFooter+'</div>';
+      return '<div class="menu-cat" data-cat="'+c.id+'"><div class="menu-cat-head"><span class="mc-ico"><i class="ti '+(c.icon||CAT_ICONS[c.id]||'ti-sparkles')+'"></i></span><h3>'+c.cat+'</h3></div>'+tierStrip+rows+addonsFooter+'</div>';
     }).join('');
+
+    renderSvcFilters();
+    applySvcFilters();
+  }
+
+  function quickBookService(catId, svcName, priceLbl){
+    wiz.cat = catId; wiz.service = svcName; wiz.priceLabel = priceLbl;
+    wiz.techId = null; wiz.date = null; wiz.time = null; wiz.step = 3;
+    render();
+    var bookSection = document.getElementById('book');
+    if(bookSection) bookSection.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  var svcActiveFilter = 'all';
+  function renderSvcFilters(){
+    var wrap = document.getElementById('svcFilters');
+    if(!wrap || wrap.dataset.built) return; // build once; categories don't change shape at runtime
+    wrap.dataset.built = '1';
+    var pills = ['<button type="button" class="svc-filter-pill active" data-filter="all">All</button>']
+      .concat(CATALOG.map(function(c){ return '<button type="button" class="svc-filter-pill" data-filter="'+c.id+'">'+c.cat+'</button>'; }));
+    wrap.innerHTML = pills.join('');
+    wrap.querySelectorAll('.svc-filter-pill').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        wrap.querySelectorAll('.svc-filter-pill').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        svcActiveFilter = btn.dataset.filter;
+        applySvcFilters();
+      });
+    });
+    var search = document.getElementById('svcSearch');
+    if(search && !search.dataset.bound){
+      search.dataset.bound = '1';
+      search.addEventListener('input', function(){ applySvcFilters(); });
+    }
+  }
+
+  function applySvcFilters(){
+    var g = document.getElementById('servicesGrid');
+    var noRes = document.getElementById('svcNoResults');
+    var search = document.getElementById('svcSearch');
+    if(!g) return;
+    var q = search ? search.value.trim().toLowerCase() : '';
+    var visibleCards = 0;
+    g.querySelectorAll('.menu-cat').forEach(function(card){
+      var catMatch = svcActiveFilter==='all' || card.dataset.cat===svcActiveFilter;
+      var anyRowVisible = false;
+      card.querySelectorAll('.menu-row').forEach(function(row){
+        var nameMatch = !q || (row.dataset.svcName||'').indexOf(q) > -1;
+        var show = catMatch && nameMatch;
+        row.style.display = show ? '' : 'none';
+        if(show) anyRowVisible = true;
+      });
+      var cardVisible = catMatch && (q ? anyRowVisible : true);
+      card.classList.toggle('filtered-out', !cardVisible);
+      if(cardVisible) visibleCards++;
+    });
+    if(noRes) noRes.classList.toggle('show', visibleCards===0);
   }
 
   function techSlots(tech, dateStr){
