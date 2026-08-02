@@ -677,6 +677,10 @@
 
   /* Skeletons must stay visible regardless of reveal-stagger pre-hidden state */
   .skel { opacity:1 !important; transform:none !important; }
+
+  /* Embedded map */
+  .map-embed-wrap { margin-top:2.5rem; border-radius:20px; overflow:hidden; border:1px solid var(--rose-mid); box-shadow:var(--shadow-sm); }
+  .map-embed-wrap iframe { width:100%; height:340px; border:0; display:block; }
   .reviews-card { max-width:680px; margin:0 auto; background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; text-align:center; box-shadow:var(--shadow); }
   .reviews-stars { font-size:34px; color:#F5A623; letter-spacing:4px; margin-bottom:.5rem; }
   .reviews-rating { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; color:var(--rose-text); line-height:1; }
@@ -770,6 +774,11 @@
       <div class="info-card"><div class="ic-ico"><i class="ti ti-mail"></i></div><div><strong>Email us</strong><span><a href="mailto:portersnailsandspa@gmail.com" style="color:inherit">portersnailsandspa@gmail.com</a></span></div></div>
       <div class="info-card"><div class="ic-ico"><i class="ti ti-clock"></i></div><div><strong data-i18n="about.hours">Hours</strong><span id="aboutHours">Mon&ndash;Fri 9&ndash;7 &middot; Sat 9&ndash;6 &middot; Sun 10&ndash;5</span></div></div>
       <div class="info-card"><div class="ic-ico"><i class="ti ti-credit-card"></i></div><div><strong data-i18n="about.pay">Payment</strong><span data-i18n="about.payval">Cash &amp; all major credit cards accepted</span></div></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="map-embed-wrap reveal">
+      <iframe id="aboutMapEmbed" src="https://www.google.com/maps?q=23830%20FM1314%20Suite%20C%2C%20Porter%2C%20TX%2077365&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Porter's Nails &amp; Spa location"></iframe>
     </div>
   </div>
 </section>
@@ -1079,6 +1088,7 @@
     var mapsHref = isIOS ? applePin : googlePin;
     var fa=document.getElementById('footAddr'); if(fa) fa.textContent=addr;
     var aa=document.getElementById('aboutAddr'); if(aa){ aa.textContent=addr; aa.href=mapsHref; }
+    var me=document.getElementById('aboutMapEmbed'); if(me && addr){ me.src = 'https://www.google.com/maps?q='+encodeURIComponent(addr)+'&output=embed'; }
     var fp=document.getElementById('footPhone'); if(fp){ fp.textContent=ph; fp.href='tel:'+ph.replace(/[^0-9]/g,''); }
     var link=document.getElementById('mapLink');
     if(link){
