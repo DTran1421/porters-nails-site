@@ -580,6 +580,53 @@
     .carousel-dots span { width:8px; height:8px; border-radius:50%; background:var(--rose-mid); cursor:pointer; transition:background .2s,transform .2s; }
     .carousel-dots span.active { background:var(--rose-dark); transform:scale(1.25); }
   }
+
+  /* ===== Modernization pass 2 ===== */
+
+  /* Scroll progress bar */
+  .scroll-progress { position:fixed; top:0; left:0; height:3px; width:0%; background:linear-gradient(90deg,var(--rose-dark),var(--rose-deep)); z-index:200; transition:width .1s linear; }
+
+  /* Shrinking sticky nav */
+  nav { transition:box-shadow .3s ease; }
+  nav.scrolled .nav-inner { padding-top:.6rem; padding-bottom:.6rem; }
+  nav.scrolled .logo img { height:40px; }
+  nav.scrolled { box-shadow:0 4px 20px rgba(184,74,110,0.08); }
+  .nav-inner, .logo img { transition:padding .25s ease, height .25s ease; }
+
+  /* Active nav link */
+  .nav-links a.active { color:var(--rose-text); }
+  .nav-links a.active::after { width:100%; }
+
+  /* Floating mobile book button */
+  .float-book { position:fixed; left:50%; bottom:20px; transform:translate(-50%,120%); z-index:150; display:none; align-items:center; gap:8px; padding:.85rem 1.6rem; border-radius:50px; background:var(--rose-dark); color:#fff; font-weight:700; font-size:15px; text-decoration:none; box-shadow:0 10px 30px rgba(184,74,110,0.35); transition:transform .35s cubic-bezier(.2,.7,.2,1); }
+  .float-book.show { transform:translate(-50%,0); }
+  @media(max-width:760px){ .float-book { display:flex; } }
+
+  /* Card tilt (desktop only, JS-driven via inline transform) */
+  @media(hover:hover) and (pointer:fine){
+    .info-card, .quote-card { transform-style:preserve-3d; will-change:transform; }
+  }
+
+  /* Skeleton loading */
+  .skel { position:relative; overflow:hidden; background:var(--rose-mid); border-radius:16px; }
+  .skel::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); transform:translateX(-100%); animation:skelShimmer 1.4s ease-in-out infinite; }
+  @keyframes skelShimmer { 100% { transform:translateX(100%); } }
+  .skel-svc { height:220px; }
+  .skel-gal { height:200px; }
+
+  /* FAQ accordion */
+  .faq-item h3 { cursor:pointer; user-select:none; }
+  .faq-item h3::after { content:'\\002B'; margin-left:auto; font-size:20px; color:var(--rose-dark); transition:transform .3s ease; flex-shrink:0; }
+  .faq-item.open h3::after { transform:rotate(135deg); }
+  .faq-item .faq-a-wrap { display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.2,.7,.2,1); }
+  .faq-item.open .faq-a-wrap { grid-template-rows:1fr; }
+  .faq-item .faq-a-inner { overflow:hidden; }
+  .faq-item p { padding-top:.6rem; }
+
+  /* Section dividers */
+  .divider-wave { display:block; width:100%; height:56px; margin-bottom:-1px; }
+  .divider-wave path { fill:var(--cream); }
+  .divider-wave.to-rose path { fill:var(--rose); }
   .reviews-card { max-width:680px; margin:0 auto; background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; text-align:center; box-shadow:var(--shadow); }
   .reviews-stars { font-size:34px; color:#F5A623; letter-spacing:4px; margin-bottom:.5rem; }
   .reviews-rating { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; color:var(--rose-text); line-height:1; }
@@ -594,7 +641,8 @@
 <body>
 
 <div class="promo-bar" id="promoBar" style="display:none;"><span id="promoText"></span></div>
-<nav>
+<div class="scroll-progress" id="scrollProgress"></div>
+<nav id="siteNav">
   <div class="nav-inner">
     <a href="#home" class="logo"><img src="porters-logo-icon.png" alt="Porter's Nails & Spa" loading="eager" /></a>
     <div class="nav-right">
@@ -630,11 +678,15 @@
   </div>
 </header>
 
+<svg class="divider-wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,20 C300,60 900,0 1200,30 L1200,60 L0,60 Z"></path></svg>
+
 <section class="services" id="services">
   <div class="wrap">
     <img src="porters-logo.png" alt="Porter's Nails & Spa" class="menu-logo" />
     <div class="sec-head reveal"><h2 data-i18n="svc.h2">Services &amp; prices</h2><p data-i18n="svc.sub">Everything we offer — tap Book to reserve your spot</p></div>
-    <div class="services-grid reveal" id="servicesGrid"></div>
+    <div class="services-grid reveal" id="servicesGrid">
+      <div class="skel skel-svc"></div><div class="skel skel-svc"></div><div class="skel skel-svc"></div>
+    </div>
     <div class="menu-pdf-bar" id="menuPdfBar" style="display:none">
       <a class="menu-pdf-btn" id="menuPdfBtn" href="#" target="_blank" rel="noopener">
         <i class="ti ti-file-text"></i> View full menu (PDF)
@@ -646,7 +698,9 @@
 <section id="gallery">
   <div class="wrap">
     <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="gal.eyebrow">Our work</div><h2 data-i18n="gal.h2">Gallery</h2><p data-i18n="gal.sub">A peek at the looks our clients love</p></div>
-    <div class="gallery-grid reveal" id="galleryGrid"></div>
+    <div class="gallery-grid reveal" id="galleryGrid">
+      <div class="skel skel-gal"></div><div class="skel skel-gal"></div><div class="skel skel-gal"></div><div class="skel skel-gal"></div>
+    </div>
   </div>
 </section>
 
@@ -666,6 +720,8 @@
     </div>
   </div>
 </section>
+
+<svg class="divider-wave to-rose" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 C300,0 900,60 1200,20 L1200,60 L0,60 Z"></path></svg>
 
 <section class="booking" id="book">
   <div class="wrap">
@@ -714,11 +770,11 @@
   <div class="wrap">
     <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="faq.eyebrow">Good to know</div><h2 data-i18n="faq.h2">Questions &amp; answers</h2><p data-i18n="faq.sub">A few things our guests often ask</p></div>
     <div class="faq-list reveal-stagger">
-      <div class="faq-item"><h3><i class="ti ti-calendar"></i><span data-i18n="faq.q1">Do I need an appointment, or can I walk in?</span></h3><p data-i18n="faq.a1">Both are welcome! Walk-ins are always accepted when we have an opening, but booking ahead guarantees your spot and your favorite nail tech.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-credit-card"></i><span data-i18n="faq.q2">What forms of payment do you accept?</span></h3><p data-i18n="faq.a2">We accept cash and all major credit cards.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-car"></i><span data-i18n="faq.q3">Where do I park?</span></h3><p data-i18n="faq.a3">There's free parking right in front of the salon — we're located next to O'Reilly Auto Parts on FM1314.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-clock"></i><span data-i18n="faq.q4">How early should I arrive?</span></h3><p data-i18n="faq.a4">Arriving about 5 minutes early helps us start your appointment on time. If you're running late, give us a quick call.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-phone"></i><span data-i18n="faq.q5">How can I reach you?</span></h3><p data-i18n="faq.a5">Call us at <a href="tel:2817477421" style="color:var(--rose-text);font-weight:600">(281) 747-7421</a>, or email us at <a href="mailto:portersnailsandspa@gmail.com" style="color:var(--rose-text);font-weight:600">portersnailsandspa@gmail.com</a>. We're happy to answer any questions or help you book.</p></div>
+      <div class="faq-item open"><h3><i class="ti ti-calendar"></i><span data-i18n="faq.q1">Do I need an appointment, or can I walk in?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a1">Both are welcome! Walk-ins are always accepted when we have an opening, but booking ahead guarantees your spot and your favorite nail tech.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-credit-card"></i><span data-i18n="faq.q2">What forms of payment do you accept?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a2">We accept cash and all major credit cards.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-car"></i><span data-i18n="faq.q3">Where do I park?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a3">There's free parking right in front of the salon — we're located next to O'Reilly Auto Parts on FM1314.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-clock"></i><span data-i18n="faq.q4">How early should I arrive?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a4">Arriving about 5 minutes early helps us start your appointment on time. If you're running late, give us a quick call.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-phone"></i><span data-i18n="faq.q5">How can I reach you?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a5">Call us at <a href="tel:2817477421" style="color:var(--rose-text);font-weight:600">(281) 747-7421</a>, or email us at <a href="mailto:portersnailsandspa@gmail.com" style="color:var(--rose-text);font-weight:600">portersnailsandspa@gmail.com</a>. We're happy to answer any questions or help you book.</p></div></div></div>
     </div>
   </div>
 </section>
@@ -1427,6 +1483,8 @@
 
 </script>
 
+<a href="#book" class="float-book" id="floatBook"><i class="ti ti-calendar"></i> Book now</a>
+
 <div class="lightbox" id="lightbox"><span class="lightbox-close" id="lightboxClose">&times;</span><img id="lightboxImg" src="" alt="" /></div>
 
 <script>
@@ -1469,6 +1527,69 @@
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', function(e){ if(e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLightbox(); });
+
+  // ---- Scroll progress bar + shrinking nav ----
+  var progressBar = document.getElementById('scrollProgress');
+  var siteNav = document.getElementById('siteNav');
+  function onScrollTop(){
+    var doc = document.documentElement;
+    var scrollTop = window.pageYOffset || doc.scrollTop;
+    var height = (doc.scrollHeight - doc.clientHeight) || 1;
+    if(progressBar) progressBar.style.width = Math.min(100, (scrollTop/height)*100) + '%';
+    if(siteNav) siteNav.classList.toggle('scrolled', scrollTop > 30);
+  }
+  window.addEventListener('scroll', onScrollTop, { passive:true });
+  onScrollTop();
+
+  // ---- Active section nav highlighting ----
+  var navLinkMap = {};
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(function(a){
+    navLinkMap[a.getAttribute('href').slice(1)] = a;
+  });
+  var navSections = Object.keys(navLinkMap).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if('IntersectionObserver' in window && navSections.length){
+    var navIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = navLinkMap[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting) {
+          Object.values(navLinkMap).forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin:'-40% 0px -55% 0px', threshold:0 });
+    navSections.forEach(function(s){ navIo.observe(s); });
+  }
+
+  // ---- Floating mobile Book Now button ----
+  var floatBook = document.getElementById('floatBook');
+  var heroEl = document.getElementById('home');
+  if(floatBook && heroEl){
+    var heroObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){ floatBook.classList.toggle('show', !entry.isIntersecting); });
+    }, { threshold:0 });
+    heroObserver.observe(heroEl);
+  }
+
+  // ---- Card tilt on hover (desktop, fine pointer only) ----
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    document.querySelectorAll('.info-card, .quote-card').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5;
+        var y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'perspective(600px) rotateX('+(-y*6)+'deg) rotateY('+(x*6)+'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave', function(){ card.style.transform = ''; });
+    });
+  }
+
+  // ---- FAQ accordion ----
+  document.querySelectorAll('.faq-item > h3').forEach(function(h){
+    h.addEventListener('click', function(){
+      h.closest('.faq-item').classList.toggle('open');
+    });
+  });
 
   // ---- Reviews mobile carousel ----
   var quotesGrid = document.getElementById('quotesGrid');
