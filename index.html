@@ -572,7 +572,7 @@
   @media(max-width:900px){
     .quotes-grid.carousel-active { position:relative; display:block; padding-bottom:2.25rem; }
     .quotes-grid.carousel-active .quote-card { display:none; opacity:0; transform:translateY(0); }
-    .quotes-grid.carousel-active .quote-card.active { display:flex; animation:fadeSlide .5s ease; }
+    .quotes-grid.carousel-active .quote-card.active { display:flex; opacity:1; animation:fadeSlide .5s ease; }
     @keyframes fadeSlide { from{ opacity:0; transform:translateX(14px); } to{ opacity:1; transform:translateX(0); } }
     .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:1.25rem; }
     .carousel-dots span { width:8px; height:8px; border-radius:50%; background:var(--rose-mid); cursor:pointer; transition:background .2s,transform .2s; }
@@ -614,7 +614,7 @@
 
   /* FAQ accordion */
   .faq-item h3 { cursor:pointer; user-select:none; }
-  .faq-item h3::after { content:'\\002B'; margin-left:auto; font-size:20px; color:var(--rose-dark); transition:transform .3s ease; flex-shrink:0; }
+  .faq-item h3::after { content:'\002B'; margin-left:auto; font-size:20px; color:var(--rose-dark); transition:transform .3s ease; flex-shrink:0; }
   .faq-item.open h3::after { transform:rotate(135deg); }
   .faq-item .faq-a-wrap { display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.2,.7,.2,1); }
   .faq-item.open .faq-a-wrap { grid-template-rows:1fr; }
