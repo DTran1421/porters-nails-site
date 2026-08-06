@@ -1771,7 +1771,7 @@ function fmtTime(t){ if(!t) return ''; var p=t.split(':'); if(p.length<2) return
 
 function _loadAppts(cb){
   if(_apptCache){cb(_apptCache);return;}
-  fetch(BOOKING_API+'/api/book')
+  fetch(BOOKING_API+'/api/book', { headers: { 'x-session-token': getSession() || '' } })
   .then(function(r){return r.json();})
   .then(function(d){_apptCache=d;cb(d);})
   .catch(function(){document.getElementById('tabBody').innerHTML='<div class="dash-empty"><i class="ti ti-alert-circle"></i><p>Could not load appointments. Check your connection.</p></div>';});
