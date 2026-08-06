@@ -1026,7 +1026,16 @@
     })
     .catch(function(){}); // silently fall back to localStorage if fetch fails
     // Fetch ALL site settings so every device stays in sync
-    fetch(BOOKING_API+'/api/book?settings=1')
+    // Anonymous visitor id for basic traffic analytics (unique/new/returning) — no
+    // personal info, just a random id persisted in this browser so repeat visits
+    // from the same device can be recognized.
+    var visitorId = DB.get('porters_vid');
+    if (!visitorId) {
+      visitorId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('v-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+      DB.set('porters_vid', visitorId);
+    }
+    var pageReferrer = document.referrer || '';
+    fetch(BOOKING_API+'/api/book?settings=1&vid='+encodeURIComponent(visitorId)+'&ref='+encodeURIComponent(pageReferrer))
     .then(function(r){return r.json();})
     .then(function(s){
       if(!s) return;
