@@ -1558,6 +1558,7 @@
   var analyticsRange = 30; // days, default = "month"
 
   function renderAnalyticsTab(){
+    analyticsRange = 30; // always reset to the default on tab open
     var tb=document.getElementById('tabBody');
     tb.innerHTML =
       '<div class="an-controls">'+
