@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.30.0/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -511,6 +512,20 @@
   .chpw-wrap{ position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:1001; display:flex; align-items:center; justify-content:center; padding:1rem; }
   .chpw-card{ background:#fff; border-radius:20px; padding:2rem; max-width:360px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.2); }
   .chpw-card h3{ font-family:'Playfair Display',serif; font-size:18px; color:var(--rose-text); margin-bottom:1.25rem; }
+
+  /* Analytics tab */
+  .an-controls{ display:flex; flex-wrap:wrap; align-items:center; gap:.6rem; margin-bottom:1.5rem; }
+  .an-range-btn{ background:var(--white); border:1.5px solid var(--rose-mid); color:var(--text-soft); font-size:13.5px; font-weight:700; padding:.5rem 1.1rem; border-radius:30px; cursor:pointer; transition:all .2s ease; font-family:'Nunito',sans-serif; }
+  .an-range-btn:hover{ border-color:var(--rose-deep); color:var(--rose-text); }
+  .an-range-btn.active{ background:var(--rose-dark); border-color:var(--rose-dark); color:#fff; }
+  .an-custom-wrap{ display:flex; align-items:center; gap:.5rem; margin-left:.5rem; }
+  .an-date-input{ border:1.5px solid var(--rose-mid); border-radius:10px; padding:.4rem .6rem; font-family:'Nunito',sans-serif; font-size:13.5px; color:var(--text); }
+  .an-stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.75rem; }
+  .an-stat{ background:var(--white); border:1px solid var(--rose-mid); border-radius:16px; padding:1.25rem; text-align:center; box-shadow:var(--shadow-sm); }
+  .an-stat-num{ font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--rose-dark); }
+  .an-stat-label{ font-size:13px; color:var(--text-soft); margin-top:.25rem; }
+  .an-chart-wrap{ background:var(--white); border:1px solid var(--rose-mid); border-radius:16px; padding:1.5rem; box-shadow:var(--shadow-sm); height:340px; }
+  @media(max-width:700px){ .an-stats{ grid-template-columns:1fr; } .an-custom-wrap{ flex-wrap:wrap; margin-left:0; } }
 </style>
 </head>
 <body class="manage-page">
@@ -553,6 +568,8 @@
       <button class="sidebar-item" onclick="showTab('photos')"><i class="ti ti-photo"></i> Photos</button>
       <button class="sidebar-item" onclick="showTab('techs')"><i class="ti ti-users"></i> Nail techs</button>
       <button class="sidebar-item" onclick="showTab('services')"><i class="ti ti-list"></i> Services & prices</button>
+      <span class="sidebar-label">Insights</span>
+      <button class="sidebar-item" onclick="showTab('analytics')"><i class="ti ti-chart-line"></i> Analytics</button>
       <span class="sidebar-label">Settings</span>
       <button class="sidebar-item" onclick="showTab('hours')"><i class="ti ti-clock"></i> Hours & info</button>
       <button class="sidebar-item" onclick="showChangePw()"><i class="ti ti-lock"></i> Change password</button>
@@ -1141,6 +1158,7 @@
       '<button class="tab '+(ownerTab==='photos'?'active':'')+'" data-tab="photos">Photos</button>'+
       '<button class="tab '+(ownerTab==='techs'?'active':'')+'" data-tab="techs">Nail techs</button>'+
       '<button class="tab '+(ownerTab==='services'?'active':'')+'" data-tab="services">Services &amp; prices</button>'+
+      '<button class="tab '+(ownerTab==='analytics'?'active':'')+'" data-tab="analytics">Analytics</button>'+
       '<button class="tab '+(ownerTab==='hours'?'active':'')+'" data-tab="hours">Hours &amp; info</button>'+
       '<button class="tab '+(ownerTab==='msglog'?'active':'')+'" data-tab="msglog">Message log</button>'+
       '</div><div id="tabBody"></div>';
@@ -1151,6 +1169,7 @@
     else if(ownerTab==='photos') renderPhotosTab();
     else if(ownerTab==='techs') renderTechsTab();
     else if(ownerTab==='services') renderServicesTab();
+    else if(ownerTab==='analytics') renderAnalyticsTab();
     else if(ownerTab==='msglog') renderMsgLogTab();
     else if(ownerTab==='accounts') renderAccountsTab();
     else renderHoursTab();
@@ -1533,6 +1552,94 @@
       })
       .catch(function(e){ status.style.display='none'; showToast('Upload failed: '+e.message); });
     };
+  }
+
+  var analyticsChart = null;
+  var analyticsRange = 30; // days, default = "month"
+
+  function renderAnalyticsTab(){
+    var tb=document.getElementById('tabBody');
+    tb.innerHTML =
+      '<div class="an-controls">'+
+        '<button type="button" class="an-range-btn" data-range="7">7 days</button>'+
+        '<button type="button" class="an-range-btn active" data-range="30">30 days</button>'+
+        '<button type="button" class="an-range-btn" data-range="90">90 days</button>'+
+        '<span class="an-custom-wrap">'+
+          '<input type="date" id="anStart" class="an-date-input" />'+
+          '<span style="color:var(--text-muted)">to</span>'+
+          '<input type="date" id="anEnd" class="an-date-input" />'+
+          '<button type="button" class="an-range-btn" id="anCustomBtn">Apply</button>'+
+        '</span>'+
+      '</div>'+
+      '<div class="an-stats" id="anStats"></div>'+
+      '<div class="an-chart-wrap"><canvas id="anChart" height="90"></canvas></div>'+
+      '<div class="dash-empty" id="anEmpty" style="display:none"><i class="ti ti-chart-line"></i><p>No traffic data yet for this range. Data starts accumulating from when tracking went live.</p></div>';
+
+    tb.querySelectorAll('.an-range-btn[data-range]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        tb.querySelectorAll('.an-range-btn[data-range]').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        analyticsRange = parseInt(btn.dataset.range);
+        loadAnalytics();
+      });
+    });
+    var customBtn = document.getElementById('anCustomBtn');
+    if(customBtn) customBtn.addEventListener('click', function(){
+      var s=document.getElementById('anStart').value, e=document.getElementById('anEnd').value;
+      if(!s||!e) return;
+      tb.querySelectorAll('.an-range-btn[data-range]').forEach(function(b){ b.classList.remove('active'); });
+      loadAnalytics(s,e);
+    });
+
+    loadAnalytics();
+  }
+
+  function loadAnalytics(customStart, customEnd){
+    var tb=document.getElementById('tabBody');
+    if(!tb || !document.getElementById('anChart')) return;
+    var url = BOOKING_API+'/api/book?analytics=1';
+    if(customStart && customEnd){ url += '&start='+customStart+'&end='+customEnd; }
+    else {
+      var end = new Date();
+      var start = new Date(); start.setDate(start.getDate() - (analyticsRange - 1));
+      url += '&start='+start.toISOString().slice(0,10)+'&end='+end.toISOString().slice(0,10);
+    }
+    fetch(url, { headers: { 'x-session-token': getSession() || '' } })
+    .then(function(r){ if(!r.ok) throw new Error('analytics fetch failed'); return r.json(); })
+    .then(function(rows){
+      if(!rows || !rows.length){ document.getElementById('anEmpty').style.display='block'; return; }
+      var totalViews = rows.reduce(function(s,r){return s+Number(r.total_views);},0);
+      var totalNew = rows.reduce(function(s,r){return s+Number(r.new_visitors);},0);
+      var totalReturning = rows.reduce(function(s,r){return s+Number(r.returning_visitors);},0);
+      var anyData = totalViews > 0;
+      document.getElementById('anEmpty').style.display = anyData ? 'none' : 'block';
+
+      document.getElementById('anStats').innerHTML =
+        '<div class="an-stat"><div class="an-stat-num">'+totalViews+'</div><div class="an-stat-label">Total page views</div></div>'+
+        '<div class="an-stat"><div class="an-stat-num">'+totalNew+'</div><div class="an-stat-label">New visitors</div></div>'+
+        '<div class="an-stat"><div class="an-stat-num">'+totalReturning+'</div><div class="an-stat-label">Returning visitors</div></div>';
+
+      var labels = rows.map(function(r){ var d=new Date(r.day+'T00:00:00'); return (d.getMonth()+1)+'/'+d.getDate(); });
+      var ctx = document.getElementById('anChart').getContext('2d');
+      if(analyticsChart) analyticsChart.destroy();
+      analyticsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            { label:'Total views', data: rows.map(function(r){return r.total_views;}), borderColor:'#B84A6E', backgroundColor:'rgba(184,74,110,.08)', tension:.3, fill:true, pointRadius:2 },
+            { label:'New visitors', data: rows.map(function(r){return r.new_visitors;}), borderColor:'#534AB7', backgroundColor:'rgba(83,74,183,.06)', tension:.3, fill:true, pointRadius:2 },
+            { label:'Returning visitors', data: rows.map(function(r){return r.returning_visitors;}), borderColor:'#2e7d52', backgroundColor:'rgba(46,125,82,.06)', tension:.3, fill:true, pointRadius:2 }
+          ]
+        },
+        options: {
+          responsive:true, maintainAspectRatio:false,
+          plugins:{ legend:{ position:'bottom', labels:{ usePointStyle:true, font:{family:'Nunito'} } } },
+          scales:{ y:{ beginAtZero:true, ticks:{ precision:0 } } }
+        }
+      });
+    })
+    .catch(function(){ document.getElementById('anEmpty').style.display='block'; });
   }
 
   function renderServicesTab(){
