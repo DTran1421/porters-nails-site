@@ -1035,7 +1035,13 @@
       DB.set('porters_vid', visitorId);
     }
     var pageReferrer = document.referrer || '';
-    fetch(BOOKING_API+'/api/book?settings=1&vid='+encodeURIComponent(visitorId)+'&ref='+encodeURIComponent(pageReferrer))
+    var urlParams = new URLSearchParams(window.location.search);
+    var trackExtra = '';
+    ['gclid','fbclid','utm_source','utm_medium','utm_campaign'].forEach(function(k){
+      var v = urlParams.get(k);
+      if (v) trackExtra += '&'+k+'='+encodeURIComponent(v);
+    });
+    fetch(BOOKING_API+'/api/book?settings=1&vid='+encodeURIComponent(visitorId)+'&ref='+encodeURIComponent(pageReferrer)+trackExtra)
     .then(function(r){return r.json();})
     .then(function(s){
       if(!s) return;
