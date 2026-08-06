@@ -525,6 +525,16 @@
   .an-stat-num{ font-family:'Playfair Display',serif; font-size:28px; font-weight:700; color:var(--rose-dark); }
   .an-stat-label{ font-size:13px; color:var(--text-soft); margin-top:.25rem; }
   .an-chart-wrap{ background:var(--white); border:1px solid var(--rose-mid); border-radius:16px; padding:1.5rem; box-shadow:var(--shadow-sm); height:340px; }
+  .an-sources-wrap{ background:var(--white); border:1px solid var(--rose-mid); border-radius:16px; padding:1.5rem; box-shadow:var(--shadow-sm); margin-top:1.25rem; }
+  .an-sources-title{ font-family:'Playfair Display',serif; font-size:16px; color:var(--rose-text); margin-bottom:1rem; font-weight:600; }
+  .an-source-row{ display:grid; grid-template-columns:140px 1fr 90px; align-items:center; gap:.75rem; padding:.55rem 0; font-size:13.5px; }
+  .an-source-name{ color:var(--text); font-weight:600; }
+  .an-source-bar-wrap{ background:var(--cream); border-radius:8px; height:10px; overflow:hidden; }
+  .an-source-bar{ display:block; height:100%; border-radius:8px; transition:width .4s ease; }
+  .an-source-count{ text-align:right; color:var(--text-soft); font-weight:700; }
+  .an-source-pct{ font-weight:400; color:var(--text-muted); }
+  .an-source-empty{ color:var(--text-muted); font-size:13.5px; text-align:center; padding:1rem 0; }
+  @media(max-width:600px){ .an-source-row{ grid-template-columns:90px 1fr 70px; } }
   @media(max-width:700px){ .an-stats{ grid-template-columns:1fr; } .an-custom-wrap{ flex-wrap:wrap; margin-left:0; } }
 </style>
 </head>
@@ -1574,6 +1584,7 @@
       '</div>'+
       '<div class="an-stats" id="anStats"></div>'+
       '<div class="an-chart-wrap"><canvas id="anChart" height="90"></canvas></div>'+
+      '<div class="an-sources-wrap"><h4 class="an-sources-title">Traffic sources</h4><div id="anSources"></div></div>'+
       '<div class="dash-empty" id="anEmpty" style="display:none"><i class="ti ti-chart-line"></i><p>No traffic data yet for this range. Data starts accumulating from when tracking went live.</p></div>';
 
     tb.querySelectorAll('.an-range-btn[data-range]').forEach(function(btn){
@@ -1598,13 +1609,14 @@
   function loadAnalytics(customStart, customEnd){
     var tb=document.getElementById('tabBody');
     if(!tb || !document.getElementById('anChart')) return;
-    var url = BOOKING_API+'/api/book?analytics=1';
-    if(customStart && customEnd){ url += '&start='+customStart+'&end='+customEnd; }
+    var startDate, endDate;
+    if(customStart && customEnd){ startDate = customStart; endDate = customEnd; }
     else {
       var end = new Date();
       var start = new Date(); start.setDate(start.getDate() - (analyticsRange - 1));
-      url += '&start='+start.toISOString().slice(0,10)+'&end='+end.toISOString().slice(0,10);
+      startDate = start.toISOString().slice(0,10); endDate = end.toISOString().slice(0,10);
     }
+    var url = BOOKING_API+'/api/book?analytics=1&start='+startDate+'&end='+endDate;
     fetch(url, { headers: { 'x-session-token': getSession() || '' } })
     .then(function(r){ if(!r.ok) throw new Error('analytics fetch failed'); return r.json(); })
     .then(function(rows){
@@ -1641,6 +1653,30 @@
       });
     })
     .catch(function(){ document.getElementById('anEmpty').style.display='block'; });
+
+    var srcUrl = BOOKING_API+'/api/book?trafficsources=1&start='+startDate+'&end='+endDate;
+    fetch(srcUrl, { headers: { 'x-session-token': getSession() || '' } })
+    .then(function(r){ if(!r.ok) throw new Error('sources fetch failed'); return r.json(); })
+    .then(function(rows){
+      var wrap = document.getElementById('anSources');
+      if(!wrap) return;
+      if(!rows || !rows.length){ wrap.innerHTML = '<div class="an-source-empty">No traffic source data yet for this range.</div>'; return; }
+      var total = rows.reduce(function(s,r){return s+Number(r.views);},0);
+      var SOURCE_COLORS = {
+        'Google Ads (paid)':'#4285F4','Meta Ads (paid)':'#0866FF','Google (organic)':'#93B5FA',
+        'Yelp':'#D32323','Facebook':'#8FB8FF','Instagram':'#E1306C','Direct':'#B84A6E','Other':'#9c8585'
+      };
+      wrap.innerHTML = rows.map(function(r){
+        var pct = total ? Math.round((r.views/total)*100) : 0;
+        var color = SOURCE_COLORS[r.source] || '#9c8585';
+        return '<div class="an-source-row">'+
+          '<span class="an-source-name">'+r.source+'</span>'+
+          '<span class="an-source-bar-wrap"><span class="an-source-bar" style="width:'+pct+'%;background:'+color+'"></span></span>'+
+          '<span class="an-source-count">'+r.views+' <span class="an-source-pct">('+pct+'%)</span></span>'+
+        '</div>';
+      }).join('');
+    })
+    .catch(function(){ var wrap = document.getElementById('anSources'); if(wrap) wrap.innerHTML = '<div class="an-source-empty">Could not load traffic sources.</div>'; });
   }
 
   function renderServicesTab(){
