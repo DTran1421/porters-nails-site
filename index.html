@@ -220,7 +220,6 @@
   .gal { background:linear-gradient(150deg,var(--lavender),var(--rose)); border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--lavender-dark); gap:6px; }
   .gal i { font-size:30px; opacity:.55; } .gal span { font-size:12px; font-weight:600; }
   .gal.big { grid-column:span 2; grid-row:span 2; }
-  .gal-photo.gal-portrait { grid-row:span 2; }
   .gal:nth-child(even) { background:linear-gradient(150deg,var(--peach),var(--rose)); color:var(--peach-text); }
 
   .about { background:var(--white); }
@@ -318,7 +317,7 @@
   .open-badge.open { background:var(--good-bg); color:var(--good); }
   .open-badge.closed { background:#f0e0e0; color:#9a5a5a; }
   .open-badge .dot { width:8px; height:8px; border-radius:50%; background:currentColor; }
-  .gal-photo { background-size:cover; background-position:center; position:relative; }
+  .gal-photo { background-size:contain; background-repeat:no-repeat; background-position:center; position:relative; }
   .gal-cap { position:absolute; left:0; right:0; bottom:0; background:linear-gradient(transparent,rgba(58,23,38,.65)); color:#fff; font-size:12px; font-weight:600; padding:1.2rem .8rem .6rem; }
   /* owner-facing helpers */
   .help { background:var(--lavender); color:var(--lavender-text); border-radius:12px; padding:.85rem 1.1rem; font-size:14px; margin-bottom:1.25rem; line-height:1.5; }
@@ -1165,23 +1164,8 @@
     g.innerHTML = gallery.map(function(p,i){
       var big = i===0 ? ' big' : '';
       var cap = p.caption ? '<div class="gal-cap">'+p.caption+'</div>' : '';
-      var safeUrl = p.url.replace(/'/g,"%27");
-      return '<div class="gal gal-photo'+big+'" data-url="'+p.url.replace(/"/g,'&quot;')+'" style="background-image:url(\''+safeUrl+'\')">'+cap+'</div>';
+      return '<div class="gal gal-photo'+big+'" style="background-image:url(\''+p.url.replace(/'/g,"%27")+'\')">'+cap+'</div>';
     }).join('');
-
-    // Detect each photo's real orientation so portrait shots (typical for close-up
-    // nail photos) get a taller cell instead of being cropped to a landscape shape.
-    Array.prototype.forEach.call(g.querySelectorAll('.gal-photo'), function(cell){
-      var url = cell.getAttribute('data-url');
-      if(!url) return;
-      var img = new Image();
-      img.onload = function(){
-        if(img.naturalWidth && img.naturalHeight && img.naturalHeight > img.naturalWidth * 1.15){
-          cell.classList.add('gal-portrait');
-        }
-      };
-      img.src = url;
-    });
   }
 
   function toggleMenuRow(el){
