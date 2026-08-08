@@ -1401,8 +1401,7 @@
         method:'POST',
         headers:{
           'x-file-name':fname,
-          'Content-Type':selectedFile.type,
-          'x-upsert':'true'
+          'x-file-type':selectedFile.type
         },
         body:selectedFile
       })
