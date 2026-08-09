@@ -1814,7 +1814,23 @@
       dots.forEach(function(d,di){ d.classList.toggle('active', di===idx); });
     }
     function next(){ go((idx+1) % cards.length); }
+    function prev(){ go((idx-1+cards.length) % cards.length); }
     function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(next, 4500); }
+
+    // Swipe left/right to navigate between reviews on touch devices
+    var qgTouchStartX = null;
+    quotesGrid.addEventListener('touchstart', function(e){
+      qgTouchStartX = e.touches[0].clientX;
+    }, { passive:true });
+    quotesGrid.addEventListener('touchend', function(e){
+      if(qgTouchStartX === null) return;
+      var dx = e.changedTouches[0].clientX - qgTouchStartX;
+      if(Math.abs(dx) > 40){ // swipe threshold
+        if(dx < 0) next(); else prev();
+        resetTimer();
+      }
+      qgTouchStartX = null;
+    }, { passive:true });
     function setupCarousel(active){
       if(active){
         quotesGrid.classList.add('carousel-active');
