@@ -575,9 +575,9 @@
 
   /* Reviews mobile carousel */
   @media(max-width:900px){
-    .quotes-grid.carousel-active { position:relative; display:block; padding-bottom:2.25rem; }
-    .quotes-grid.carousel-active .quote-card { position:absolute; top:0; left:0; right:0; opacity:0; pointer-events:none; transition:opacity .5s ease; }
-    .quotes-grid.carousel-active .quote-card.active { opacity:1; pointer-events:auto; z-index:1; }
+    .quotes-grid.carousel-active { position:relative; display:block; padding-bottom:2.25rem; overflow:hidden; }
+    .quotes-grid.carousel-active .quote-card { position:absolute; top:0; left:0; right:0; transform:translateX(100%); transition:transform .45s cubic-bezier(.4,0,.2,1); pointer-events:none; }
+    .quotes-grid.carousel-active .quote-card.active { transform:translateX(0%); pointer-events:auto; z-index:1; }
     .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:1.25rem; }
     .carousel-dots span { width:8px; height:8px; border-radius:50%; background:var(--rose-mid); cursor:pointer; transition:background .2s,transform .2s; }
     .carousel-dots span.active { background:var(--rose-dark); transform:scale(1.25); }
@@ -1803,17 +1803,39 @@
     cards.forEach(function(c,i){
       var dot = document.createElement('span');
       if(i===0) dot.classList.add('active');
-      dot.addEventListener('click', function(){ go(i); resetTimer(); });
+      dot.addEventListener('click', function(){
+        if(i===idx) return;
+        goDirectional(i, i>idx ? 1 : -1);
+        resetTimer();
+      });
       dotsWrap.appendChild(dot);
     });
     var dots = Array.prototype.slice.call(dotsWrap.children);
-    function go(i){
-      idx = i;
-      cards.forEach(function(c,ci){ c.classList.toggle('active', ci===idx); });
+
+    // Slide the old card out one side while the new card slides in from the other,
+    // direction depends on which way we're navigating (matches swipe direction).
+    function goDirectional(newIdx, direction){
+      if(newIdx === idx || !cards[newIdx]) return;
+      var oldCard = cards[idx];
+      var newCard = cards[newIdx];
+
+      // Instantly place the incoming card off-screen on the correct side, no transition
+      newCard.style.transition = 'none';
+      newCard.style.transform = 'translateX(' + (direction > 0 ? '100%' : '-100%') + ')';
+      void newCard.offsetWidth; // force reflow so the instant placement takes effect
+      newCard.style.transition = '';
+
+      // Now animate both simultaneously: old exits opposite side, new slides to center
+      oldCard.style.transform = 'translateX(' + (direction > 0 ? '-100%' : '100%') + ')';
+      newCard.classList.add('active');
+      newCard.style.transform = 'translateX(0%)';
+      oldCard.classList.remove('active');
+
+      idx = newIdx;
       dots.forEach(function(d,di){ d.classList.toggle('active', di===idx); });
     }
-    function next(){ go((idx+1) % cards.length); }
-    function prev(){ go((idx-1+cards.length) % cards.length); }
+    function next(){ goDirectional((idx+1) % cards.length, 1); }
+    function prev(){ goDirectional((idx-1+cards.length) % cards.length, -1); }
     function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(next, 4500); }
 
     // Swipe left/right to navigate between reviews on touch devices
@@ -1845,7 +1867,7 @@
         quotesGrid.classList.add('carousel-active');
         dotsWrap.style.display = 'flex';
         measureHeight();
-        go(idx);
+        cards.forEach(function(c,ci){ c.classList.toggle('active', ci===idx); c.style.transform = ci===idx ? 'translateX(0%)' : 'translateX(100%)'; });
         resetTimer();
       } else {
         quotesGrid.classList.remove('carousel-active');
