@@ -576,9 +576,8 @@
   /* Reviews mobile carousel */
   @media(max-width:900px){
     .quotes-grid.carousel-active { position:relative; display:block; padding-bottom:2.25rem; }
-    .quotes-grid.carousel-active .quote-card { display:none; opacity:0; transform:translateY(0); }
-    .quotes-grid.carousel-active .quote-card.active { display:flex; opacity:1; animation:fadeSlide .5s ease; }
-    @keyframes fadeSlide { from{ opacity:0; transform:translateX(14px); } to{ opacity:1; transform:translateX(0); } }
+    .quotes-grid.carousel-active .quote-card { position:absolute; top:0; left:0; right:0; opacity:0; pointer-events:none; transition:opacity .5s ease; }
+    .quotes-grid.carousel-active .quote-card.active { opacity:1; pointer-events:auto; z-index:1; }
     .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:1.25rem; }
     .carousel-dots span { width:8px; height:8px; border-radius:50%; background:var(--rose-mid); cursor:pointer; transition:background .2s,transform .2s; }
     .carousel-dots span.active { background:var(--rose-dark); transform:scale(1.25); }
@@ -1831,18 +1830,31 @@
       }
       qgTouchStartX = null;
     }, { passive:true });
+    function measureHeight(){
+      var max = 0;
+      cards.forEach(function(c){ if(c.offsetHeight > max) max = c.offsetHeight; });
+      if(max) quotesGrid.style.height = max + 'px';
+    }
+    var resizeTimer = null;
+    function onResize(){
+      if(resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function(){ if(quotesGrid.classList.contains('carousel-active')) measureHeight(); }, 150);
+    }
     function setupCarousel(active){
       if(active){
         quotesGrid.classList.add('carousel-active');
         dotsWrap.style.display = 'flex';
+        measureHeight();
         go(idx);
         resetTimer();
       } else {
         quotesGrid.classList.remove('carousel-active');
+        quotesGrid.style.height = '';
         dotsWrap.style.display = 'none';
         if(timer) clearInterval(timer);
       }
     }
+    window.addEventListener('resize', onResize);
     var mq = window.matchMedia('(max-width:900px)');
     setupCarousel(mq.matches);
     if(mq.addEventListener) mq.addEventListener('change', function(e){ setupCarousel(e.matches); });
