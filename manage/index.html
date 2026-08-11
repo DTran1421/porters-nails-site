@@ -527,7 +527,10 @@
   .an-chart-wrap{ background:var(--white); border:1px solid var(--rose-mid); border-radius:16px; padding:1.5rem; box-shadow:var(--shadow-sm); height:340px; }
   .an-sources-wrap{ background:var(--white); border:1px solid var(--rose-mid); border-radius:16px; padding:1.5rem; box-shadow:var(--shadow-sm); margin-top:1.25rem; }
   .an-sources-title{ font-family:'Playfair Display',serif; font-size:16px; color:var(--rose-text); margin-bottom:1rem; font-weight:600; }
-  .an-source-row{ display:grid; grid-template-columns:140px 1fr 90px; align-items:center; gap:.75rem; padding:.55rem 0; font-size:13.5px; }
+  .an-source-row{ display:grid; grid-template-columns:140px 1fr 90px; align-items:center; gap:.75rem; padding:.55rem .5rem; font-size:13.5px; cursor:pointer; border-radius:8px; transition:background .15s ease; }
+  .an-source-row:hover{ background:var(--cream); }
+  .an-source-row.active{ background:var(--rose); }
+  .an-source-row.active .an-source-name{ color:var(--rose-dark); font-weight:700; }
   .an-source-name{ color:var(--text); font-weight:600; }
   .an-source-bar-wrap{ background:var(--cream); border-radius:8px; height:10px; overflow:hidden; }
   .an-source-bar{ display:block; height:100%; border-radius:8px; transition:width .4s ease; }
@@ -1605,17 +1608,32 @@
     loadAnalytics();
   }
 
+  var currentStart = null, currentEnd = null, selectedSource = null;
+
+  // Formats a Date as YYYY-MM-DD in Central Time — avoids toISOString(), which
+  // is always UTC and was causing the analytics range to be a few hours off
+  // from the actual Central "today" (same bug fixed server-side earlier).
+  function centralDateStr(date){
+    return new Intl.DateTimeFormat('en-CA', { timeZone:'America/Chicago', year:'numeric', month:'2-digit', day:'2-digit' }).format(date);
+  }
+
   function loadAnalytics(customStart, customEnd){
     var tb=document.getElementById('tabBody');
     if(!tb || !document.getElementById('anChart')) return;
-    var startDate, endDate;
-    if(customStart && customEnd){ startDate = customStart; endDate = customEnd; }
+    if(customStart && customEnd){ currentStart = customStart; currentEnd = customEnd; }
     else {
       var end = new Date();
       var start = new Date(); start.setDate(start.getDate() - (analyticsRange - 1));
-      startDate = start.toISOString().slice(0,10); endDate = end.toISOString().slice(0,10);
+      currentStart = centralDateStr(start); currentEnd = centralDateStr(end);
     }
-    var url = BOOKING_API+'/api/book?analytics=1&start='+startDate+'&end='+endDate;
+    selectedSource = null; // reset filter whenever the date range changes
+    loadChart();
+    loadSources();
+  }
+
+  function loadChart(){
+    var url = BOOKING_API+'/api/book?analytics=1&start='+currentStart+'&end='+currentEnd;
+    if(selectedSource) url += '&source='+encodeURIComponent(selectedSource);
     fetch(url, { headers: { 'x-session-token': getSession() || '' } })
     .then(function(r){ if(!r.ok) throw new Error('analytics fetch failed'); return r.json(); })
     .then(function(rows){
@@ -1627,7 +1645,7 @@
       document.getElementById('anEmpty').style.display = anyData ? 'none' : 'block';
 
       document.getElementById('anStats').innerHTML =
-        '<div class="an-stat"><div class="an-stat-num">'+totalViews+'</div><div class="an-stat-label">Total page views</div></div>'+
+        '<div class="an-stat"><div class="an-stat-num">'+totalViews+'</div><div class="an-stat-label">'+(selectedSource?selectedSource+' views':'Total page views')+'</div></div>'+
         '<div class="an-stat"><div class="an-stat-num">'+totalNew+'</div><div class="an-stat-label">New visitors</div></div>'+
         '<div class="an-stat"><div class="an-stat-num">'+totalReturning+'</div><div class="an-stat-label">Returning visitors</div></div>';
 
@@ -1639,7 +1657,7 @@
         data: {
           labels: labels,
           datasets: [
-            { label:'Total views', data: rows.map(function(r){return r.total_views;}), borderColor:'#B84A6E', backgroundColor:'rgba(184,74,110,.08)', tension:.3, fill:true, pointRadius:2 },
+            { label: selectedSource ? (selectedSource+' views') : 'Total views', data: rows.map(function(r){return r.total_views;}), borderColor:'#B84A6E', backgroundColor:'rgba(184,74,110,.08)', tension:.3, fill:true, pointRadius:2 },
             { label:'New visitors', data: rows.map(function(r){return r.new_visitors;}), borderColor:'#534AB7', backgroundColor:'rgba(83,74,183,.06)', tension:.3, fill:true, pointRadius:2 },
             { label:'Returning visitors', data: rows.map(function(r){return r.returning_visitors;}), borderColor:'#2e7d52', backgroundColor:'rgba(46,125,82,.06)', tension:.3, fill:true, pointRadius:2 }
           ]
@@ -1652,8 +1670,10 @@
       });
     })
     .catch(function(){ document.getElementById('anEmpty').style.display='block'; });
+  }
 
-    var srcUrl = BOOKING_API+'/api/book?trafficsources=1&start='+startDate+'&end='+endDate;
+  function loadSources(){
+    var srcUrl = BOOKING_API+'/api/book?trafficsources=1&start='+currentStart+'&end='+currentEnd;
     fetch(srcUrl, { headers: { 'x-session-token': getSession() || '' } })
     .then(function(r){ if(!r.ok) throw new Error('sources fetch failed'); return r.json(); })
     .then(function(rows){
@@ -1668,12 +1688,21 @@
       wrap.innerHTML = rows.map(function(r){
         var pct = total ? Math.round((r.views/total)*100) : 0;
         var color = SOURCE_COLORS[r.source] || '#9c8585';
-        return '<div class="an-source-row">'+
+        var safeSource = r.source.replace(/"/g,'&quot;');
+        return '<div class="an-source-row" data-source="'+safeSource+'" tabindex="0" role="button">'+
           '<span class="an-source-name">'+r.source+'</span>'+
           '<span class="an-source-bar-wrap"><span class="an-source-bar" style="width:'+pct+'%;background:'+color+'"></span></span>'+
           '<span class="an-source-count">'+r.views+' <span class="an-source-pct">('+pct+'%)</span></span>'+
         '</div>';
       }).join('');
+      wrap.querySelectorAll('.an-source-row').forEach(function(row){
+        row.addEventListener('click', function(){
+          var src = row.getAttribute('data-source');
+          selectedSource = (selectedSource === src) ? null : src; // click again to clear
+          wrap.querySelectorAll('.an-source-row').forEach(function(r){ r.classList.toggle('active', r.getAttribute('data-source')===selectedSource); });
+          loadChart();
+        });
+      });
     })
     .catch(function(){ var wrap = document.getElementById('anSources'); if(wrap) wrap.innerHTML = '<div class="an-source-empty">Could not load traffic sources.</div>'; });
   }
