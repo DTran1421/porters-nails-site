@@ -2123,7 +2123,7 @@ function _wireApptEvents(tb){
             if(btn){btn.disabled=true;btn.innerHTML='Saving...';}
             fetch(BOOKING_API+'/api/update-status',{
               method:'POST',
-              headers:{'Content-Type':'application/json'},
+              headers:{'Content-Type':'application/json','x-session-token':getSession()||''},
               body:JSON.stringify({id:el.dataset.reschedule,status:'rescheduled',name:el.dataset.aname,email:el.dataset.aemail,phone:el.dataset.aphone,service:el.dataset.asvc,date:newDate,time:newTime,tech_name:el.dataset.atech,new_date:newDate,new_time:newTime,old_date:el.dataset.adate,old_time:el.dataset.atime})
             })
             .then(function(r){return r.json();})
@@ -2161,10 +2161,10 @@ function _wireApptEvents(tb){
   function updateApptStatus(id,status,name,email,service,date,time,techName){
     var body={id:id,status:status,name:name||'',email:email||'',service:service||'',date:date||'',time:time||''};
     if(techName) body.tech_name=techName;
-    fetch(BOOKING_API+'/api/update-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
-    .then(function(r){return r.json();})
+    fetch(BOOKING_API+'/api/update-status',{method:'POST',headers:{'Content-Type':'application/json','x-session-token':getSession()||''},body:JSON.stringify(body)})
+    .then(function(r){ if(r.status===401){ showToast('Your login expired. Please log in again.'); throw new Error('unauthorized'); } return r.json(); })
     .then(function(d){ if(d.success){ _apptCache=null; showToast(techName?'Assigned to '+techName+' and confirmed!':('Appointment '+status+'!')); renderDash(); } else showToast('Could not update.'); })
-    .catch(function(){ showToast('Connection error.'); });
+    .catch(function(e){ if(e&&e.message==='unauthorized') return; showToast('Connection error.'); });
   }
 
   // Dashboard render is triggered by auth after login
