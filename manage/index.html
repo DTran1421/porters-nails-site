@@ -351,7 +351,9 @@
   .msg-type-sms { display:inline-flex; align-items:center; gap:4px; background:#E8F4FD; color:#1565C0; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
   .msg-type-email { display:inline-flex; align-items:center; gap:4px; background:#F3E8FD; color:#6A1B9A; font-size:11px; font-weight:700; padding:2px 8px; border-radius:20px; }
   .msg-trigger { font-size:11px; color:var(--text-muted); background:var(--cream); padding:2px 7px; border-radius:10px; }
-  .msg-preview { color:var(--text-soft); font-size:12.5px; max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  /* Full message text: keeps its own line breaks, never wraps or truncates — the table scrolls sideways instead */
+  .msg-preview { color:var(--text-soft); font-size:12.5px; white-space:pre; }
+  .msglog-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
   .msglog-empty { text-align:center; padding:3rem; color:var(--text-muted); font-size:14px; }
   .msglog-filters { display:flex; gap:.5rem; margin-bottom:1rem; flex-wrap:wrap; }
   .msglog-filter-btn { background:var(--white); border:1.5px solid var(--rose-mid); border-radius:20px; padding:.35rem .9rem; font-size:13px; font-family:'Nunito'; cursor:pointer; color:var(--text-soft); transition:all .15s; }
@@ -1449,8 +1451,8 @@
         if(filtered.length===0){
           html+='<div class="msglog-empty">No messages of this type yet.</div>';
         } else {
-          html+='<div style="overflow-x:auto"><table class="msglog-table">'
-            +'<thead><tr><th>Time</th><th>Type</th><th>Recipient</th><th>Trigger</th><th>Preview</th></tr></thead><tbody>';
+          html+='<div class="msglog-scroll"><table class="msglog-table">'
+            +'<thead><tr><th>Time</th><th>Type</th><th>Recipient</th><th>Trigger</th><th>Message</th></tr></thead><tbody>';
           html+=filtered.map(function(m){
             var d=new Date(m.created_at);
             var timeStr=d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
@@ -1459,7 +1461,7 @@
               : '<span class="msg-type-email"><i class="ti ti-mail" style="font-size:11px"></i> Email</span>';
             var recipient = (m.recipient_name ? m.recipient_name+'<br><span style="color:var(--text-muted);font-size:11px">'+m.recipient+'</span>' : m.recipient);
             var trigger = '<span class="msg-trigger">'+(m.trigger||'—').replace(/_/g,' ')+'</span>';
-            var preview = '<div class="msg-preview">'+(m.body_preview||m.subject||'—')+'</div>';
+            var preview = '<div class="msg-preview">'+String(m.body_preview||m.subject||'—').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div>';
             return '<tr><td style="white-space:nowrap;color:var(--text-muted);font-size:12px">'+timeStr+'</td><td>'+typeTag+'</td><td>'+recipient+'</td><td>'+trigger+'</td><td>'+preview+'</td></tr>';
           }).join('');
           html+='</tbody></table></div>';
