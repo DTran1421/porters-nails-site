@@ -151,10 +151,10 @@
   }
   html { scroll-behavior:smooth; }
   body { font-family:'Nunito',sans-serif; background:var(--cream); color:var(--text); line-height:1.75; overflow-x:hidden; font-size:16px; }
-  .wrap { max-width:1180px; margin:0 auto; padding:0 2rem; }
+  .wrap { max-width:1400px; margin:0 auto; padding:0 2rem; }
 
   nav { position:sticky; top:0; z-index:100; background:rgba(253,248,245,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--rose-mid); }
-  .nav-inner { display:flex; justify-content:space-between; align-items:center; padding:1.1rem 2rem; max-width:1180px; margin:0 auto; }
+  .nav-inner { display:flex; justify-content:space-between; align-items:center; padding:1.1rem 2rem; max-width:1400px; margin:0 auto; }
   .logo { display:flex; align-items:center; text-decoration:none; }
   .logo img { height:52px; width:auto; display:block; }
   .nav-links { display:flex; align-items:center; gap:2rem; list-style:none; }
@@ -191,7 +191,7 @@
   .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(184,74,110,.3); }
   .btn-ghost { background:var(--white); color:var(--rose-text); border:2px solid var(--rose-mid); }
   .btn-ghost:hover { background:var(--rose); border-color:var(--rose-deep); }
-  .hero-visual { position:relative; aspect-ratio:4/5; background:linear-gradient(160deg,var(--rose),var(--peach)); border-radius:28px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; }
+  .hero-visual { position:relative; aspect-ratio:4/3; background-color:var(--rose); background-image:linear-gradient(160deg,var(--rose),var(--peach)); background-size:cover; border-radius:28px; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; }
   .hero-visual .ph { text-align:center; color:var(--rose-dark); }
   .hero-visual .ph i { font-size:56px; opacity:.5; }
   .hero-visual .ph p { font-size:13px; font-weight:600; margin-top:8px; letter-spacing:.05em; }
@@ -216,10 +216,9 @@
   .svc-price small { font-size:13px; font-weight:400; color:var(--text-muted); font-family:'Nunito'; }
   .svc-empty { grid-column:1/-1; text-align:center; color:var(--text-muted); padding:2rem; }
 
-  .gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:200px; gap:1rem; }
-  .gal { background:linear-gradient(150deg,var(--lavender),var(--rose)); border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--lavender-dark); gap:6px; }
+  .gallery-grid { column-count:4; column-gap:1rem; }
+  .gal { background:linear-gradient(150deg,var(--lavender),var(--rose)); border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--lavender-dark); gap:6px; break-inside:avoid; margin-bottom:1rem; aspect-ratio:1; }
   .gal i { font-size:30px; opacity:.55; } .gal span { font-size:12px; font-weight:600; }
-  .gal.big { grid-column:span 2; grid-row:span 2; }
   .gal:nth-child(even) { background:linear-gradient(150deg,var(--peach),var(--rose)); color:var(--peach-text); }
 
   .about { background:var(--white); }
@@ -317,7 +316,8 @@
   .open-badge.open { background:var(--good-bg); color:var(--good); }
   .open-badge.closed { background:#f0e0e0; color:#9a5a5a; }
   .open-badge .dot { width:8px; height:8px; border-radius:50%; background:currentColor; }
-  .gal-photo { background-size:cover; background-position:center; position:relative; }
+  .gal-item { position:relative; break-inside:avoid; margin-bottom:1rem; }
+  .gal-photo { display:block; width:100%; height:auto; border-radius:18px; }
   .gal-cap { position:absolute; left:0; right:0; bottom:0; background:linear-gradient(transparent,rgba(58,23,38,.65)); color:#fff; font-size:12px; font-weight:600; padding:1.2rem .8rem .6rem; }
   /* owner-facing helpers */
   .help { background:var(--lavender); color:var(--lavender-text); border-radius:12px; padding:.85rem 1.1rem; font-size:14px; margin-bottom:1.25rem; line-height:1.5; }
@@ -357,7 +357,7 @@
   .nav-right { order:3; margin-left:1.5rem; }
 
   .menu-logo { display:block; max-width:210px; height:auto; margin:0 auto 1rem; }
-  .menu-cats { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem 2.5rem; }
+  .menu-cats { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem 2.5rem; align-items:start; }
   .menu-cat { background:var(--cream); border:1px solid var(--rose-mid); border-radius:18px; padding:1.5rem 1.6rem; overflow:hidden; }
   .menu-cat-head { display:flex; align-items:center; gap:.7rem; margin-bottom:1rem; }
   .menu-cat-head h3 { font-family:'Playfair Display',serif; font-size:22px; font-weight:600; color:var(--rose-text); }
@@ -367,13 +367,11 @@
   .menu-row:last-child { border-bottom:none; }
   .menu-row-top { display:flex; align-items:center; gap:.5rem; cursor:pointer; user-select:none; overflow:hidden; }
   .menu-row-top:hover .mr-name { color:var(--rose-dark); }
-  .mr-name { font-size:15.5px; color:var(--text); font-weight:600; transition:color .15s; flex-shrink:1; min-width:0; }
+  .mr-name { font-size:15.5px; color:var(--text); font-weight:600; transition:color .15s; flex-shrink:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .mr-dots { flex:1; border-bottom:1.5px dotted var(--rose-mid); }
   .mr-price { font-size:15.5px; font-weight:800; color:var(--rose-dark); white-space:nowrap; }
   .mr-tog { font-size:13px; color:var(--text-muted); transition:transform .2s; flex-shrink:0; }
   .menu-row.open .mr-tog { transform:rotate(180deg); }
-  .mr-bullets { display:none; margin:5px 0 4px 0; padding:0; list-style:none; }
-  .menu-row.open .mr-bullets { display:flex; flex-direction:column; gap:3px; }
   .mr-bullets li { font-size:12.5px; color:var(--text-soft); padding-left:16px; position:relative; line-height:1.55; }
   .mr-bullets li::before { content:''; position:absolute; left:4px; top:7px; width:5px; height:5px; border-radius:50%; background:var(--rose-deep); }
   .mr-tier-badge { display:inline-block; font-size:10px; font-weight:700; border-radius:20px; padding:1px 7px; margin-left:6px; vertical-align:middle; white-space:nowrap; border:0.5px solid; }
@@ -472,10 +470,10 @@
 
   @media (max-width:900px) {
     .hero-grid, .about-grid { grid-template-columns:1fr; }
-    .hero-visual { max-width:340px; margin:0 auto; }
+    .hero-visual { max-width:340px; min-height:255px; margin:0 auto; }
     .services-grid, .choice-grid { grid-template-columns:1fr; }
     .menu-cats { grid-template-columns:1fr; gap:1rem; }
-    .gallery-grid { grid-template-columns:repeat(2,1fr); }
+    .gallery-grid { column-count:2; }
     .hero h1 { font-size:42px; } .wrap { padding:0 1.25rem; }
     .footer-grid, .dash-stats, .field-row, .chk-grid, .svc-edit .se-row { grid-template-columns:1fr; }
     .slot-grid { grid-template-columns:repeat(3,1fr); }
@@ -500,6 +498,193 @@
   }
 
   .reviews { background:linear-gradient(170deg,var(--cream) 0%,var(--rose) 100%); }
+  .quotes-grid { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:1.25rem; max-width:1000px; margin:0 auto 2.5rem; }
+  .quote-card { background:var(--white); border:1px solid var(--rose-mid); border-radius:20px; padding:1.75rem; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; }
+  .quote-card .qc-stars { color:#F5A623; font-size:16px; letter-spacing:2px; margin-bottom:.75rem; }
+  .quote-card p { font-size:15px; line-height:1.55; color:var(--text); flex:1; margin-bottom:1rem; }
+  .quote-card .qc-author { font-family:'Playfair Display',serif; font-size:15px; font-weight:600; color:var(--rose-text); }
+  .quote-card.qc-featured p { font-size:16px; }
+  @media(max-width:900px){ .quotes-grid{ grid-template-columns:1fr; } }
+
+  /* ===== Animations & motion polish ===== */
+  html { scroll-behavior:smooth; }
+  section[id] { scroll-margin-top:88px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* Scroll reveal */
+  .reveal { opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); will-change:opacity,transform; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+  .reveal-stagger.in > * { opacity:1; transform:translateY(0); }
+  .reveal-stagger > * { opacity:0; transform:translateY(24px); transition:opacity .6s cubic-bezier(.2,.7,.2,1), transform .6s cubic-bezier(.2,.7,.2,1); }
+  .reveal-stagger.in > *:nth-child(1){ transition-delay:.05s; }
+  .reveal-stagger.in > *:nth-child(2){ transition-delay:.16s; }
+  .reveal-stagger.in > *:nth-child(3){ transition-delay:.27s; }
+  .reveal-stagger.in > *:nth-child(4){ transition-delay:.38s; }
+  .reveal-stagger.in > *:nth-child(5){ transition-delay:.49s; }
+  .reveal-stagger.in > *:nth-child(6){ transition-delay:.60s; }
+
+  /* Hero: entrance + floating blobs */
+  .hero-text > .hero-badge, .hero-text > h1, .hero-text > p, .hero-text > .hero-btns { opacity:0; transform:translateY(18px); animation:heroUp .8s cubic-bezier(.2,.7,.2,1) forwards; }
+  .hero-text > .hero-badge { animation-delay:.05s; }
+  .hero-text > h1 { animation-delay:.16s; }
+  .hero-text > p { animation-delay:.30s; }
+  .hero-text > .hero-btns { animation-delay:.44s; }
+  .hero-visual { opacity:0; transform:translateY(18px) scale(.98); animation:heroUp .9s cubic-bezier(.2,.7,.2,1) forwards; animation-delay:.2s; }
+  @keyframes heroUp { to { opacity:1; transform:translateY(0) scale(1); } }
+  .hero::before { animation:floatSlow 9s ease-in-out infinite; }
+  .hero::after { animation:floatSlow 11s ease-in-out infinite reverse; }
+  @keyframes floatSlow { 0%,100%{ transform:translateY(0) translateX(0); } 50%{ transform:translateY(-22px) translateX(10px); } }
+
+  /* Nav underline */
+  .nav-links a { position:relative; }
+  .nav-links a::after { content:''; position:absolute; left:0; bottom:-4px; width:0; height:2px; background:var(--rose-dark); border-radius:2px; transition:width .28s cubic-bezier(.2,.7,.2,1); }
+  .nav-links a:hover::after { width:100%; }
+
+  /* Buttons */
+  .btn { transition:transform .18s ease, box-shadow .25s ease, background .2s ease; }
+  .btn:hover { transform:translateY(-2px); }
+  .btn:active { transform:translateY(0) scale(.98); }
+  .btn-pulse { animation:btnPulse 2.6s ease-in-out infinite; }
+  @keyframes btnPulse { 0%,100%{ box-shadow:0 0 0 0 rgba(184,74,110,.35); } 50%{ box-shadow:0 0 0 10px rgba(184,74,110,0); } }
+
+  /* Info cards / FAQ items lift */
+  .info-card, .faq-item { transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .info-card:hover, .faq-item:hover { transform:translateY(-4px); box-shadow:var(--shadow-sm); }
+
+  /* Quote card lift (extends existing card styling) */
+  .quote-card { transition:transform .25s ease, box-shadow .25s ease; }
+  .quote-card:hover { transform:translateY(-5px); box-shadow:var(--shadow); }
+
+  /* Gallery zoom + lightbox */
+  .gal-photo { overflow:hidden; cursor:pointer; transition:transform .5s cubic-bezier(.2,.7,.2,1); }
+  .gal-photo:hover { transform:scale(1.045); z-index:2; box-shadow:var(--shadow); }
+  .lightbox { position:fixed; inset:0; background:rgba(30,15,20,.86); overflow:hidden; z-index:999; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+  .lightbox.open { opacity:1; pointer-events:auto; }
+  .lightbox-slide { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:2rem; transition:transform .45s cubic-bezier(.4,0,.2,1); }
+  .lightbox-slide img { max-width:90vw; max-height:85vh; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+  .lightbox-close { position:absolute; top:22px; right:28px; color:#fff; font-size:32px; cursor:pointer; opacity:.85; transition:opacity .2s; line-height:1; z-index:2; }
+  .lightbox-close:hover { opacity:1; }
+  .lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); color:#fff; font-size:34px; opacity:.75; cursor:pointer; padding:.5rem 1rem; transition:opacity .2s; user-select:none; z-index:2; }
+  .lightbox-nav:hover { opacity:1; }
+  .lightbox-prev { left:6px; }
+  .lightbox-next { right:6px; }
+  @media(max-width:600px){ .lightbox-nav { font-size:28px; padding:.5rem .6rem; } }
+
+  /* Reviews mobile carousel */
+  @media(max-width:900px){
+    .quotes-grid.carousel-active { position:relative; display:block; padding-bottom:2.25rem; overflow:hidden; }
+    .quotes-grid.carousel-active .quote-card { position:absolute; top:0; left:0; right:0; transform:translateX(100%); transition:transform .45s cubic-bezier(.4,0,.2,1); pointer-events:none; }
+    .quotes-grid.carousel-active .quote-card.active { transform:translateX(0%); pointer-events:auto; z-index:1; }
+    .carousel-dots { display:flex; justify-content:center; gap:8px; margin-top:1.25rem; }
+    .carousel-dots span { width:8px; height:8px; border-radius:50%; background:var(--rose-mid); cursor:pointer; transition:background .2s,transform .2s; }
+    .carousel-dots span.active { background:var(--rose-dark); transform:scale(1.25); }
+  }
+
+  /* ===== Modernization pass 2 ===== */
+
+  /* Scroll progress bar */
+  .scroll-progress { position:fixed; top:0; left:0; height:3px; width:0%; background:linear-gradient(90deg,var(--rose-dark),var(--rose-deep)); z-index:200; transition:width .1s linear; }
+
+  /* Shrinking sticky nav */
+  nav { transition:box-shadow .3s ease; }
+  nav.scrolled .nav-inner { padding-top:.6rem; padding-bottom:.6rem; }
+  nav.scrolled .logo img { height:40px; }
+  nav.scrolled { box-shadow:0 4px 20px rgba(184,74,110,0.08); }
+  .nav-inner, .logo img { transition:padding .25s ease, height .25s ease; }
+
+  /* Active nav link */
+  .nav-links a.active { color:var(--rose-text); }
+  .nav-links a.active::after { width:100%; }
+
+  /* Floating mobile book button */
+  .float-book { position:fixed; left:50%; bottom:20px; transform:translate(-50%,120%); z-index:150; display:none; align-items:center; gap:8px; padding:.85rem 1.6rem; border-radius:50px; background:var(--rose-dark); color:#fff; font-weight:700; font-size:15px; text-decoration:none; box-shadow:0 10px 30px rgba(184,74,110,0.35); transition:transform .35s cubic-bezier(.2,.7,.2,1); }
+  .float-book.show { transform:translate(-50%,0); }
+  @media(max-width:760px){ .float-book { display:flex; } }
+
+  /* Card tilt (desktop only, JS-driven via inline transform) */
+  @media(hover:hover) and (pointer:fine){
+    .info-card, .quote-card { transform-style:preserve-3d; will-change:transform; }
+  }
+
+  /* Skeleton loading */
+  .skel { position:relative; overflow:hidden; background:var(--rose-mid); border-radius:16px; }
+  .skel::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); transform:translateX(-100%); animation:skelShimmer 1.4s ease-in-out infinite; }
+  @keyframes skelShimmer { 100% { transform:translateX(100%); } }
+  .skel-svc { height:220px; }
+  .skel-gal { height:200px; }
+
+  /* FAQ accordion */
+  .faq-item h3 { cursor:pointer; user-select:none; }
+  .faq-item h3::after { content:'\002B'; margin-left:auto; font-size:20px; color:var(--rose-dark); transition:transform .3s ease; flex-shrink:0; }
+  .faq-item.open h3::after { transform:rotate(135deg); }
+  .faq-item .faq-a-wrap { display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.2,.7,.2,1); }
+  .faq-item.open .faq-a-wrap { grid-template-rows:1fr; }
+  .faq-item .faq-a-inner { overflow:hidden; }
+  .faq-item p { padding-top:.6rem; }
+
+  /* Section dividers */
+  .divider-wave { display:block; width:100%; height:56px; margin-bottom:-1px; }
+  .divider-wave path { fill:var(--cream); }
+  .divider-wave.to-rose path { fill:var(--rose); }
+
+  /* ===== Services section redesign ===== */
+
+  /* Filter pills */
+  .svc-filters { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-bottom:1.25rem; }
+  .svc-filter-pill { background:var(--white); border:1.5px solid var(--rose-mid); color:var(--text-soft); font-size:13.5px; font-weight:700; padding:.5rem 1.15rem; border-radius:30px; cursor:pointer; transition:all .2s ease; }
+  .svc-filter-pill:hover { border-color:var(--rose-deep); color:var(--rose-text); }
+  .svc-filter-pill.active { background:var(--rose-dark); border-color:var(--rose-dark); color:#fff; }
+
+  /* Search */
+  .svc-search-wrap { max-width:420px; margin:0 auto 2rem; position:relative; }
+  .svc-search { width:100%; padding:.75rem 1rem .75rem 2.6rem; border-radius:30px; border:1.5px solid var(--rose-mid); background:var(--white); font-size:14.5px; font-family:inherit; color:var(--text); outline:none; transition:border-color .2s; box-sizing:border-box; }
+  .svc-search:focus { border-color:var(--rose-deep); }
+  .svc-search-wrap i { position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:16px; pointer-events:none; }
+  .svc-no-results { text-align:center; color:var(--text-soft); padding:2rem 0; font-size:15px; grid-column:1/-1; display:none; }
+  .svc-no-results.show { display:block; }
+
+  /* Category accent bands (cycled by position) */
+  .menu-cat { position:relative; transition:opacity .3s ease, transform .3s ease, max-height .3s ease, margin .3s ease, padding .3s ease; }
+  .menu-cat.filtered-out { display:none; }
+  .menu-cat::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; border-radius:18px 18px 0 0; background:var(--rose-deep); }
+  .menu-cat:nth-of-type(3n+2)::before { background:var(--lavender-dark); }
+  .menu-cat:nth-of-type(3n)::before { background:var(--peach-mid); }
+  .menu-cat:nth-of-type(3n+2) .mc-ico { background:var(--lavender); }
+  .menu-cat:nth-of-type(3n+2) .mc-ico i { color:var(--lavender-dark); }
+  .menu-cat:nth-of-type(3n) .mc-ico { background:var(--peach); }
+  .menu-cat:nth-of-type(3n) .mc-ico i { color:var(--peach-text); }
+
+  /* Tier price strip (pedicure) */
+  .tier-strip { display:flex; flex-wrap:wrap; gap:.5rem; margin-bottom:1.15rem; }
+  .tier-chip { background:var(--rose); border:1px solid var(--rose-mid); border-radius:20px; padding:.35rem .8rem; font-size:12px; font-weight:700; color:var(--rose-text); white-space:nowrap; }
+  .tier-chip b { color:var(--rose-dark); margin-left:3px; font-size:12.5px; }
+
+  /* Smooth accordion expand (replaces instant show/hide) */
+  .mr-a-wrap { display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s cubic-bezier(.2,.7,.2,1); }
+  .menu-row.open .mr-a-wrap { grid-template-rows:1fr; }
+  .mr-a-inner { overflow:hidden; }
+  .mr-bullets { display:flex; flex-direction:column; gap:3px; margin:5px 0 4px 0; padding:0; list-style:none; }
+
+  /* Most requested badge */
+  .mr-popular { display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:800; color:var(--rose-dark); background:var(--rose); border:1px solid var(--rose-deep); border-radius:20px; padding:1px 7px; margin-left:6px; white-space:nowrap; vertical-align:middle; }
+
+  /* Inline book button on row hover */
+  .menu-row-top { position:relative; }
+  .mr-book-btn { opacity:0; transform:translateX(-6px); pointer-events:none; flex-shrink:0; background:var(--rose-dark); color:#fff; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:20px; border:none; cursor:pointer; transition:opacity .2s ease, transform .2s ease; white-space:nowrap; margin-left:4px; }
+  @media(hover:hover) and (pointer:fine){
+    .menu-row-top:hover .mr-book-btn { opacity:1; transform:translateX(0); pointer-events:auto; }
+  }
+  @media(max-width:760px){ .mr-book-btn { opacity:1; transform:none; pointer-events:auto; } .mr-name { flex:1 1 0%; } .mr-dots { flex:0 0 14px; min-width:14px; } }
+
+  /* Skeletons must stay visible regardless of reveal-stagger pre-hidden state */
+  .skel { opacity:1 !important; transform:none !important; }
+
+  /* Embedded map */
+  .map-embed-wrap { margin-top:2.5rem; border-radius:20px; overflow:hidden; border:1px solid var(--rose-mid); box-shadow:var(--shadow-sm); }
+  .map-embed-wrap iframe { width:100%; height:340px; border:0; display:block; }
   .reviews-card { max-width:680px; margin:0 auto; background:var(--white); border:1px solid var(--rose-mid); border-radius:24px; padding:2.5rem 2rem; text-align:center; box-shadow:var(--shadow); }
   .reviews-stars { font-size:34px; color:#F5A623; letter-spacing:4px; margin-bottom:.5rem; }
   .reviews-rating { font-family:'Playfair Display',serif; font-size:42px; font-weight:600; color:var(--rose-text); line-height:1; }
@@ -514,7 +699,8 @@
 <body>
 
 <div class="promo-bar" id="promoBar" style="display:none;"><span id="promoText"></span></div>
-<nav>
+<div class="scroll-progress" id="scrollProgress"></div>
+<nav id="siteNav">
   <div class="nav-inner">
     <a href="#home" class="logo"><img src="porters-logo-icon.png" alt="Porter's Nails & Spa" loading="eager" /></a>
     <div class="nav-right">
@@ -542,7 +728,7 @@
       <h1 data-i18n="hero.h1">Nails that make you feel <em>beautiful.</em></h1>
       <p data-i18n="hero.sub">Professional nail care and spa treatments in a warm, welcoming space. Book online in seconds &mdash; choose your service, your tech, and your time.</p>
       <div class="hero-btns">
-        <a href="#book" class="btn btn-primary"><i class="ti ti-calendar"></i> <span>Book online</span></a>
+        <a href="#book" class="btn btn-primary btn-pulse"><i class="ti ti-calendar"></i> <span>Book online</span></a>
         <a href="tel:2817477421" class="btn btn-ghost"><i class="ti ti-phone"></i> (281) 747-7421</a>
       </div>
     </div>
@@ -550,34 +736,38 @@
   </div>
 </header>
 
+<svg class="divider-wave" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,20 C300,60 900,0 1200,30 L1200,60 L0,60 Z"></path></svg>
+
 <section class="services" id="services">
   <div class="wrap">
     <img src="porters-logo.png" alt="Porter's Nails & Spa" class="menu-logo" />
-    <div class="sec-head"><h2 data-i18n="svc.h2">Services &amp; prices</h2><p data-i18n="svc.sub">Everything we offer — tap Book to reserve your spot</p></div>
-    <div class="services-grid" id="servicesGrid"></div>
-    <div class="menu-pdf-bar" id="menuPdfBar" style="display:none">
-      <a class="menu-pdf-btn" id="menuPdfBtn" href="#" target="_blank" rel="noopener">
-        <i class="ti ti-file-text"></i> View full menu (PDF)
-      </a>
+    <div class="sec-head reveal"><h2 data-i18n="svc.h2">Services &amp; prices</h2><p data-i18n="svc.sub">Everything we offer — tap Book to reserve your spot</p></div>
+    <div class="svc-search-wrap"><i class="ti ti-search"></i><input type="text" class="svc-search" id="svcSearch" placeholder="Search services..." /></div>
+    <div class="svc-filters" id="svcFilters"></div>
+    <div class="services-grid reveal-stagger" id="servicesGrid">
+      <div class="skel skel-svc"></div><div class="skel skel-svc"></div><div class="skel skel-svc"></div>
     </div>
+    <div class="svc-no-results" id="svcNoResults">No services match your search.</div>
   </div>
 </section>
 
 <section id="gallery">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="gal.eyebrow">Our work</div><h2 data-i18n="gal.h2">Gallery</h2><p data-i18n="gal.sub">A peek at the looks our clients love</p></div>
-    <div class="gallery-grid" id="galleryGrid"></div>
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="gal.eyebrow">Our work</div><h2 data-i18n="gal.h2">Gallery</h2><p data-i18n="gal.sub">A peek at the looks our clients love</p></div>
+    <div class="gallery-grid reveal" id="galleryGrid">
+      <div class="skel skel-gal"></div><div class="skel skel-gal"></div><div class="skel skel-gal"></div><div class="skel skel-gal"></div>
+    </div>
   </div>
 </section>
 
 <section class="about" id="about">
   <div class="wrap about-grid">
-    <div class="about-text">
+    <div class="about-text reveal">
       <h2 data-i18n="about.h2">A fresh start, with you in mind.</h2>
       <p data-i18n="about.p1">Porter's Nails and Spa is under new ownership with a renewed commitment to quality, cleanliness, and genuine care for every guest who walks through our door.</p>
       <p data-i18n="about.p2">We've created a calm, welcoming space where you can relax, unwind, and leave feeling your absolute best. Come treat yourself &mdash; you've earned it.</p>
     </div>
-    <div class="info-stack">
+    <div class="info-stack reveal-stagger">
       <div class="info-card"><div class="ic-ico"><i class="ti ti-map-pin"></i></div><div><strong data-i18n="about.visit">Visit us</strong><a id="aboutAddr" href="https://maps.app.goo.gl/8AW8RNzP2fiX5LpN8" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">23830 FM1314 Suite C, Porter, TX 77365</a></div></div>
       <div class="info-card"><div class="ic-ico"><i class="ti ti-phone"></i></div><div><strong>Call us</strong><span><a href="tel:2817477421" style="color:inherit">(281) 747-7421</a></span></div></div>
       <div class="info-card"><div class="ic-ico"><i class="ti ti-mail"></i></div><div><strong>Email us</strong><span><a href="mailto:portersnailsandspa@gmail.com" style="color:inherit">portersnailsandspa@gmail.com</a></span></div></div>
@@ -585,11 +775,18 @@
       <div class="info-card"><div class="ic-ico"><i class="ti ti-credit-card"></i></div><div><strong data-i18n="about.pay">Payment</strong><span data-i18n="about.payval">Cash &amp; all major credit cards accepted</span></div></div>
     </div>
   </div>
+  <div class="wrap">
+    <div class="map-embed-wrap reveal">
+      <iframe id="aboutMapEmbed" src="https://www.google.com/maps?q=23830%20FM1314%20Suite%20C%2C%20Porter%2C%20TX%2077365&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Porter's Nails &amp; Spa location"></iframe>
+    </div>
+  </div>
 </section>
+
+<svg class="divider-wave to-rose" viewBox="0 0 1200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0,30 C300,0 900,60 1200,20 L1200,60 L0,60 Z"></path></svg>
 
 <section class="booking" id="book">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="book.eyebrow">Reserve your spot</div><h2 data-i18n="book.h2">Book an appointment</h2><p data-i18n="book.sub">Pick your service, your nail tech, and your time</p></div>
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="book.eyebrow">Reserve your spot</div><h2 data-i18n="book.h2">Book an appointment</h2><p data-i18n="book.sub">Pick your service, your nail tech, and your time</p></div>
     <div class="wiz">
       <div class="wiz-steps" id="wizSteps"></div>
       <div id="wizBody"></div>
@@ -599,8 +796,26 @@
 
 <section class="reviews" id="reviews">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="rev.eyebrow" data-en="Loved by our guests">Loved by our guests</div><h2 data-i18n="rev.h2" data-en="Reviews">Reviews</h2><p data-i18n="rev.sub" data-en="See what our clients are saying — and share your own visit">See what our clients are saying — and share your own visit</p></div>
-    <div class="reviews-card">
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="rev.eyebrow" data-en="Loved by our guests">Loved by our guests</div><h2 data-i18n="rev.h2" data-en="Reviews">Reviews</h2><p data-i18n="rev.sub" data-en="See what our clients are saying — and share your own visit">See what our clients are saying — and share your own visit</p></div>
+    <div class="quotes-grid reveal-stagger" id="quotesGrid">
+      <div class="quote-card qc-featured">
+        <div class="qc-stars">★★★★★</div>
+        <p>&ldquo;This is my absolute favorite place to come and unwind and enjoy the nail techs. I come from Downtown area and it's definitely worth the drive. Today's nails are my favorite! 10 out of 10&rdquo;</p>
+        <div class="qc-author">Felicia Reyes &middot; Google review</div>
+      </div>
+      <div class="quote-card">
+        <div class="qc-stars">★★★★★</div>
+        <p>&ldquo;Went in for pedicures this week. They did amazing! Real flower petals in the water, the tropical scrub smelled soooo good! The massage was great and everything is so new and clean and beautiful!&rdquo;</p>
+        <div class="qc-author">Angela Walker &middot; Google review</div>
+      </div>
+      <div class="quote-card">
+        <div class="qc-stars">★★★★★</div>
+        <p>&ldquo;Love love love this place, miss Ivy did a great job.&rdquo;</p>
+        <div class="qc-author">Natesha Sanders &middot; Google review</div>
+      </div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+    <div class="reviews-card reveal">
       <div class="g-logo-mark"><i class="ti ti-brand-google"></i> <span data-i18n="rev.on" data-en="Reviews on Google">Reviews on Google</span></div>
       <div class="reviews-stars">★★★★★</div>
       <div class="reviews-sub" data-i18n="rev.cta" data-en="Your experience means the world to us. Tap below to read our reviews or leave one of your own.">Your experience means the world to us. Tap below to read our reviews or leave one of your own.</div>
@@ -614,13 +829,13 @@
 
 <section class="faq" id="faq">
   <div class="wrap">
-    <div class="sec-head"><div class="sec-eyebrow" data-i18n="faq.eyebrow">Good to know</div><h2 data-i18n="faq.h2">Questions &amp; answers</h2><p data-i18n="faq.sub">A few things our guests often ask</p></div>
-    <div class="faq-list">
-      <div class="faq-item"><h3><i class="ti ti-calendar"></i><span data-i18n="faq.q1">Do I need an appointment, or can I walk in?</span></h3><p data-i18n="faq.a1">Both are welcome! Walk-ins are always accepted when we have an opening, but booking ahead guarantees your spot and your favorite nail tech.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-credit-card"></i><span data-i18n="faq.q2">What forms of payment do you accept?</span></h3><p data-i18n="faq.a2">We accept cash and all major credit cards.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-car"></i><span data-i18n="faq.q3">Where do I park?</span></h3><p data-i18n="faq.a3">There's free parking right in front of the salon — we're located next to O'Reilly Auto Parts on FM1314.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-clock"></i><span data-i18n="faq.q4">How early should I arrive?</span></h3><p data-i18n="faq.a4">Arriving about 5 minutes early helps us start your appointment on time. If you're running late, give us a quick call.</p></div>
-      <div class="faq-item"><h3><i class="ti ti-phone"></i><span data-i18n="faq.q5">How can I reach you?</span></h3><p data-i18n="faq.a5">Call us at <a href="tel:2817477421" style="color:var(--rose-text);font-weight:600">(281) 747-7421</a>, or email us at <a href="mailto:portersnailsandspa@gmail.com" style="color:var(--rose-text);font-weight:600">portersnailsandspa@gmail.com</a>. We're happy to answer any questions or help you book.</p></div>
+    <div class="sec-head reveal"><div class="sec-eyebrow" data-i18n="faq.eyebrow">Good to know</div><h2 data-i18n="faq.h2">Questions &amp; answers</h2><p data-i18n="faq.sub">A few things our guests often ask</p></div>
+    <div class="faq-list reveal-stagger">
+      <div class="faq-item open"><h3><i class="ti ti-calendar"></i><span data-i18n="faq.q1">Do I need an appointment, or can I walk in?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a1">Both are welcome! Walk-ins are always accepted when we have an opening, but booking ahead guarantees your spot and your favorite nail tech.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-credit-card"></i><span data-i18n="faq.q2">What forms of payment do you accept?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a2">We accept cash and all major credit cards.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-car"></i><span data-i18n="faq.q3">Where do I park?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a3">There's free parking right in front of the salon — we're located next to O'Reilly Auto Parts on FM1314.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-clock"></i><span data-i18n="faq.q4">How early should I arrive?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a4">Arriving about 5 minutes early helps us start your appointment on time. If you're running late, give us a quick call.</p></div></div></div>
+      <div class="faq-item"><h3><i class="ti ti-phone"></i><span data-i18n="faq.q5">How can I reach you?</span></h3><div class="faq-a-wrap"><div class="faq-a-inner"><p data-i18n="faq.a5">Call us at <a href="tel:2817477421" style="color:var(--rose-text);font-weight:600">(281) 747-7421</a>, or email us at <a href="mailto:portersnailsandspa@gmail.com" style="color:var(--rose-text);font-weight:600">portersnailsandspa@gmail.com</a>. We're happy to answer any questions or help you book.</p></div></div></div>
     </div>
   </div>
 </section>
@@ -815,7 +1030,22 @@
     })
     .catch(function(){}); // silently fall back to localStorage if fetch fails
     // Fetch ALL site settings so every device stays in sync
-    fetch(BOOKING_API+'/api/book?settings=1')
+    // Anonymous visitor id for basic traffic analytics (unique/new/returning) — no
+    // personal info, just a random id persisted in this browser so repeat visits
+    // from the same device can be recognized.
+    var visitorId = DB.get('porters_vid');
+    if (!visitorId) {
+      visitorId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('v-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+      DB.set('porters_vid', visitorId);
+    }
+    var pageReferrer = document.referrer || '';
+    var urlParams = new URLSearchParams(window.location.search);
+    var trackExtra = '';
+    ['gclid','fbclid','utm_source','utm_medium','utm_campaign'].forEach(function(k){
+      var v = urlParams.get(k);
+      if (v) trackExtra += '&'+k+'='+encodeURIComponent(v);
+    });
+    fetch(BOOKING_API+'/api/book?settings=1&vid='+encodeURIComponent(visitorId)+'&ref='+encodeURIComponent(pageReferrer)+trackExtra)
     .then(function(r){return r.json();})
     .then(function(s){
       if(!s) return;
@@ -872,6 +1102,7 @@
     var mapsHref = isIOS ? applePin : googlePin;
     var fa=document.getElementById('footAddr'); if(fa) fa.textContent=addr;
     var aa=document.getElementById('aboutAddr'); if(aa){ aa.textContent=addr; aa.href=mapsHref; }
+    var me=document.getElementById('aboutMapEmbed'); if(me && addr){ me.src = 'https://www.google.com/maps?q='+encodeURIComponent(addr)+'&output=embed'; }
     var fp=document.getElementById('footPhone'); if(fp){ fp.textContent=ph; fp.href='tel:'+ph.replace(/[^0-9]/g,''); }
     var link=document.getElementById('mapLink');
     if(link){
@@ -927,17 +1158,18 @@
   function renderGalleryPublic(){
     var g=document.getElementById('galleryGrid'); if(!g) return;
     if(!gallery.length){
-      g.innerHTML = '<div class="gal big"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
+      g.innerHTML = '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
         '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
         '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
         '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>'+
         '<div class="gal"><i class="ti ti-camera"></i><span>Photos coming soon</span></div>';
       return;
     }
-    g.innerHTML = gallery.map(function(p,i){
-      var big = i===0 ? ' big' : '';
+    g.innerHTML = gallery.map(function(p){
       var cap = p.caption ? '<div class="gal-cap">'+p.caption+'</div>' : '';
-      return '<div class="gal gal-photo'+big+'" style="background-image:url(\''+p.url.replace(/'/g,"%27")+'\')">'+cap+'</div>';
+      var safeUrl = p.url.replace(/"/g,'&quot;');
+      var altText = (p.caption ? p.caption.replace(/"/g,'&quot;') : "Porter's Nails & Spa client work");
+      return '<div class="gal-item"><img class="gal-photo" src="'+safeUrl+'" loading="lazy" alt="'+altText+'">'+cap+'</div>';
     }).join('');
   }
 
@@ -964,10 +1196,15 @@
     kids:     'ti-star',
     waxing:   'ti-droplet'
   };
+  var POPULAR_IDS = ['ped_2','man_1','enh_11'];
+  var TIER_STRIP_IDS = ['ped_1','ped_2','ped_3','ped_4','ped_5','ped_6'];
+  var TIER_STRIP_LABELS = { ped_1:'Basic', ped_2:'Classic', ped_3:'Deluxe', ped_4:'Luxury', ped_5:'Golden', ped_6:'Pearl' };
+
   function renderPublicServices(){
     var g=document.getElementById('servicesGrid');
     if(!g) return;
-    g.className='menu-cats';
+    var wasRevealed = g.classList.contains('in');
+    g.className = 'menu-cats reveal-stagger' + (wasRevealed ? ' in' : '');
 
     // Pedicure add-ons to show at the bottom of the pedicure card
     var PED_ADDON_IDS = ['add_8','add_9','add_10'];
@@ -976,6 +1213,17 @@
     if(addCat){ pedAddons = addCat.items.filter(function(it){ return PED_ADDON_IDS.indexOf(it.id)>-1; }); }
 
     g.innerHTML = CATALOG.map(function(c){
+      // Tier price strip — pedicure only, using known tier ids if present
+      var tierStrip = '';
+      if(c.id==='pedicure'){
+        var chips = TIER_STRIP_IDS.map(function(id){
+          var it = c.items.filter(function(x){ return x.id===id; })[0];
+          if(!it) return '';
+          return '<span class="tier-chip">'+TIER_STRIP_LABELS[id]+'<b>'+priceLabel(it)+'</b></span>';
+        }).join('');
+        if(chips) tierStrip = '<div class="tier-strip">'+chips+'</div>';
+      }
+
       var rows = c.items.map(function(it){
         var hasBullets = it.desc && it.desc.length > 0;
         // Split comma-separated desc into bullet array
@@ -1004,14 +1252,18 @@
             return '<li>'+cap+badge+'</li>';
           }).join('')+'</ul>';
         }
-        return '<div class="menu-row"'+rowAttr+'>'
+        var bulletsWrap = hasBullets ? '<div class="mr-a-wrap"><div class="mr-a-inner">'+bullets+'</div></div>' : '';
+        var popular = POPULAR_IDS.indexOf(it.id)>-1 ? '<span class="mr-popular"><i class="ti ti-flame" style="font-size:10px"></i> Popular</span>' : '';
+        var safeName = it.name.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+        return '<div class="menu-row" data-svc-name="'+it.name.toLowerCase().replace(/"/g,'&quot;')+'"'+rowAttr+'>'
           +'<div class="menu-row-top" onclick="toggleMenuRow(this)">'
-          +'<span class="mr-name">'+it.name+'</span>'
+          +'<span class="mr-name">'+it.name+popular+'</span>'
           +'<span class="mr-dots"></span>'
           +'<span class="mr-price">'+priceLabel(it)+'</span>'
           +tog
+          +'<button type="button" class="mr-book-btn" onclick="event.stopPropagation();quickBookService(\''+c.id+'\',\''+safeName+'\',\''+priceLabel(it)+'\')">Book</button>'
           +'</div>'
-          +bullets
+          +bulletsWrap
           +'</div>';
       }).join('');
 
@@ -1026,8 +1278,65 @@
           +'</div>';
       }
 
-      return '<div class="menu-cat"><div class="menu-cat-head"><span class="mc-ico"><i class="ti '+(c.icon||CAT_ICONS[c.id]||'ti-sparkles')+'"></i></span><h3>'+c.cat+'</h3></div>'+rows+addonsFooter+'</div>';
+      return '<div class="menu-cat" data-cat="'+c.id+'"><div class="menu-cat-head"><span class="mc-ico"><i class="ti '+(c.icon||CAT_ICONS[c.id]||'ti-sparkles')+'"></i></span><h3>'+c.cat+'</h3></div>'+tierStrip+rows+addonsFooter+'</div>';
     }).join('');
+
+    renderSvcFilters();
+    applySvcFilters();
+  }
+
+  function quickBookService(catId, svcName, priceLbl){
+    wiz.cat = catId; wiz.service = svcName; wiz.priceLabel = priceLbl;
+    wiz.techId = null; wiz.date = null; wiz.time = null; wiz.step = 3;
+    render();
+    var bookSection = document.getElementById('book');
+    if(bookSection) bookSection.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  var svcActiveFilter = 'all';
+  function renderSvcFilters(){
+    var wrap = document.getElementById('svcFilters');
+    if(!wrap || wrap.dataset.built) return; // build once; categories don't change shape at runtime
+    wrap.dataset.built = '1';
+    var pills = ['<button type="button" class="svc-filter-pill active" data-filter="all">All</button>']
+      .concat(CATALOG.map(function(c){ return '<button type="button" class="svc-filter-pill" data-filter="'+c.id+'">'+c.cat+'</button>'; }));
+    wrap.innerHTML = pills.join('');
+    wrap.querySelectorAll('.svc-filter-pill').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        wrap.querySelectorAll('.svc-filter-pill').forEach(function(b){ b.classList.remove('active'); });
+        btn.classList.add('active');
+        svcActiveFilter = btn.dataset.filter;
+        applySvcFilters();
+      });
+    });
+    var search = document.getElementById('svcSearch');
+    if(search && !search.dataset.bound){
+      search.dataset.bound = '1';
+      search.addEventListener('input', function(){ applySvcFilters(); });
+    }
+  }
+
+  function applySvcFilters(){
+    var g = document.getElementById('servicesGrid');
+    var noRes = document.getElementById('svcNoResults');
+    var search = document.getElementById('svcSearch');
+    if(!g) return;
+    var q = search ? search.value.trim().toLowerCase() : '';
+    var visibleCards = 0;
+    g.querySelectorAll('.menu-cat').forEach(function(card){
+      var catMatch = svcActiveFilter==='all' || card.dataset.cat===svcActiveFilter;
+      var anyRowVisible = false;
+      card.querySelectorAll('.menu-row').forEach(function(row){
+        var nameMatch = !q || (row.dataset.svcName||'').indexOf(q) > -1;
+        var show = catMatch && nameMatch;
+        row.style.display = show ? '' : 'none';
+        if(show) anyRowVisible = true;
+      });
+      var cardVisible = catMatch && (q ? anyRowVisible : true);
+      card.classList.toggle('filtered-out', !cardVisible);
+      if(cardVisible) visibleCards++;
+    });
+    if(noRes) noRes.classList.toggle('show', visibleCards===0);
   }
 
   function techSlots(tech, dateStr){
@@ -1204,9 +1513,9 @@
         '<div><span>Time</span><strong>'+fmtTime(wiz.time)+'</strong></div>'+
       '</div>'+
       '<div class="field-row"><div class="field"><label>Your name</label><input id="dName" type="text" autocomplete="name" placeholder="Jane Doe"></div><div class="field"><label>Phone number</label><input id="dPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(281) 555-0000"></div></div>'+
-      '<label style="display:flex;align-items:flex-start;gap:.55rem;font-size:12px;color:var(--text-muted);line-height:1.5;margin:-.4rem 0 1rem;cursor:pointer">'+
-        '<input type="checkbox" id="dSms" style="margin-top:2px;flex:none;width:16px;height:16px;accent-color:var(--rose-dark)">'+
-        '<span>I agree to receive text messages from Porter\'s Nails &amp; Spa about my appointment (confirmations, updates, reminders). Msg &amp; data rates may apply. Msg frequency varies. Reply STOP to opt out, HELP for help. Consent is optional and not a condition of booking or service. <a href="/terms.html" style="color:var(--rose-dark)">Terms</a> &amp; <a href="/privacy.html" style="color:var(--rose-dark)">Privacy Policy</a>.</span>'+
+      '<label style="display:flex;align-items:flex-start;gap:10px;background:var(--rose);border:1.5px solid var(--rose-mid);border-radius:12px;padding:.85rem 1rem;margin-bottom:1rem;cursor:pointer">'+
+      '<input type="checkbox" id="smsConsent" style="margin-top:3px;accent-color:var(--rose-dark);width:16px;height:16px;flex-shrink:0">'+
+      '<span style="font-size:13px;color:var(--text-soft);line-height:1.55">I agree to receive text messages from Porter\'s Nails &amp; Spa about my appointment (confirmations, updates, and reminders). Msg &amp; data rates may apply. Message frequency varies. Reply <strong>STOP</strong> to opt out, <strong>HELP</strong> for help. <a href="/terms.html" style="color:var(--rose-dark)">Terms</a> &amp; <a href="/privacy.html" style="color:var(--rose-dark)">Privacy Policy</a>.</span>'+
       '</label>'+
       '<div class="field"><label>Email (optional)</label><input id="dEmail" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com"></div>'+
       '<div class="field"><label>Notes (optional)</label><textarea id="dNotes" placeholder="Any special requests?"></textarea></div>'+
@@ -1218,12 +1527,14 @@
       if(phone.replace(/\D/g,'').length<10){ showToast('Please enter a valid 10-digit phone number'); return; }
       var emailVal=b.querySelector('#dEmail').value.trim();
       if(emailVal && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(emailVal)){ showToast('Please enter a valid email or leave it blank'); return; }
+      var consent=b.querySelector('#smsConsent');
+      var smsOptIn = consent ? consent.checked : false;
       var btn=b.querySelector('#submitBtn'); btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Sending...';
       var isReschedule=!!(wiz.rescheduleToken);
       var endpoint=isReschedule?(BOOKING_API+'/api/booking'):(BOOKING_API+'/api/book');
       var payload=isReschedule?
-        {original_token:wiz.rescheduleToken,name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||''}:
-        {name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||'',smsOptIn:!!(b.querySelector('#dSms')&&b.querySelector('#dSms').checked)};
+        {original_token:wiz.rescheduleToken,name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||'',smsOptIn:smsOptIn}:
+        {name:name,phone:phone,email:b.querySelector('#dEmail').value.trim(),notes:b.querySelector('#dNotes').value.trim(),service:wiz.service,category:catName(wiz.cat),techName:isAny?'Any available':tech.name,date:wiz.date,time:wiz.time,priceLabel:wiz.priceLabel||'',smsOptIn:smsOptIn};
       fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
       .then(function(r){return r.json().then(function(d){return {status:r.status,data:d};});})
       .then(function(res){
@@ -1325,6 +1636,281 @@
     });
   }
 
+</script>
+
+<a href="#book" class="float-book" id="floatBook"><i class="ti ti-calendar"></i> Book now</a>
+
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" id="lightboxClose">&times;</span>
+  <span class="lightbox-nav lightbox-prev" id="lightboxPrev"><i class="ti ti-chevron-left"></i></span>
+  <div class="lightbox-slide" id="lightboxSlideA"><img src="" alt="" /></div>
+  <div class="lightbox-slide" id="lightboxSlideB"><img src="" alt="" /></div>
+  <span class="lightbox-nav lightbox-next" id="lightboxNext"><i class="ti ti-chevron-right"></i></span>
+</div>
+
+<script>
+(function(){
+  // ---- Scroll reveal ----
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  if('IntersectionObserver' in window && revealEls.length){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
+      });
+    }, { threshold:0.15, rootMargin:'0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // ---- Gallery lightbox (delegated, works with dynamically rendered photos) ----
+  var lightbox = document.getElementById('lightbox');
+  var lightboxClose = document.getElementById('lightboxClose');
+  var lightboxPrev = document.getElementById('lightboxPrev');
+  var lightboxNext = document.getElementById('lightboxNext');
+  var lbSlides = [document.getElementById('lightboxSlideA'), document.getElementById('lightboxSlideB')];
+  var lbImgs = [lbSlides[0].querySelector('img'), lbSlides[1].querySelector('img')];
+  var lbActiveSlot = 0;
+  var lbPhotos = [];
+  var lbIndex = 0;
+
+  function refreshLbPhotos(){
+    lbPhotos = Array.prototype.map.call(document.querySelectorAll('.gal-photo'), function(img){ return img.src; });
+  }
+  function updateLbNav(){
+    var multi = lbPhotos.length > 1;
+    lightboxPrev.style.display = multi ? '' : 'none';
+    lightboxNext.style.display = multi ? '' : 'none';
+  }
+  // direction: 1 = next (slides in from right), -1 = prev (slides in from left), 0/omitted = instant, no animation
+  function showAt(i, direction){
+    if(!lbPhotos.length) return;
+    lbIndex = (i + lbPhotos.length) % lbPhotos.length;
+    updateLbNav();
+    var activeWrap = lbSlides[lbActiveSlot];
+
+    if(!direction){
+      lbImgs[lbActiveSlot].src = lbPhotos[lbIndex];
+      var otherWrap = lbSlides[1 - lbActiveSlot];
+      activeWrap.style.transition = 'none';
+      activeWrap.style.transform = 'translateX(0%)';
+      otherWrap.style.transition = 'none';
+      otherWrap.style.transform = 'translateX(100%)';
+      void activeWrap.offsetWidth;
+      activeWrap.style.transition = '';
+      otherWrap.style.transition = '';
+      return;
+    }
+
+    var nextSlot = 1 - lbActiveSlot;
+    var nextWrap = lbSlides[nextSlot];
+    var nextImg = lbImgs[nextSlot];
+
+    // Place the incoming slide off-screen on the correct side, instantly
+    nextWrap.style.transition = 'none';
+    nextWrap.style.transform = 'translateX(' + (direction > 0 ? '100%' : '-100%') + ')';
+    nextImg.src = lbPhotos[lbIndex];
+    void nextWrap.offsetWidth;
+    nextWrap.style.transition = '';
+
+    // Animate: active exits opposite side, incoming slides to center
+    activeWrap.style.transform = 'translateX(' + (direction > 0 ? '-100%' : '100%') + ')';
+    nextWrap.style.transform = 'translateX(0%)';
+    lbActiveSlot = nextSlot;
+  }
+  function openLightbox(url){
+    if(!url) return;
+    refreshLbPhotos();
+    var idx = lbPhotos.indexOf(url);
+    showAt(idx > -1 ? idx : 0);
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('click', function(e){
+    var photo = e.target.closest && e.target.closest('.gal-photo');
+    if(photo && photo.src) openLightbox(photo.src);
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightboxPrev.addEventListener('click', function(e){ e.stopPropagation(); showAt(lbIndex - 1, -1); });
+  lightboxNext.addEventListener('click', function(e){ e.stopPropagation(); showAt(lbIndex + 1, 1); });
+  lightbox.addEventListener('click', function(e){ if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function(e){
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLightbox();
+    else if(e.key === 'ArrowLeft') showAt(lbIndex - 1, -1);
+    else if(e.key === 'ArrowRight') showAt(lbIndex + 1, 1);
+  });
+
+  // Swipe left/right to navigate between photos on touch devices
+  var lbTouchStartX = null;
+  lightbox.addEventListener('touchstart', function(e){
+    lbTouchStartX = e.touches[0].clientX;
+  }, { passive:true });
+  lightbox.addEventListener('touchend', function(e){
+    if(lbTouchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - lbTouchStartX;
+    if(Math.abs(dx) > 40){ // swipe threshold
+      if(dx < 0) showAt(lbIndex + 1, 1); else showAt(lbIndex - 1, -1);
+    }
+    lbTouchStartX = null;
+  }, { passive:true });
+
+  // ---- Scroll progress bar + shrinking nav ----
+  var progressBar = document.getElementById('scrollProgress');
+  var siteNav = document.getElementById('siteNav');
+  function onScrollTop(){
+    var doc = document.documentElement;
+    var scrollTop = window.pageYOffset || doc.scrollTop;
+    var height = (doc.scrollHeight - doc.clientHeight) || 1;
+    if(progressBar) progressBar.style.width = Math.min(100, (scrollTop/height)*100) + '%';
+    if(siteNav) siteNav.classList.toggle('scrolled', scrollTop > 30);
+  }
+  window.addEventListener('scroll', onScrollTop, { passive:true });
+  onScrollTop();
+
+  // ---- Active section nav highlighting ----
+  var navLinkMap = {};
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(function(a){
+    navLinkMap[a.getAttribute('href').slice(1)] = a;
+  });
+  var navSections = Object.keys(navLinkMap).map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  if('IntersectionObserver' in window && navSections.length){
+    var navIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = navLinkMap[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting) {
+          Object.values(navLinkMap).forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin:'-40% 0px -55% 0px', threshold:0 });
+    navSections.forEach(function(s){ navIo.observe(s); });
+  }
+
+  // ---- Floating mobile Book Now button ----
+  var floatBook = document.getElementById('floatBook');
+  var heroEl = document.getElementById('home');
+  if(floatBook && heroEl){
+    var heroObserver = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){ floatBook.classList.toggle('show', !entry.isIntersecting); });
+    }, { threshold:0 });
+    heroObserver.observe(heroEl);
+  }
+
+  // ---- Card tilt on hover (desktop, fine pointer only) ----
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+    document.querySelectorAll('.info-card, .quote-card').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var r = card.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5;
+        var y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform = 'perspective(600px) rotateX('+(-y*6)+'deg) rotateY('+(x*6)+'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave', function(){ card.style.transform = ''; });
+    });
+  }
+
+  // ---- FAQ accordion ----
+  document.querySelectorAll('.faq-item > h3').forEach(function(h){
+    h.addEventListener('click', function(){
+      h.closest('.faq-item').classList.toggle('open');
+    });
+  });
+
+  // ---- Reviews mobile carousel ----
+  var quotesGrid = document.getElementById('quotesGrid');
+  var dotsWrap = document.getElementById('carouselDots');
+  if(quotesGrid && dotsWrap){
+    var cards = Array.prototype.slice.call(quotesGrid.querySelectorAll('.quote-card'));
+    var idx = 0, timer = null;
+    cards.forEach(function(c,i){
+      var dot = document.createElement('span');
+      if(i===0) dot.classList.add('active');
+      dot.addEventListener('click', function(){
+        if(i===idx) return;
+        goDirectional(i, i>idx ? 1 : -1);
+        resetTimer();
+      });
+      dotsWrap.appendChild(dot);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+
+    // Slide the old card out one side while the new card slides in from the other,
+    // direction depends on which way we're navigating (matches swipe direction).
+    function goDirectional(newIdx, direction){
+      if(newIdx === idx || !cards[newIdx]) return;
+      var oldCard = cards[idx];
+      var newCard = cards[newIdx];
+
+      // Instantly place the incoming card off-screen on the correct side, no transition
+      newCard.style.transition = 'none';
+      newCard.style.transform = 'translateX(' + (direction > 0 ? '100%' : '-100%') + ')';
+      void newCard.offsetWidth; // force reflow so the instant placement takes effect
+      newCard.style.transition = '';
+
+      // Now animate both simultaneously: old exits opposite side, new slides to center
+      oldCard.style.transform = 'translateX(' + (direction > 0 ? '-100%' : '100%') + ')';
+      newCard.classList.add('active');
+      newCard.style.transform = 'translateX(0%)';
+      oldCard.classList.remove('active');
+
+      idx = newIdx;
+      dots.forEach(function(d,di){ d.classList.toggle('active', di===idx); });
+    }
+    function next(){ goDirectional((idx+1) % cards.length, 1); }
+    function prev(){ goDirectional((idx-1+cards.length) % cards.length, -1); }
+    function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(next, 4500); }
+
+    // Swipe left/right to navigate between reviews on touch devices
+    var qgTouchStartX = null;
+    quotesGrid.addEventListener('touchstart', function(e){
+      qgTouchStartX = e.touches[0].clientX;
+    }, { passive:true });
+    quotesGrid.addEventListener('touchend', function(e){
+      if(qgTouchStartX === null) return;
+      var dx = e.changedTouches[0].clientX - qgTouchStartX;
+      if(Math.abs(dx) > 40){ // swipe threshold
+        if(dx < 0) next(); else prev();
+        resetTimer();
+      }
+      qgTouchStartX = null;
+    }, { passive:true });
+    function measureHeight(){
+      var max = 0;
+      cards.forEach(function(c){ if(c.offsetHeight > max) max = c.offsetHeight; });
+      if(max) quotesGrid.style.height = max + 'px';
+    }
+    var resizeTimer = null;
+    function onResize(){
+      if(resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function(){ if(quotesGrid.classList.contains('carousel-active')) measureHeight(); }, 150);
+    }
+    function setupCarousel(active){
+      if(active){
+        quotesGrid.classList.add('carousel-active');
+        dotsWrap.style.display = 'flex';
+        measureHeight();
+        cards.forEach(function(c,ci){ c.classList.toggle('active', ci===idx); c.style.transform = ci===idx ? 'translateX(0%)' : 'translateX(100%)'; });
+        resetTimer();
+      } else {
+        quotesGrid.classList.remove('carousel-active');
+        quotesGrid.style.height = '';
+        dotsWrap.style.display = 'none';
+        if(timer) clearInterval(timer);
+      }
+    }
+    window.addEventListener('resize', onResize);
+    var mq = window.matchMedia('(max-width:900px)');
+    setupCarousel(mq.matches);
+    if(mq.addEventListener) mq.addEventListener('change', function(e){ setupCarousel(e.matches); });
+    else if(mq.addListener) mq.addListener(function(e){ setupCarousel(e.matches); });
+  }
+})();
 </script>
 </body>
 </html>
